@@ -4,6 +4,9 @@ import env from './config/env.js';
 import sessionMiddleware from './middleware/session.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRouter from './routes/auth.js';
+import coursesRouter from './routes/courses.js';
+import enrollmentsRouter from './routes/enrollments.js';
+import adminRouter from './routes/admin.js';
 
 const app = express();
 
@@ -26,6 +29,15 @@ app.get('/api/health', (_req, res) => {
 
 // Auth routes — Google OAuth, session, logout
 app.use(authRouter);
+
+// Course routes — public catalog + teacher/admin management
+app.use('/api/courses', coursesRouter);
+
+// Enrollment routes — student requests, teacher/admin review
+app.use('/api/enrollments', enrollmentsRouter);
+
+// Admin routes — user management + courses overview
+app.use('/api/admin', adminRouter);
 
 // 404 — catch unknown routes
 app.use((_req, res) => {

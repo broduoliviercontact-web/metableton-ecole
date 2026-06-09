@@ -1,6 +1,11 @@
 -- Migration 001: Core schema
 -- Creates all enum types, tables, and indexes for the MVP
 
+-- Enable pgcrypto so gen_random_uuid() is available for table defaults.
+-- Required on fresh local Supabase / vanilla Postgres; harmless on Supabase
+-- Cloud where the extension is already installed in the extensions schema.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- Enums
 CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 CREATE TYPE course_status AS ENUM ('draft', 'published');

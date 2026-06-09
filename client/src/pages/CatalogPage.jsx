@@ -1,12 +1,64 @@
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '../components/ui/Badge.jsx';
 import EmptyState from '../components/ui/EmptyState.jsx';
-import { getAllCourses, SKILL_LABELS } from '../data/mockCourses.js';
+import LoadingSpinner from '../components/ui/LoadingSpinner.jsx';
+import ErrorMessage from '../components/ui/ErrorMessage.jsx';
+import { getPublishedCourses } from '../api/courses.js';
+import { SKILL_LABELS } from '../data/mockCourses.js';
 
 export default function CatalogPage() {
-  const courses = getAllCourses();
+  const [courses, setCourses] = useState(null); // null = not loaded
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (courses.length === 0) {
+  const loadCourses = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await getPublishedCourses();
+      setCourses(data || []);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCourses();
+  }, [loadCourses]);
+
+  // ── Loading state ───────────────────────────────────────────────
+  if (isLoading) {
+    return (
+      <div className="px-4 py-16">
+        <h1 className="mb-8 text-center text-3xl font-bold text-white">
+          Catalogue des cours
+        </h1>
+        <LoadingSpinner size="lg" className="py-12" />
+      </div>
+    );
+  }
+
+  // ── Error state ─────────────────────────────────────────────────
+  if (error) {
+    return (
+      <div className="px-4 py-16">
+        <h1 className="mb-8 text-center text-3xl font-bold text-white">
+          Catalogue des cours
+        </h1>
+        <ErrorMessage
+          title="Impossible de charger le catalogue"
+          message={error.message || 'Une erreur est survenue lors du chargement.'}
+          onRetry={loadCourses}
+        />
+      </div>
+    );
+  }
+
+  // ── Empty state ─────────────────────────────────────────────────
+  if (!courses || courses.length === 0) {
     return (
       <div className="px-4 py-16">
         <h1 className="mb-8 text-center text-3xl font-bold text-white">
@@ -14,13 +66,14 @@ export default function CatalogPage() {
         </h1>
         <EmptyState
           icon="🎓"
-          title="Aucun cours pour le moment"
-          description="Revenez bientôt pour découvrir les cours disponibles."
+          title="Aucun cours publié pour le moment"
+          description="Les cours créés et publiés par les enseignants apparaîtront ici."
         />
       </div>
     );
   }
 
+  // ── Populated state ─────────────────────────────────────────────
   return (
     <div className="px-4 py-16">
       {/* ── Header ──────────────────────────────────────────────── */}
@@ -44,8 +97,8 @@ export default function CatalogPage() {
           >
             {/* Skill badge */}
             <div className="mb-4">
-              <Badge variant={course.skillLevel}>
-                {SKILL_LABELS[course.skillLevel]}
+              <Badge variant={course.skill_level}>
+                {SKILL_LABELS[course.skill_level] || course.skill_level}
               </Badge>
             </div>
 
@@ -55,14 +108,24 @@ export default function CatalogPage() {
             </h2>
 
             {/* Description */}
-            <p className="mb-4 flex-1 text-sm leading-relaxed text-gray-400">
-              {course.description}
-            </p>
+            {course.description ? (
+              <p className="mb-4 flex-1 text-sm leading-relaxed text-gray-400">
+                {course.description}
+              </p>
+            ) : (
+              <p className="mb-4 flex-1 text-sm italic text-gray-500">
+                Pas de description.
+              </p>
+            )}
 
             {/* Meta */}
             <div className="flex items-center justify-between text-xs text-gray-500">
-              <span>Par {course.teacherName}</span>
-              <span>{course.duration}</span>
+              <span>
+                Par {course.profiles?.display_name || 'Enseignant'}
+              </span>
+              {course.classroom_url && (
+                <span className="text-emerald-400">Classroom lié</span>
+              )}
             </div>
           </Link>
         ))}

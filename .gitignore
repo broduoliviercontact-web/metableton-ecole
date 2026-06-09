@@ -28,6 +28,8 @@ npm-debug.log*
 # Supabase local
 supabase/.branches/
 supabase/.temp/
+supabase/.env
+supabase/migrations/*.local.sql
 
 # Session
 .sessions/

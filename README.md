@@ -20,6 +20,7 @@ metableton-ecole/
 ├── server/          # Express 5 API server
 │   └── src/         # Routes, middleware, services
 ├── supabase/        # Supabase configuration
+│   ├── config.toml  # Supabase CLI project config
 │   └── migrations/  # SQL migration files
 └── _bmad-output/    # Planning artifacts (brief, PRD, architecture)
 ```
@@ -43,13 +44,20 @@ cd ../server && npm install
 
 ### 2. Start Supabase locally
 
+The Supabase CLI project is already initialized (`supabase/config.toml` is committed), so a fresh clone is one command away:
+
 ```bash
 # From the project root:
-cd supabase
 supabase start
 ```
 
-This starts a local PostgreSQL instance with all Supabase services on `http://127.0.0.1:54321`.
+This boots a local PostgreSQL plus all Supabase services in Docker. The default ports are:
+- API: `http://127.0.0.1:54321`
+- Postgres: `127.0.0.1:54322`
+- Studio: `http://127.0.0.1:54323`
+- Inbucket (email testing): `http://127.0.0.1:54324`
+
+> If `supabase` is not on your PATH, install it first: `brew install supabase/tap/supabase` (macOS) — see the [CLI install guide](https://supabase.com/docs/guides/local-development) for Linux/Windows.
 
 ### 3. Run migrations
 
@@ -59,23 +67,30 @@ supabase db push
 ```
 
 The migration at `supabase/migrations/001_core_schema.sql` creates:
+- The `pgcrypto` extension (for `gen_random_uuid()`)
 - Four enum types: `user_role`, `course_status`, `enrollment_status`, `skill_level`
 - Three tables: `profiles`, `courses`, `enrollments`
 - Six indexes for common query patterns
 
-To reset and re-apply migrations: `supabase db reset`
+To reset and re-apply migrations from scratch: `supabase db reset`
 
 ### 4. Configure environment variables
 
 ```bash
 cp server/.env.example server/.env
+cp client/.env.example client/.env
 ```
 
 Edit `server/.env` and fill in:
-- `SUPABASE_URL` — from `supabase start` output (usually `http://127.0.0.1:54321`)
-- `SUPABASE_SERVICE_ROLE_KEY` — from `supabase status`
+- `SUPABASE_URL` — usually `http://127.0.0.1:54321`
+- `SUPABASE_SERVICE_ROLE_KEY` — from `supabase status` (look for `service_role key`)
+- `DATABASE_URL` — usually `postgresql://postgres:postgres@127.0.0.1:54322/postgres`
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` — from Google Cloud Console
-- `SESSION_SECRET` — any long random string
+- `GOOGLE_REDIRECT_URI` — `http://localhost:3001/api/auth/google/callback`
+- `SESSION_SECRET` — any long random string (e.g. `openssl rand -hex 32`)
+- `CLIENT_ORIGIN` — usually `http://localhost:5173`
+
+The default values in `server/.env.example` already match the local Supabase ports, so for a first boot you only need to fill in the Google OAuth and session secret.
 
 ### 5. Google Cloud setup
 
@@ -105,14 +120,17 @@ cd client && npm run dev
 
 | Variable                    | Required | Description                         |
 |-----------------------------|----------|-------------------------------------|
-| `PORT`                      | No       | Server port (default: 3001)        |
-| `NODE_ENV`                  | No       | `development` or `production`      |
-| `SUPABASE_URL`              | Yes      | Supabase PostgreSQL URL            |
-| `SUPABASE_SERVICE_ROLE_KEY`  | Yes      | Supabase service role key          |
-| `GOOGLE_CLIENT_ID`          | Yes      | Google OAuth 2.0 client ID         |
-| `GOOGLE_CLIENT_SECRET`      | Yes      | Google OAuth 2.0 client secret     |
-| `GOOGLE_REDIRECT_URI`       | Yes      | OAuth callback URL                 |
-| `SESSION_SECRET`            | Yes      | Random string for session signing  |
+| `PORT`                      | No       | Server port (default: `3001`)       |
+| `NODE_ENV`                  | No       | `development` or `production`       |
+| `SUPABASE_URL`              | Yes      | Supabase API URL                    |
+| `SUPABASE_SERVICE_ROLE_KEY`  | Yes      | Supabase service role key           |
+| `DATABASE_URL`              | Yes      | PostgreSQL URL (used by session store) |
+| `GOOGLE_CLIENT_ID`          | Yes      | Google OAuth 2.0 client ID          |
+| `GOOGLE_CLIENT_SECRET`      | Yes      | Google OAuth 2.0 client secret      |
+| `GOOGLE_REDIRECT_URI`       | Yes      | OAuth callback URL                  |
+| `SESSION_SECRET`            | Yes      | Random string for session signing   |
+| `CLIENT_ORIGIN`             | Yes      | Client origin allowed by CORS (e.g. `http://localhost:5173`) |
+| `VITE_API_URL` (client)     | No       | Base URL of the API (default: `http://localhost:3001/api`) |
 
 ## MVP scope
 

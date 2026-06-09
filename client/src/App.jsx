@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import PublicLayout from './components/layout/PublicLayout.jsx';
 import DashboardLayout from './components/layout/DashboardLayout.jsx';
+import RequireAuth from './components/RequireAuth.jsx';
 import HomePage from './pages/HomePage.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
 import CourseDetailPage from './pages/CourseDetailPage.jsx';
@@ -8,6 +9,8 @@ import NotFoundPage from './pages/NotFoundPage.jsx';
 import StudentDashboardPage from './pages/dashboard/StudentDashboardPage.jsx';
 import TeacherDashboardPage from './pages/dashboard/TeacherDashboardPage.jsx';
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage.jsx';
+import AdminCoursesPage from './pages/dashboard/AdminCoursesPage.jsx';
+import CourseFormPage from './pages/dashboard/CourseFormPage.jsx';
 
 export default function App() {
   return (
@@ -19,11 +22,62 @@ export default function App() {
         <Route path="catalog/:courseId" element={<CourseDetailPage />} />
       </Route>
 
-      {/* Dashboard pages — Dashboard layout (role-based routing comes later) */}
-      <Route path="dashboard" element={<DashboardLayout />}>
-        <Route index element={<StudentDashboardPage />} />
-        <Route path="teacher" element={<TeacherDashboardPage />} />
-        <Route path="admin" element={<AdminDashboardPage />} />
+      {/* Dashboard pages — Dashboard layout + role-gated routes */}
+      <Route path="dashboard" element={<RequireAuth><DashboardLayout /></RequireAuth>}>
+        {/* Student dashboard — accessible by student, teacher, admin */}
+        <Route
+          index
+          element={
+            <RequireAuth allow="student">
+              <StudentDashboardPage />
+            </RequireAuth>
+          }
+        />
+        {/* Teacher dashboard — accessible by teacher, admin */}
+        <Route
+          path="teacher"
+          element={
+            <RequireAuth allow="teacher">
+              <TeacherDashboardPage />
+            </RequireAuth>
+          }
+        />
+        {/* Teacher: create new course */}
+        <Route
+          path="teacher/courses/new"
+          element={
+            <RequireAuth allow="teacher">
+              <CourseFormPage mode="create" />
+            </RequireAuth>
+          }
+        />
+        {/* Teacher: edit existing course */}
+        <Route
+          path="teacher/courses/:courseId/edit"
+          element={
+            <RequireAuth allow="teacher">
+              <CourseFormPage mode="edit" />
+            </RequireAuth>
+          }
+        />
+        {/* Admin dashboard — accessible by admin only */}
+        <Route
+          path="admin"
+          element={
+            <RequireAuth allow="admin">
+              <AdminDashboardPage />
+            </RequireAuth>
+          }
+        />
+        {/* Admin: courses overview */}
+        <Route
+          path="admin/courses"
+          element={
+            <RequireAuth allow="admin">
+              <AdminCoursesPage />
+            </RequireAuth>
+          }
+        />
       </Route>
 
       {/* 404 — outside layouts for a clean error page */}
