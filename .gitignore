@@ -33,3 +33,4 @@ supabase/migrations/*.local.sql
 
 # Session
 .sessions/
+.claude/
