@@ -1,5 +1,4 @@
-import { google } from 'googleapis';
-import oauth2Client from '../config/google.js';
+import { getOauth2Client } from '../config/google.js';
 
 // How Google represents a public Classroom course page.
 // Examples that should resolve to id "123456789012":
@@ -67,6 +66,7 @@ async function refreshIfNeeded(tokens) {
     return tokens;
   }
 
+  const oauth2Client = await getOauth2Client();
   oauth2Client.setCredentials({
     refresh_token: tokens.refresh_token,
   });
@@ -107,6 +107,7 @@ export async function validateClassroomCourse(tokens, classroomId) {
   }
 
   await refreshIfNeeded(tokens);
+  const { google } = await import('googleapis');
 
   // Build a one-shot auth client so we never mutate the shared oauth2Client
   // (which is also used by the OAuth flow itself).

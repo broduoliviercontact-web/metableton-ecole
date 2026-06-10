@@ -1,4 +1,4 @@
-import supabase from '../config/supabase.js';
+import { getSupabase } from '../config/supabase.js';
 
 /**
  * Enrollment state machine
@@ -22,6 +22,7 @@ import supabase from '../config/supabase.js';
  * to know if this was a fresh request or a retry.
  */
 export async function requestEnrollment(studentId, courseId) {
+  const supabase = await getSupabase();
   // 1. Verify course exists and is open for enrollment
   const { data: course, error: courseError } = await supabase
     .from('courses')
@@ -101,6 +102,7 @@ export async function rejectEnrollment(enrollmentId) {
 }
 
 async function transitionEnrollment(enrollmentId, newStatus) {
+  const supabase = await getSupabase();
   // 1. Look up the enrollment
   const { data: enrollment, error: lookupError } = await supabase
     .from('enrollments')
@@ -143,6 +145,7 @@ async function transitionEnrollment(enrollmentId, newStatus) {
  * Includes the course title, status, classroom_url, and teacher name.
  */
 export async function getEnrollmentsForStudent(studentId) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('enrollments')
     .select(`
@@ -164,6 +167,7 @@ export async function getEnrollmentsForStudent(studentId) {
  * Includes the student's display_name and email for review purposes.
  */
 export async function getPendingEnrollmentsForTeacher(teacherId) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('enrollments')
     .select(`
@@ -184,6 +188,7 @@ export async function getPendingEnrollmentsForTeacher(teacherId) {
  * Includes course title, teacher name, and student name/email.
  */
 export async function getAllPendingEnrollments() {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('enrollments')
     .select(`
@@ -206,6 +211,7 @@ export async function getAllPendingEnrollments() {
  * Returns the course's teacher_id, or null if the enrollment doesn't exist.
  */
 export async function getEnrollmentCourseTeacher(enrollmentId) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('enrollments')
     .select('id, status, courses!inner ( id, teacher_id )')

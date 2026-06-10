@@ -1,4 +1,4 @@
-import supabase from '../config/supabase.js';
+import { getSupabase } from '../config/supabase.js';
 
 const VALID_SKILL_LEVELS = ['beginner', 'intermediate', 'advanced', 'all_levels'];
 const VALID_STATUSES = ['draft', 'published'];
@@ -8,6 +8,7 @@ const VALID_STATUSES = ['draft', 'published'];
  * Public — used by /catalog and HomePage.
  */
 export async function getPublishedCourses() {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .select('id, title, description, skill_level, cover_image_url, status, classroom_id, classroom_url, created_at, updated_at, teacher_id, profiles!courses_teacher_id_fkey(display_name)')
@@ -23,6 +24,7 @@ export async function getPublishedCourses() {
  * Returns null if not found.
  */
 export async function getCourseById(courseId) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .select('id, title, description, skill_level, cover_image_url, status, classroom_id, classroom_url, created_at, updated_at, teacher_id, profiles!courses_teacher_id_fkey(display_name)')
@@ -38,6 +40,7 @@ export async function getCourseById(courseId) {
  * Returns null if not found OR not published.
  */
 export async function getPublishedCourseById(courseId) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .select('id, title, description, skill_level, cover_image_url, status, classroom_id, classroom_url, created_at, updated_at, teacher_id, profiles!courses_teacher_id_fkey(display_name)')
@@ -54,6 +57,7 @@ export async function getPublishedCourseById(courseId) {
  * Used by the teacher's "manage" view.
  */
 export async function getCoursesByTeacher(teacherId) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .select('id, title, description, skill_level, cover_image_url, status, classroom_id, classroom_url, created_at, updated_at, teacher_id, profiles!courses_teacher_id_fkey(display_name)')
@@ -68,6 +72,7 @@ export async function getCoursesByTeacher(teacherId) {
  * List all courses in the system (admin "manage" view).
  */
 export async function getAllCourses() {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .select('id, title, description, skill_level, cover_image_url, status, classroom_id, classroom_url, created_at, updated_at, teacher_id, profiles!courses_teacher_id_fkey(display_name)')
@@ -89,6 +94,7 @@ export async function createCourse({
   coverImageUrl = null,
   status = 'draft',
 }) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .insert({
@@ -112,6 +118,7 @@ export async function createCourse({
  * Maps camelCase request body fields to snake_case DB columns.
  */
 export async function updateCourse(courseId, fields) {
+  const supabase = await getSupabase();
   const dbFields = {};
 
   if (fields.title !== undefined) dbFields.title = fields.title;
@@ -147,6 +154,7 @@ export { VALID_SKILL_LEVELS, VALID_STATUSES };
  * Returns the updated course row.
  */
 export async function setClassroomLink(courseId, { classroomId, classroomUrl }) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .update({

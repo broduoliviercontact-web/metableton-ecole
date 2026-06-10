@@ -1,11 +1,18 @@
-import { createClient } from '@supabase/supabase-js';
 import env from './env.js';
 
-const supabase = createClient(env.supabaseUrl, env.supabaseServiceRoleKey, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-  },
-});
+let supabasePromise;
 
-export default supabase;
+export async function getSupabase() {
+  if (!supabasePromise) {
+    supabasePromise = import('@supabase/supabase-js').then(({ createClient }) =>
+      createClient(env.supabaseUrl, env.supabaseServiceRoleKey, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      })
+    );
+  }
+
+  return supabasePromise;
+}

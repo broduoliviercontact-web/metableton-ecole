@@ -1,10 +1,17 @@
-import { google } from 'googleapis';
 import env from './env.js';
 
-const oauth2Client = new google.auth.OAuth2(
-  env.googleClientId,
-  env.googleClientSecret,
-  env.googleRedirectUri
-);
+let oauth2ClientPromise;
 
-export default oauth2Client;
+export async function getOauth2Client() {
+  if (!oauth2ClientPromise) {
+    oauth2ClientPromise = import('googleapis').then(({ google }) => (
+      new google.auth.OAuth2(
+        env.googleClientId,
+        env.googleClientSecret,
+        env.googleRedirectUri
+      )
+    ));
+  }
+
+  return oauth2ClientPromise;
+}

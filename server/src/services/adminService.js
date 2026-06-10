@@ -1,4 +1,4 @@
-import supabase from '../config/supabase.js';
+import { getSupabase } from '../config/supabase.js';
 
 const VALID_ROLES = ['student', 'teacher', 'admin'];
 
@@ -10,6 +10,7 @@ const USER_COLUMNS = 'id, email, display_name, avatar_url, role, created_at, upd
  * Ordered by created_at desc so newly added users appear first.
  */
 export async function listAllUsers() {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('profiles')
     .select(USER_COLUMNS)
@@ -23,6 +24,7 @@ export async function listAllUsers() {
  * Get a single user by id, or null if not found.
  */
 export async function getUserById(userId) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('profiles')
     .select(USER_COLUMNS)
@@ -38,6 +40,7 @@ export async function getUserById(userId) {
  * to prevent the system from being locked out of admin actions.
  */
 export async function countAdmins() {
+  const supabase = await getSupabase();
   const { count, error } = await supabase
     .from('profiles')
     .select('*', { count: 'exact', head: true })
@@ -55,6 +58,7 @@ export async function countAdmins() {
  *   - the last-admin guard (check before calling this)
  */
 export async function updateUserRole(userId, newRole) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('profiles')
     .update({ role: newRole, updated_at: new Date().toISOString() })
@@ -72,6 +76,7 @@ export async function updateUserRole(userId, newRole) {
  * the teacher even if their display name is generic.
  */
 export async function listAllCoursesForAdmin() {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('courses')
     .select('id, title, description, skill_level, cover_image_url, status, classroom_id, classroom_url, created_at, updated_at, teacher_id, profiles!courses_teacher_id_fkey(display_name, email)')

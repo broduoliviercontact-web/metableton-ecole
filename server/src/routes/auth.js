@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import oauth2Client from '../config/google.js';
+import { getOauth2Client } from '../config/google.js';
 import env from '../config/env.js';
 import { findOrCreateGoogleProfile } from '../services/profileService.js';
 
@@ -7,14 +7,19 @@ const router = Router();
 
 // ── GET /api/auth/google ──────────────────────────────────────────
 // Redirects the user to Google's OAuth 2.0 consent screen.
-router.get('/api/auth/google', (_req, res) => {
-  const authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    prompt: 'consent',
-    scope: ['openid', 'profile', 'email'],
-  });
+router.get('/api/auth/google', async (_req, res, next) => {
+  try {
+    const oauth2Client = await getOauth2Client();
+    const authUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      prompt: 'consent',
+      scope: ['openid', 'profile', 'email'],
+    });
 
-  res.redirect(authUrl);
+    res.redirect(authUrl);
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── GET /api/auth/google/callback ─────────────────────────────────
@@ -32,6 +37,8 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
   }
 
   try {
+    const oauth2Client = await getOauth2Client();
+
     // 1. Exchange authorization code for tokens
     const { tokens } = await oauth2Client.getToken(code);
 

@@ -1,4 +1,4 @@
-import supabase from '../config/supabase.js';
+import { getSupabase } from '../config/supabase.js';
 
 /**
  * Find an existing profile by Google subject, or create one.
@@ -22,6 +22,8 @@ export async function findOrCreateGoogleProfile({
   displayName,
   avatarUrl,
 }) {
+  const supabase = await getSupabase();
+
   // 1. Look up existing profile by Google sub
   const { data: existing, error: lookupError } = await supabase
     .from('profiles')

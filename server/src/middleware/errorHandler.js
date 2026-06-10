@@ -1,5 +1,10 @@
 export function errorHandler(err, req, res, _next) {
-  console.error(`[${new Date().toISOString()}] ${req.method} ${req.path}:`, err.message);
+  console.error(
+    `[${new Date().toISOString()}] ${req.method} ${req.path}:`,
+    err.message,
+    err.details ? `\nDetails: ${err.details}` : '',
+    err.stack ? `\nStack: ${err.stack}` : ''
+  );
 
   // Known HTTP status code (thrown intentionally from route/service)
   if (err.statusCode) {
@@ -17,6 +22,20 @@ export function errorHandler(err, req, res, _next) {
       error: {
         code: 'DATABASE_ERROR',
         message: 'A database error occurred.',
+      },
+    });
+  }
+
+  // Supabase local / PostgREST unavailable
+  if (
+    err.message?.includes('fetch failed') ||
+    err.details?.includes('ECONNREFUSED') ||
+    err.cause?.code === 'ECONNREFUSED'
+  ) {
+    return res.status(503).json({
+      error: {
+        code: 'DATABASE_UNAVAILABLE',
+        message: 'Supabase local is not reachable. Start Supabase and try again.',
       },
     });
   }
