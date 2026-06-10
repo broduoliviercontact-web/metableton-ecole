@@ -65,9 +65,9 @@ export default function CatalogPage() {
           Catalogue des cours
         </h1>
         <EmptyState
-          icon="🎓"
+          icon="📚"
           title="Aucun cours publié pour le moment"
-          description="Les cours créés et publiés par les enseignants apparaîtront ici."
+          description="Revenez bientôt : de nouveaux cours seront bientôt disponibles."
         />
       </div>
     );

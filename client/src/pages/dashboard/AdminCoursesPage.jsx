@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import Button from '../../components/ui/Button.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
@@ -74,9 +75,14 @@ export default function AdminCoursesPage() {
       <div>
         <PageHeader />
         <EmptyState
-          icon="📚"
+          icon="🎓"
           title="Aucun cours pour le moment"
           description="Les cours créés par les enseignants apparaîtront ici."
+          action={
+            <Link to="/dashboard/teacher/courses/new">
+              <Button size="sm">Créer un cours</Button>
+            </Link>
+          }
         />
       </div>
     );
