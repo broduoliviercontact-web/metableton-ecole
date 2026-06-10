@@ -23,7 +23,7 @@ const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     secure: env.isProduction,
-    sameSite: 'lax',
+    sameSite: env.isProduction ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   },
 });

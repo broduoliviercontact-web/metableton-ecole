@@ -118,7 +118,7 @@ router.post('/api/auth/logout', (req, res, next) => {
     res.clearCookie('connect.sid', {
       httpOnly: true,
       secure: env.isProduction,
-      sameSite: 'lax',
+      sameSite: env.isProduction ? 'none' : 'lax',
     });
 
     res.json({ ok: true });
