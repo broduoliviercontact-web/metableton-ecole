@@ -34,3 +34,5 @@ supabase/migrations/*.local.sql
 # Session
 .sessions/
 .claude/
+docs/architecture/
+docs/user-flows/
