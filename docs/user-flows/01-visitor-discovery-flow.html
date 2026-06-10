@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — Visitor Discovery Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}
+.container{max-width:1200px;margin:0 auto}
+.header{margin-bottom:2rem}
+.header-row{display:flex;align-items:center;gap:1rem;margin-bottom:.5rem}
+.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em}
+.subtitle{color:#94a3b8;font-size:.875rem;margin-left:1.75rem}
+.diagram-container{background:rgba(15,23,42,.5);border-radius:1rem;border:1px solid #1e293b;padding:1.5rem;overflow-x:auto}
+svg{width:100%;min-width:900px;display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:2rem}
+.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.25rem}
+.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}
+.card-dot{width:8px;height:8px;border-radius:50%}
+.card-dot.cyan{background:#22d3ee}.card-dot.emerald{background:#34d399}
+.card-dot.violet{background:#a78bfa}.card-dot.amber{background:#fbbf24}
+.card-dot.rose{background:#fb7185}.card-dot.orange{background:#fb923c}
+.card h3{font-size:.875rem;font-weight:600}
+.card ul{list-style:none;color:#94a3b8;font-size:.75rem}
+.card li{margin-bottom:.375rem}
+.footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.75rem}
+.toolbar{display:flex;gap:.5rem;margin-left:auto;flex-shrink:0;align-items:center}
+.toolbar-toggle{background:transparent;border:none;color:#475569;cursor:pointer;font-size:1.25rem;line-height:1;padding:.25rem .5rem;border-radius:.375rem;transition:color .2s,background .2s}
+.toolbar-toggle:hover{color:#94a3b8;background:rgba(30,41,59,.5)}
+.toolbar-actions{display:none;gap:.5rem}
+.toolbar.expanded .toolbar-actions{display:flex}
+.toolbar-actions button{background:rgba(30,41,59,.8);border:1px solid #334155;color:#94a3b8;padding:.375rem .75rem;border-radius:.375rem;font-family:inherit;font-size:.75rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.toolbar-actions button:hover{background:rgba(51,65,85,.8);color:white;border-color:#475569}
+@media print{body{background:#020617;padding:1rem}.toolbar{display:none!important}}
+</style>
+</head>
+<body>
+<div class="container" id="report-container">
+<div class="header">
+<div class="header-row"><div class="pulse-dot"></div><h1>Metableton Ecole — Visitor Discovery Flow</h1>
+<div class="toolbar"><div class="toolbar-actions"><button onclick="copyAsImage(this)">📋 Copy</button><button onclick="downloadPNG(this)">🖼️ PNG</button><button onclick="downloadPDF(this)">📄 PDF</button></div><button class="toolbar-toggle" onclick="this.parentElement.classList.toggle('expanded')" title="Export" aria-label="Export">⋯</button></div>
+</div>
+<p class="subtitle">Rôle: visitor (non authentifié) — Parcours de découverte : landing → catalogue → détail cours → redirection auth si inscription demandée</p>
+</div>
+
+<div class="diagram-container">
+<svg viewBox="0 0 1100 680">
+<defs>
+<marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#64748b"/></marker>
+<marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#22d3ee"/></marker>
+<marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#34d399"/></marker>
+<marker id="arrow-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#a78bfa"/></marker>
+<marker id="arrow-rose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#fb7185"/></marker>
+<marker id="arrow-amber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#fbbf24"/></marker>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+
+<!-- ============ ARROWS ============ -->
+<!-- Visitor → HomePage -->
+<line x1="125" y1="170" x2="228" y2="170" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+<text x="176" y="163" fill="#94a3b8" font-size="7" text-anchor="middle">lands on</text>
+<!-- HomePage → Catalog -->
+<line x1="298" y1="210" x2="298" y2="248" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+<text x="310" y="234" fill="#94a3b8" font-size="7">browse</text>
+<!-- Catalog → GET /api/courses -->
+<line x1="388" y1="270" x2="518" y2="270" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+<text x="453" y="263" fill="#94a3b8" font-size="7" text-anchor="middle">GET</text>
+<!-- API → Supabase -->
+<line x1="715" y1="270" x2="808" y2="270" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow-violet)"/>
+<!-- Catalog → CourseDetail -->
+<line x1="298" y1="340" x2="298" y2="378" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+<text x="310" y="364" fill="#94a3b8" font-size="7">click</text>
+<!-- CourseDetail → GET /api/courses/:id -->
+<line x1="388" y1="400" x2="518" y2="400" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+<text x="453" y="393" fill="#94a3b8" font-size="7" text-anchor="middle">GET</text>
+<!-- API → Supabase (detail) -->
+<line x1="715" y1="400" x2="808" y2="400" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow-violet)"/>
+
+<!-- "Request Access" path → auth check -->
+<rect x="390" y="445" width="30" height="20" rx="4" fill="rgba(251,191,36,.2)" stroke="#fbbf24" stroke-width="1"/>
+<text x="405" y="459" fill="#fbbf24" font-size="9" text-anchor="middle">?</text>
+<line x1="405" y1="470" x2="405" y2="510" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+
+<!-- Auth? check -->
+<rect x="360" y="515" width="90" height="30" rx="4" fill="rgba(251,191,36,.15)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="405" y="534" fill="#fbbf24" font-size="9" font-weight="600" text-anchor="middle">Authenticated?</text>
+
+<!-- NO branch → redirect to Google -->
+<line x1="360" y1="530" x2="300" y2="530" stroke="#fb7185" stroke-width="1.5" marker-end="url(#arrow-rose)"/>
+<text x="325" y="522" fill="#fb7185" font-size="7" text-anchor="middle">NO</text>
+
+<!-- Auth required box -->
+<rect x="160" y="505" width="135" height="50" rx="6" fill="#0f172a"/>
+<rect x="160" y="505" width="135" height="50" rx="6" fill="rgba(136,19,55,.35)" stroke="#fb7185" stroke-width="1.5"/>
+<text x="227" y="528" fill="white" font-size="9" font-weight="600" text-anchor="middle">Auth Required</text>
+<text x="227" y="544" fill="#94a3b8" font-size="8" text-anchor="middle">→ Google OAuth login</text>
+<text x="227" y="570" fill="#475569" font-size="7" text-anchor="middle">(see auth onboarding flow)</text>
+<text x="227" y="582" fill="#475569" font-size="6" text-anchor="middle">returns to dashboard after</text>
+
+<!-- YES branch → dashboard/redirect -->
+<line x1="450" y1="530" x2="560" y2="530" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+<text x="500" y="522" fill="#34d399" font-size="7" text-anchor="middle">YES</text>
+
+<!-- Post-auth redirect box -->
+<rect x="565" y="505" width="145" height="50" rx="6" fill="#0f172a"/>
+<rect x="565" y="505" width="145" height="50" rx="6" fill="rgba(6,78,59,.3)" stroke="#34d399" stroke-width="1.5"/>
+<text x="637" y="528" fill="white" font-size="9" font-weight="600" text-anchor="middle">Dashboard Redirect</text>
+<text x="637" y="544" fill="#94a3b8" font-size="8" text-anchor="middle">student/teacher/admin</text>
+<text x="637" y="560" fill="#475569" font-size="7" text-anchor="middle">→ enrollment flow</text>
+
+<!-- Error paths -->
+<path d="M 715 290 L 760 290 Q 780 290 780 310 L 780 445 L 565 445" fill="none" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arrow-rose)"/>
+<text x="740" y="385" fill="#fb7185" font-size="7">404/500</text>
+
+<!-- ============ COMPONENTS ============ -->
+
+<!-- Visitor -->
+<rect x="30" y="140" width="130" height="60" rx="6" fill="#0f172a"/>
+<rect x="30" y="140" width="130" height="60" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="95" y="165" fill="white" font-size="11" font-weight="600" text-anchor="middle">Visitor</text>
+<text x="95" y="182" fill="#94a3b8" font-size="9" text-anchor="middle">no session</text>
+
+<!-- HomePage -->
+<rect x="235" y="140" width="145" height="70" rx="6" fill="#0f172a"/>
+<rect x="235" y="140" width="145" height="70" rx="6" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="307" y="164" fill="white" font-size="10" font-weight="600" text-anchor="middle">HomePage</text>
+<text x="307" y="180" fill="#94a3b8" font-size="8" text-anchor="middle">/ (PublicLayout)</text>
+<text x="307" y="196" fill="#94a3b8" font-size="8" text-anchor="middle">Landing + Intro</text>
+<text x="307" y="210" fill="#475569" font-size="7" text-anchor="middle">→ link to /catalog</text>
+
+<!-- CatalogPage -->
+<rect x="235" y="250" width="145" height="70" rx="6" fill="#0f172a"/>
+<rect x="235" y="250" width="145" height="70" rx="6" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="307" y="274" fill="white" font-size="10" font-weight="600" text-anchor="middle">CatalogPage</text>
+<text x="307" y="290" fill="#94a3b8" font-size="8" text-anchor="middle">/catalog</text>
+<text x="307" y="306" fill="#94a3b8" font-size="8" text-anchor="middle">Liste des cours publiés</text>
+<text x="307" y="322" fill="#475569" font-size="7" text-anchor="middle">→ click → course detail</text>
+
+<!-- CourseDetailPage -->
+<rect x="235" y="380" width="145" height="70" rx="6" fill="#0f172a"/>
+<rect x="235" y="380" width="145" height="70" rx="6" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="307" y="404" fill="white" font-size="10" font-weight="600" text-anchor="middle">CourseDetailPage</text>
+<text x="307" y="420" fill="#94a3b8" font-size="8" text-anchor="middle">/catalog/:courseId</text>
+<text x="307" y="436" fill="#94a3b8" font-size="8" text-anchor="middle">Titre, description,</text>
+<text x="307" y="452" fill="#94a3b8" font-size="8" text-anchor="middle">niveau → "Request Access"</text>
+
+<!-- Express API catalog route -->
+<rect x="530" y="245" width="210" height="50" rx="6" fill="#0f172a"/>
+<rect x="530" y="245" width="210" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="635" y="268" fill="white" font-size="10" font-weight="600" text-anchor="middle">GET /api/courses</text>
+<text x="635" y="284" fill="#94a3b8" font-size="8" text-anchor="middle">public · published only</text>
+<text x="635" y="298" fill="#475569" font-size="7" text-anchor="middle">ordered by created_at DESC</text>
+
+<!-- Express API detail route -->
+<rect x="530" y="375" width="210" height="50" rx="6" fill="#0f172a"/>
+<rect x="530" y="375" width="210" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="635" y="398" fill="white" font-size="10" font-weight="600" text-anchor="middle">GET /api/courses/:id</text>
+<text x="635" y="414" fill="#94a3b8" font-size="8" text-anchor="middle">public · published only</text>
+<text x="635" y="430" fill="#475569" font-size="7" text-anchor="middle">→ 404 if draft or missing</text>
+
+<!-- Supabase -->
+<rect x="815" y="245" width="200" height="110" rx="6" fill="#0f172a"/>
+<rect x="815" y="245" width="200" height="110" rx="6" fill="rgba(76,29,149,.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="915" y="272" fill="white" font-size="10" font-weight="600" text-anchor="middle">Supabase PostgreSQL</text>
+<text x="915" y="292" fill="#94a3b8" font-size="8" text-anchor="middle">courses table</text>
+<text x="915" y="308" fill="#94a3b8" font-size="8" text-anchor="middle">WHERE status = 'published'</text>
+<text x="915" y="326" fill="#94a3b8" font-size="8" text-anchor="middle">JOIN profiles (teacher name)</text>
+<text x="915" y="348" fill="#475569" font-size="7" text-anchor="middle">public data · no auth needed</text>
+
+<!-- Error states sidebar -->
+<rect x="30" y="480" width="135" height="100" rx="8" fill="transparent" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="40" y="500" fill="#fb7185" font-size="8" font-weight="600">Error States</text>
+<text x="40" y="520" fill="#94a3b8" font-size="7">• 404 — course not found</text>
+<text x="40" y="536" fill="#94a3b8" font-size="7">• 500 — server error</text>
+<text x="40" y="552" fill="#94a3b8" font-size="7">• 401 — if auth gating</text>
+<text x="40" y="568" fill="#94a3b8" font-size="7">  triggers on protected</text>
+<text x="40" y="584" fill="#94a3b8" font-size="7">  pages only</text>
+
+<!-- Google OAuth redirect info box -->
+<rect x="800" y="480" width="250" height="80" rx="6" fill="rgba(251,191,36,.05)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="812" y="500" fill="#fbbf24" font-size="8" font-weight="600">Google OAuth Redirect (inferred)</text>
+<text x="812" y="520" fill="#94a3b8" font-size="7">When visitor clicks "Request Access"</text>
+<text x="812" y="536" fill="#94a3b8" font-size="7">→ AuthContext detects no session</text>
+<text x="812" y="552" fill="#94a3b8" font-size="7">→ redirect to /api/auth/google</text>
+<text x="812" y="568" fill="#475569" font-size="6">Post-auth: redirected back to dashboard</text>
+
+<!-- Legend -->
+<text x="40" y="660" fill="white" font-size="10" font-weight="600">Legend</text>
+<rect x="110" y="648" width="16" height="10" rx="2" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1"/>
+<text x="132" y="656" fill="#94a3b8" font-size="8">Frontend Page</text>
+<rect x="260" y="648" width="16" height="10" rx="2" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1"/>
+<text x="282" y="656" fill="#94a3b8" font-size="8">Backend API</text>
+<rect x="400" y="648" width="16" height="10" rx="2" fill="rgba(76,29,149,.4)" stroke="#a78bfa" stroke-width="1"/>
+<text x="422" y="656" fill="#94a3b8" font-size="8">Database</text>
+<rect x="530" y="648" width="16" height="10" rx="2" fill="rgba(251,191,36,.2)" stroke="#fbbf24" stroke-width="1"/>
+<text x="552" y="656" fill="#94a3b8" font-size="8">Decision</text>
+<rect x="650" y="648" width="16" height="10" rx="2" fill="rgba(136,19,55,.35)" stroke="#fb7185" stroke-width="1"/>
+<text x="672" y="656" fill="#94a3b8" font-size="8">Error / Auth redirect</text>
+<line x1="790" y1="653" x2="806" y2="653" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="812" y="656" fill="#94a3b8" font-size="8">Error path</text>
+</svg>
+</div>
+
+<div class="cards">
+<div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Pages publiques (visitor)</h3></div><ul><li>• HomePage (/) — landing, présentation</li><li>• CatalogPage (/catalog) — tous les cours publiés</li><li>• CourseDetailPage (/catalog/:id) — fiche détaillée</li><li>• Toutes servies par PublicLayout</li><li>• Aucune auth requise pour la lecture</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>API routes publiques</h3></div><ul><li>• GET /api/courses — liste filtrée published</li><li>• GET /api/courses/:id — détail (published only)</li><li>• GET /api/health — health check</li><li>• Aucune auth middleware sur ces routes</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot rose"></div><h3>Gating & redirects</h3></div><ul><li>• "Request Access" → vérifie session</li><li>• Non-auth → Google OAuth login</li><li>• Auth → dashboard role-based redirect</li><li>• RequireAuth wrapper sur /dashboard/*</li><li>• 401 si accès dashboard sans session</li></ul></div>
+</div>
+
+<p class="footer">Metableton Ecole · Visitor Discovery Flow · Generated from repo analysis · docs/user-flows/01-visitor-discovery-flow.html</p>
+</div>
+<script>
+async function copyAsImage(b){const o=b.textContent;try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),bl=await new Promise(r=>c.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':bl})]),b.textContent='✓ Copied!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}
+async function downloadPNG(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),a=document.createElement('a');a.download='visitor-discovery-flow.png',a.href=c.toDataURL('image/png'),a.click(),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}
+async function downloadPDF(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),d=c.toDataURL('image/png'),{jsPDF:j}=window.jspdf,o2=c.width>c.height?'landscape':'portrait',pdf=new j({orientation:o2,unit:'px',format:[c.width,c.height],hotfixes:['px_scaling']});pdf.addImage(d,'PNG',0,0,c.width,c.height),pdf.save('visitor-discovery-flow.pdf'),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}
+</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — Student Enrollment Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}.container{max-width:1200px;margin:0 auto}.header{margin-bottom:2rem}.header-row{display:flex;align-items:center;gap:1rem;margin-bottom:.5rem}.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em}.subtitle{color:#94a3b8;font-size:.875rem;margin-left:1.75rem}.diagram-container{background:rgba(15,23,42,.5);border-radius:1rem;border:1px solid #1e293b;padding:1.5rem;overflow-x:auto}svg{width:100%;min-width:900px;display:block}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:2rem}.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.25rem}.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}.card-dot{width:8px;height:8px;border-radius:50%}.card-dot.cyan{background:#22d3ee}.card-dot.emerald{background:#34d399}.card-dot.violet{background:#a78bfa}.card-dot.amber{background:#fbbf24}.card-dot.rose{background:#fb7185}.card-dot.orange{background:#fb923c}.card h3{font-size:.875rem;font-weight:600}.card ul{list-style:none;color:#94a3b8;font-size:.75rem}.card li{margin-bottom:.375rem}.footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.75rem}.toolbar{display:flex;gap:.5rem;margin-left:auto;flex-shrink:0;align-items:center}.toolbar-toggle{background:transparent;border:none;color:#475569;cursor:pointer;font-size:1.25rem;line-height:1;padding:.25rem .5rem;border-radius:.375rem;transition:color .2s,background .2s}.toolbar-toggle:hover{color:#94a3b8;background:rgba(30,41,59,.5)}.toolbar-actions{display:none;gap:.5rem}.toolbar.expanded .toolbar-actions{display:flex}.toolbar-actions button{background:rgba(30,41,59,.8);border:1px solid #334155;color:#94a3b8;padding:.375rem .75rem;border-radius:.375rem;font-family:inherit;font-size:.75rem;cursor:pointer;transition:all .2s;white-space:nowrap}.toolbar-actions button:hover{background:rgba(51,65,85,.8);color:white;border-color:#475569}@media print{body{background:#020617;padding:1rem}.toolbar{display:none!important}}
+</style>
+</head>
+<body>
+<div class="container" id="report-container">
+<div class="header">
+<div class="header-row"><div class="pulse-dot"></div><h1>Metableton Ecole — Student Enrollment Flow</h1>
+<div class="toolbar"><div class="toolbar-actions"><button onclick="copyAsImage(this)">📋 Copy</button><button onclick="downloadPNG(this)">🖼️ PNG</button><button onclick="downloadPDF(this)">📄 PDF</button></div><button class="toolbar-toggle" onclick="this.parentElement.classList.toggle('expanded')" title="Export">⋯</button></div></div>
+<p class="subtitle">Rôle: student — Parcours complet : login → catalogue → demande inscription → attente → approved/rejected → dashboard → Classroom</p>
+</div>
+
+<div class="diagram-container">
+<svg viewBox="0 0 1100 720">
+<defs>
+<marker id="ah" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#64748b"/></marker>
+<marker id="ac" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#22d3ee"/></marker>
+<marker id="ag" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#34d399"/></marker>
+<marker id="av" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#a78bfa"/></marker>
+<marker id="ar" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#fb7185"/></marker>
+<marker id="aa" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#fbbf24"/></marker>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+
+<!-- ===== ARROWS ===== -->
+<!-- Login → Catalog -->
+<line x1="165" y1="175" x2="258" y2="175" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ac)"/>
+<!-- Catalog → CourseDetail -->
+<line x1="328" y1="220" x2="328" y2="268" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ac)"/>
+<!-- CourseDetail → POST enroll -->
+<line x1="418" y1="290" x2="518" y2="290" stroke="#34d399" stroke-width="1.5" marker-end="url(#ag)"/>
+<text x="468" y="283" fill="#94a3b8" font-size="7" text-anchor="middle">POST</text>
+<!-- POST enroll → Supabase -->
+<line x1="715" y1="290" x2="808" y2="290" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#av)"/>
+<!-- Supabase → pending status -->
+<path d="M 908 310 L 925 310 L 925 390 L 715 390" fill="none" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#ah)"/>
+<text x="825" y="385" fill="#fb923c" font-size="7">state: pending</text>
+<!-- pending → teacher review -->
+<line x1="715" y1="410" x2="715" y2="430" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ah)"/>
+<!-- Approve → Supabase -->
+<line x1="715" y1="465" x2="808" y2="465" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#av)"/>
+<text x="761" y="458" fill="#94a3b8" font-size="7">UPDATE</text>
+<!-- approved → StudentDashboard -->
+<path d="M 808 485 L 830 485 L 830 610 L 418 610 L 418 588" fill="none" stroke="#34d399" stroke-width="1.5" marker-end="url(#ag)"/>
+<text x="625" y="602" fill="#34d399" font-size="7">approved → notify student</text>
+<!-- Reject → Supabase -->
+<line x1="715" y1="500" x2="808" y2="500" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#av)"/>
+<text x="761" y="493" fill="#94a3b8" font-size="7">UPDATE</text>
+<!-- rejected → Catalog (retry) -->
+<path d="M 808 520 L 830 520 L 880 520 L 880 175 L 388 175" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#ar)"/>
+<text x="630" y="515" fill="#fb7185" font-size="7">rejected → retryable (re-request)</text>
+<!-- StudentDashboard → Classroom -->
+<line x1="328" y1="640" x2="328" y2="668" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#aa)"/>
+<text x="345" y="660" fill="#94a3b8" font-size="7">link</text>
+<!-- GET /me (enrollments) -->
+<line x1="418" y1="580" x2="518" y2="580" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ac)"/>
+<text x="468" y="573" fill="#94a3b8" font-size="7">GET</text>
+<!-- GET /mine → Supabase -->
+<line x1="715" y1="580" x2="808" y2="580" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#av)"/>
+
+<!-- ===== COMPONENTS ===== -->
+<!-- Student login -->
+<rect x="35" y="145" width="130" height="60" rx="6" fill="#0f172a"/>
+<rect x="35" y="145" width="130" height="60" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="100" y="170" fill="white" font-size="11" font-weight="600" text-anchor="middle">Student</text>
+<text x="100" y="187" fill="#94a3b8" font-size="9" text-anchor="middle">Google OAuth</text>
+<text x="100" y="203" fill="#475569" font-size="7" text-anchor="middle">role: student</text>
+
+<!-- Catalog -->
+<rect x="265" y="145" width="145" height="75" rx="6" fill="#0f172a"/>
+<rect x="265" y="145" width="145" height="75" rx="6" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="337" y="170" fill="white" font-size="10" font-weight="600" text-anchor="middle">CatalogPage</text>
+<text x="337" y="188" fill="#94a3b8" font-size="8" text-anchor="middle">GET /api/courses</text>
+<text x="337" y="204" fill="#94a3b8" font-size="8" text-anchor="middle">published courses</text>
+<text x="337" y="220" fill="#475569" font-size="7" text-anchor="middle">→ click course</text>
+
+<!-- CourseDetail -->
+<rect x="265" y="270" width="145" height="50" rx="6" fill="#0f172a"/>
+<rect x="265" y="270" width="145" height="50" rx="6" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="337" y="293" fill="white" font-size="10" font-weight="600" text-anchor="middle">CourseDetailPage</text>
+<text x="337" y="309" fill="#94a3b8" font-size="8" text-anchor="middle">→ Request Access</text>
+<text x="337" y="323" fill="#475569" font-size="7" text-anchor="middle">requireAuth</text>
+
+<!-- POST /api/enrollments -->
+<rect x="530" y="260" width="210" height="60" rx="6" fill="#0f172a"/>
+<rect x="530" y="260" width="210" height="60" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="635" y="284" fill="white" font-size="10" font-weight="600" text-anchor="middle">POST /api/enrollments</text>
+<text x="635" y="300" fill="#94a3b8" font-size="8" text-anchor="middle">{ courseId }</text>
+<text x="635" y="316" fill="#475569" font-size="7" text-anchor="middle">requireAuth · requestEnrollment()</text>
+
+<!-- Teacher/Admin review box -->
+<rect x="530" y="400" width="210" height="110" rx="8" fill="transparent" stroke="#fb923c" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="542" y="420" fill="#fb923c" font-size="9" font-weight="600">Teacher/Admin Review</text>
+<text x="542" y="440" fill="#94a3b8" font-size="8">• GET /api/enrollments/pending</text>
+<text x="542" y="458" fill="#94a3b8" font-size="8">• POST :id/approve → approved</text>
+<text x="542" y="476" fill="#94a3b8" font-size="8">• POST :id/reject → rejected</text>
+<text x="542" y="496" fill="#475569" font-size="7">ownership check: teacher_id match</text>
+<text x="542" y="510" fill="#475569" font-size="7">admin can approve/reject any</text>
+
+<!-- Supabase -->
+<rect x="815" y="260" width="195" height="280" rx="8" fill="rgba(76,29,149,.06)" stroke="#a78bfa" stroke-width="1" stroke-dasharray="5,5"/>
+<text x="825" y="282" fill="#a78bfa" font-size="9" font-weight="600">Supabase PostgreSQL</text>
+<text x="825" y="306" fill="#94a3b8" font-size="8">courses table</text>
+<text x="825" y="324" fill="#94a3b8" font-size="8">enrollments table</text>
+<text x="825" y="348" fill="#475569" font-size="7">Enrollment State Machine:</text>
+<text x="830" y="366" fill="#94a3b8" font-size="7">none → pending</text>
+<text x="830" y="382" fill="#34d399" font-size="7">pending → approved (terminal)</text>
+<text x="830" y="398" fill="#fb7185" font-size="7">pending → rejected</text>
+<text x="830" y="414" fill="#fb923c" font-size="7">rejected → pending (retry)</text>
+<text x="825" y="440" fill="#475569" font-size="7">Guards:</text>
+<text x="830" y="458" fill="#94a3b8" font-size="7">• course must be published</text>
+<text x="830" y="474" fill="#94a3b8" font-size="7">• ALREADY_PENDING (409)</text>
+<text x="830" y="490" fill="#94a3b8" font-size="7">• ALREADY_APPROVED (409)</text>
+<text x="830" y="506" fill="#94a3b8" font-size="7">• rejected → retryable</text>
+
+<!-- StudentDashboard (approved) -->
+<rect x="265" y="555" width="145" height="55" rx="6" fill="#0f172a"/>
+<rect x="265" y="555" width="145" height="55" rx="6" fill="rgba(6,78,59,.25)" stroke="#34d399" stroke-width="1.5"/>
+<text x="337" y="578" fill="white" font-size="10" font-weight="600" text-anchor="middle">StudentDashboard</text>
+<text x="337" y="594" fill="#94a3b8" font-size="8" text-anchor="middle">GET /api/enrollments/mine</text>
+<text x="337" y="610" fill="#475569" font-size="7" text-anchor="middle">approved courses listed</text>
+
+<!-- Classroom link -->
+<rect x="265" y="670" width="145" height="35" rx="6" fill="#0f172a"/>
+<rect x="265" y="670" width="145" height="35" rx="6" fill="rgba(120,53,15,.25)" stroke="#fbbf24" stroke-width="1"/>
+<text x="337" y="692" fill="#fbbf24" font-size="9" text-anchor="middle">Google Classroom</text>
+<text x="337" y="704" fill="#475569" font-size="7" text-anchor="middle">(if linked by teacher)</text>
+
+<!-- GET /mine -->
+<rect x="530" y="555" width="210" height="50" rx="6" fill="#0f172a"/>
+<rect x="530" y="555" width="210" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="635" y="578" fill="white" font-size="10" font-weight="600" text-anchor="middle">GET /api/enrollments/mine</text>
+<text x="635" y="594" fill="#94a3b8" font-size="8" text-anchor="middle">joined with courses + teachers</text>
+<text x="635" y="608" fill="#475569" font-size="7" text-anchor="middle">returns classroom_url if linked</text>
+
+<!-- Legend -->
+<text x="40" y="40" fill="white" font-size="10" font-weight="600">Legend</text>
+<rect x="40" y="55" width="16" height="10" rx="2" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1"/>
+<text x="62" y="63" fill="#94a3b8" font-size="8">Frontend</text>
+<rect x="150" y="55" width="16" height="10" rx="2" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1"/>
+<text x="172" y="63" fill="#94a3b8" font-size="8">Backend API</text>
+<rect x="280" y="55" width="16" height="10" rx="2" fill="rgba(76,29,149,.4)" stroke="#a78bfa" stroke-width="1"/>
+<text x="302" y="63" fill="#94a3b8" font-size="8">Database</text>
+<rect x="400" y="55" width="16" height="10" rx="2" fill="rgba(251,146,60,.3)" stroke="#fb923c" stroke-width="1"/>
+<text x="422" y="63" fill="#94a3b8" font-size="8">Review/Action</text>
+<line x1="530" y1="60" x2="546" y2="60" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5,5"/>
+<text x="552" y="63" fill="#94a3b8" font-size="8">Rejected/Retry</text>
+</svg>
+</div>
+
+<div class="cards">
+<div class="card"><div class="card-header"><div class="card-dot orange"></div><h3>Enrollment State Machine</h3></div><ul><li>• none → pending (POST /enrollments)</li><li>• pending → approved (teacher/admin action)</li><li>• pending → rejected (teacher/admin action)</li><li>• rejected → pending (re-request via upsert)</li><li>• approved = terminal state</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>API Routes Used</h3></div><ul><li>• POST /api/enrollments (request)</li><li>• GET /api/enrollments/mine (my statuses)</li><li>• DELETE /api/enrollments/:id (cancel pending)</li><li>• GET /api/courses + /:id (browse)</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot rose"></div><h3>Error States</h3></div><ul><li>• 401 — not authenticated (RequireAuth)</li><li>• 409 — ALREADY_PENDING / ALREADY_APPROVED</li><li>• 400 — course not published</li><li>• 404 — course/enrollment not found</li><li>• 409 — cancel non-pending enrollment</li></ul></div>
+</div>
+
+<p class="footer">Metableton Ecole · Student Enrollment Flow · Generated from repo analysis · docs/user-flows/02-student-enrollment-flow.html</p>
+</div>
+<script>async function copyAsImage(b){const o=b.textContent;try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),bl=await new Promise(r=>c.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':bl})]),b.textContent='✓ Copied!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPNG(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),a=document.createElement('a');a.download='student-enrollment-flow.png',a.href=c.toDataURL('image/png'),a.click(),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPDF(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),d=c.toDataURL('image/png'),{jsPDF:j}=window.jspdf,o2=c.width>c.height?'landscape':'portrait',pdf=new j({orientation:o2,unit:'px',format:[c.width,c.height],hotfixes:['px_scaling']});pdf.addImage(d,'PNG',0,0,c.width,c.height),pdf.save('student-enrollment-flow.pdf'),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}</script>
+</body>
+</html>

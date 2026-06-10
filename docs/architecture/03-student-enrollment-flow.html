@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metableton Ecole — Student Enrollment Flow</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'JetBrains Mono', monospace; background: #020617; min-height: 100vh; padding: 2rem; color: white; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { margin-bottom: 2rem; }
+    .header-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .pulse-dot { width: 12px; height: 12px; background: #22d3ee; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+    .subtitle { color: #94a3b8; font-size: 0.875rem; margin-left: 1.75rem; }
+    .diagram-container { background: rgba(15, 23, 42, 0.5); border-radius: 1rem; border: 1px solid #1e293b; padding: 1.5rem; overflow-x: auto; }
+    svg { width: 100%; min-width: 900px; display: block; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .card { background: rgba(15, 23, 42, 0.5); border-radius: 0.75rem; border: 1px solid #1e293b; padding: 1.25rem; }
+    .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .card-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .card-dot.cyan { background: #22d3ee; } .card-dot.emerald { background: #34d399; }
+    .card-dot.violet { background: #a78bfa; } .card-dot.amber { background: #fbbf24; }
+    .card-dot.rose { background: #fb7185; } .card-dot.orange { background: #fb923c; }
+    .card h3 { font-size: 0.875rem; font-weight: 600; }
+    .card ul { list-style: none; color: #94a3b8; font-size: 0.75rem; }
+    .card li { margin-bottom: 0.375rem; }
+    .footer { text-align: center; margin-top: 1.5rem; color: #475569; font-size: 0.75rem; }
+    .toolbar { display: flex; gap: 0.5rem; margin-left: auto; flex-shrink: 0; align-items: center; }
+    .toolbar-toggle { background: transparent; border: none; color: #475569; cursor: pointer; font-size: 1.25rem; line-height: 1; padding: 0.25rem 0.5rem; border-radius: 0.375rem; transition: color 0.2s, background 0.2s; }
+    .toolbar-toggle:hover { color: #94a3b8; background: rgba(30, 41, 59, 0.5); }
+    .toolbar-actions { display: none; gap: 0.5rem; }
+    .toolbar.expanded .toolbar-actions { display: flex; }
+    .toolbar-actions button { background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; color: #94a3b8; padding: 0.375rem 0.75rem; border-radius: 0.375rem; font-family: inherit; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .toolbar-actions button:hover { background: rgba(51, 65, 85, 0.8); color: white; border-color: #475569; }
+    @media print { body { background: #020617; padding: 1rem; } .toolbar { display: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="container" id="report-container">
+    <div class="header">
+      <div class="header-row">
+        <div class="pulse-dot"></div>
+        <h1>Metableton Ecole — Student Enrollment Flow</h1>
+        <div class="toolbar">
+          <div class="toolbar-actions">
+            <button onclick="copyAsImage(this)">📋 Copy</button>
+            <button onclick="downloadPNG(this)">🖼️ PNG</button>
+            <button onclick="downloadPDF(this)">📄 PDF</button>
+          </div>
+          <button class="toolbar-toggle" onclick="this.parentElement.classList.toggle('expanded')" title="Export options" aria-label="Export options">⋯</button>
+        </div>
+      </div>
+      <p class="subtitle">Complete student journey — browse catalog → request enrollment → teacher approval → Google Classroom access — with enrollment state machine</p>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1100 680">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8" />
+          </marker>
+          <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee" />
+          </marker>
+          <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#34d399" />
+          </marker>
+          <marker id="arrow-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa" />
+          </marker>
+          <marker id="arrow-rose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#fb7185" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- ============================================================
+             ARROWS — drawn first so they render behind components
+             ============================================================ -->
+
+        <!-- 1. Student → Catalog -->
+        <line x1="130" y1="140" x2="218" y2="140" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+        <text x="174" y="133" fill="#94a3b8" font-size="7" text-anchor="middle">browse</text>
+
+        <!-- 2. Catalog → Course Detail (student clicks course) -->
+        <line x1="310" y1="170" x2="310" y2="208" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+
+        <!-- 3. Course Detail → Request Enrollment POST -->
+        <line x1="410" y1="205" x2="518" y2="205" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+        <text x="464" y="198" fill="#94a3b8" font-size="7" text-anchor="middle">POST</text>
+
+        <!-- 4. Enrollment Service → Supabase upsert -->
+        <line x1="640" y1="205" x2="738" y2="205" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow-violet)"/>
+
+        <!-- 5a. State: pending → Teacher reviews -->
+        <path d="M 810 175 L 840 175 Q 860 175 860 155 L 860 130 L 578 130 Q 558 130 558 150 L 558 285" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#arrow-rose)"/>
+        <text x="720" y="123" fill="#fb7185" font-size="7">requires review</text>
+
+        <!-- 5b. Teacher approve/reject → DB update -->
+        <line x1="688" y1="340" x2="738" y2="340" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow-violet)"/>
+
+        <!-- 6a. Approved → Student dashboard -->
+        <path d="M 810 310 L 840 310 Q 860 310 860 425 L 410 425 Q 390 425 390 445 L 390 468" fill="none" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+        <text x="660" y="418" fill="#94a3b8" font-size="7">approved!</text>
+
+        <!-- 6b. Rejected → Student retry -->
+        <path d="M 810 380 L 840 380 Q 860 380 860 425 L 310 425 Q 290 425 290 445 L 290 468" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#arrow-rose)"/>
+        <text x="570" y="440" fill="#fb7185" font-size="7">rejected (retryable)</text>
+
+        <!-- 7. Student → Classroom -->
+        <line x1="310" y1="530" x2="310" y2="558" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="325" y="549" fill="#94a3b8" font-size="7">link</text>
+
+        <!-- ============================================================
+             COMPONENTS — Left to right, top to bottom flow
+             ============================================================ -->
+
+        <!-- Student (Browser) -->
+        <rect x="30" y="110" width="130" height="60" rx="6" fill="#0f172a"/>
+        <rect x="30" y="110" width="130" height="60" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="95" y="135" fill="white" font-size="11" font-weight="600" text-anchor="middle">Student</text>
+        <text x="95" y="152" fill="#94a3b8" font-size="9" text-anchor="middle">(Browser)</text>
+        <text x="95" y="166" fill="#475569" font-size="7" text-anchor="middle">role: student</text>
+
+        <!-- Catalog Page -->
+        <rect x="228" y="110" width="140" height="60" rx="6" fill="#0f172a"/>
+        <rect x="228" y="110" width="140" height="60" rx="6" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="298" y="134" fill="white" font-size="10" font-weight="600" text-anchor="middle">CatalogPage</text>
+        <text x="298" y="150" fill="#94a3b8" font-size="8" text-anchor="middle">GET /api/courses</text>
+        <text x="298" y="164" fill="#475569" font-size="7" text-anchor="middle">public · published only</text>
+
+        <!-- Course Detail Page -->
+        <rect x="228" y="210" width="140" height="60" rx="6" fill="#0f172a"/>
+        <rect x="228" y="210" width="140" height="60" rx="6" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="298" y="234" fill="white" font-size="10" font-weight="600" text-anchor="middle">CourseDetailPage</text>
+        <text x="298" y="250" fill="#94a3b8" font-size="8" text-anchor="middle">GET /api/courses/:id</text>
+        <text x="298" y="264" fill="#475569" font-size="7" text-anchor="middle">+ "Request Access"</text>
+
+        <!-- POST /api/enrollments -->
+        <rect x="430" y="175" width="210" height="60" rx="6" fill="#0f172a"/>
+        <rect x="430" y="175" width="210" height="60" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="535" y="197" fill="white" font-size="10" font-weight="600" text-anchor="middle">POST /api/enrollments</text>
+        <text x="535" y="213" fill="#94a3b8" font-size="8" text-anchor="middle">requestEnrollment( studentId, courseId )</text>
+        <text x="535" y="229" fill="#475569" font-size="7" text-anchor="middle">state machine guards · upsert</text>
+
+        <!-- Enrollment State Machine -->
+        <rect x="430" y="280" width="210" height="110" rx="6" fill="#0f172a"/>
+        <rect x="430" y="280" width="210" height="110" rx="6" fill="rgba(251, 146, 60, 0.2)" stroke="#fb923c" stroke-width="1.5"/>
+        <text x="535" y="302" fill="#fb923c" font-size="10" font-weight="600" text-anchor="middle">Teacher/Admin Reviews</text>
+        <text x="535" y="320" fill="#94a3b8" font-size="8" text-anchor="middle">GET /api/enrollments/pending</text>
+        <text x="535" y="336" fill="#94a3b8" font-size="8" text-anchor="middle">POST enrollments/:id/approve  →  approved</text>
+        <text x="535" y="352" fill="#94a3b8" font-size="8" text-anchor="middle">POST enrollments/:id/reject   →  rejected</text>
+        <text x="535" y="370" fill="#475569" font-size="7" text-anchor="middle">ownership check: teacher_id match</text>
+        <text x="535" y="384" fill="#475569" font-size="7" text-anchor="middle">admin can approve/reject any</text>
+
+        <!-- Supabase Enrollments -->
+        <rect x="750" y="175" width="200" height="80" rx="6" fill="#0f172a"/>
+        <rect x="750" y="175" width="200" height="80" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="850" y="199" fill="white" font-size="10" font-weight="600" text-anchor="middle">Supabase: enrollments</text>
+        <text x="850" y="217" fill="#94a3b8" font-size="8" text-anchor="middle">UPSERT on (student_id, course_id)</text>
+        <text x="850" y="233" fill="#94a3b8" font-size="8" text-anchor="middle">rejected → pending (retryable)</text>
+        <text x="850" y="249" fill="#475569" font-size="7" text-anchor="middle">terminal: approved</text>
+
+        <!-- Student Dashboard (approved) -->
+        <rect x="228" y="470" width="140" height="70" rx="6" fill="#0f172a"/>
+        <rect x="228" y="470" width="140" height="70" rx="6" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="298" y="494" fill="white" font-size="10" font-weight="600" text-anchor="middle">StudentDashboard</text>
+        <text x="298" y="510" fill="#94a3b8" font-size="8" text-anchor="middle">GET /api/enrollments/mine</text>
+        <text x="298" y="526" fill="#94a3b8" font-size="8" text-anchor="middle">filtered: approved</text>
+        <text x="298" y="540" fill="#22d3ee" font-size="7" text-anchor="middle">→ classroom_url link</text>
+
+        <!-- Google Classroom (access via link) -->
+        <rect x="228" y="560" width="140" height="55" rx="6" fill="#0f172a"/>
+        <rect x="228" y="560" width="140" height="55" rx="6" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="298" y="582" fill="white" font-size="9" font-weight="600" text-anchor="middle">Google Classroom</text>
+        <text x="298" y="598" fill="#94a3b8" font-size="8" text-anchor="middle">classroom_url link</text>
+        <text x="298" y="612" fill="#475569" font-size="7" text-anchor="middle">(if linked by teacher)</text>
+
+        <!-- ============================================================
+             STATE MACHINE VISUAL (bottom-right)
+             ============================================================ -->
+        <rect x="650" y="430" width="400" height="150" rx="10" fill="rgba(251, 146, 60, 0.05)" stroke="#fb923c" stroke-width="0.5" stroke-dasharray="6,4"/>
+        <text x="660" y="448" fill="#fb923c" font-size="9" font-weight="600">Enrollment State Machine</text>
+
+        <!-- none state -->
+        <rect x="670" y="465" width="75" height="28" rx="4" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1"/>
+        <text x="707" y="483" fill="#94a3b8" font-size="8" text-anchor="middle">none</text>
+
+        <line x1="745" y1="479" x2="795" y2="479" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="770" y="473" fill="#94a3b8" font-size="6" text-anchor="middle">request</text>
+
+        <!-- pending state -->
+        <rect x="800" y="465" width="80" height="28" rx="4" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1.5"/>
+        <text x="840" y="483" fill="#fb923c" font-size="8" font-weight="600" text-anchor="middle">pending</text>
+
+        <!-- pending → approved -->
+        <line x1="840" y1="493" x2="840" y2="523" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+        <text x="855" y="513" fill="#34d399" font-size="7">approve</text>
+
+        <!-- pending → rejected -->
+        <line x1="880" y1="479" x2="940" y2="479" stroke="#fb7185" stroke-width="1.5" marker-end="url(#arrow-rose)"/>
+        <text x="910" y="473" fill="#fb7185" font-size="7">reject</text>
+
+        <!-- approved state -->
+        <rect x="800" y="525" width="80" height="28" rx="4" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="840" y="543" fill="#34d399" font-size="8" font-weight="600" text-anchor="middle">approved</text>
+        <text x="840" y="565" fill="#475569" font-size="6" text-anchor="middle">terminal</text>
+
+        <!-- rejected state -->
+        <rect x="945" y="465" width="80" height="28" rx="4" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="985" y="483" fill="#fb7185" font-size="8" font-weight="600" text-anchor="middle">rejected</text>
+
+        <!-- rejected → pending (retry) -->
+        <path d="M 985 465 L 985 450 Q 985 440 975 440 L 840 440 Q 830 440 830 450 L 830 463" fill="none" stroke="#fb923c" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowhead)"/>
+        <text x="910" y="435" fill="#94a3b8" font-size="6" text-anchor="middle">re-request</text>
+
+        <!-- ============================================================
+             SIDEBAR: Error Guards
+             ============================================================ -->
+        <rect x="30" y="430" width="160" height="155" rx="8" fill="transparent" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="40" y="448" fill="#fb7185" font-size="8" font-weight="600">State Guards (409/400)</text>
+        <text x="40" y="468" fill="#94a3b8" font-size="7">• ALREADY_PENDING</text>
+        <text x="40" y="484" fill="#94a3b8" font-size="7">  "You already have a pending</text>
+        <text x="40" y="496" fill="#94a3b8" font-size="7">   request for this course."</text>
+        <text x="40" y="516" fill="#94a3b8" font-size="7">• ALREADY_APPROVED</text>
+        <text x="40" y="532" fill="#94a3b8" font-size="7">  "You are already enrolled</text>
+        <text x="40" y="544" fill="#94a3b8" font-size="7">   in this course."</text>
+        <text x="40" y="564" fill="#94a3b8" font-size="7">• Course must be published</text>
+        <text x="40" y="580" fill="#94a3b8" font-size="7">  Draft courses hidden from</text>
+        <text x="40" y="592" fill="#94a3b8" font-size="7">  catalog (by DB query)</text>
+
+        <!-- ============================================================
+             LEGEND
+             ============================================================ -->
+        <text x="30" y="670" fill="white" font-size="10" font-weight="600">Legend</text>
+
+        <rect x="100" y="658" width="16" height="10" rx="2" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+        <text x="122" y="666" fill="#94a3b8" font-size="8">Frontend Page</text>
+
+        <rect x="240" y="658" width="16" height="10" rx="2" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1"/>
+        <text x="262" y="666" fill="#94a3b8" font-size="8">API Route</text>
+
+        <rect x="370" y="658" width="16" height="10" rx="2" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+        <text x="392" y="666" fill="#94a3b8" font-size="8">Database</text>
+
+        <rect x="500" y="658" width="16" height="10" rx="2" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1"/>
+        <text x="522" y="666" fill="#94a3b8" font-size="8">State Machine</text>
+
+        <rect x="640" y="658" width="16" height="10" rx="2" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1"/>
+        <text x="662" y="666" fill="#94a3b8" font-size="8">Rejection / Error</text>
+
+        <line x1="780" y1="663" x2="796" y2="663" stroke="#fb7185" stroke-width="1" stroke-dasharray="5,5"/>
+        <text x="802" y="666" fill="#94a3b8" font-size="8">Rejected retry</text>
+      </svg>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot orange"></div>
+          <h3>Enrollment State Machine</h3>
+        </div>
+        <ul>
+          <li>• none → pending (requestEnrollment)</li>
+          <li>• pending → approved (approveEnrollment)</li>
+          <li>• pending → rejected (rejectEnrollment)</li>
+          <li>• rejected → pending (re-request, retryable)</li>
+          <li>• approved = terminal (no further transitions)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot emerald"></div>
+          <h3>API Routes Used</h3>
+        </div>
+        <ul>
+          <li>• GET /api/courses — public catalog</li>
+          <li>• GET /api/courses/:id — course detail</li>
+          <li>• POST /api/enrollments — request enrollment</li>
+          <li>• GET /api/enrollments/mine — student's list</li>
+          <li>• DELETE /api/enrollments/:id — cancel pending</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot rose"></div>
+          <h3>Ownership & Permissions</h3>
+        </div>
+        <ul>
+          <li>• Student can only cancel their own requests</li>
+          <li>• Only pending enrollments can be canceled (409 otherwise)</li>
+          <li>• Teacher reviews enrollments for their own courses</li>
+          <li>• Admin can approve/reject any enrollment</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer">
+      Metableton Ecole · Student Enrollment Flow · Inferred from server/src/routes/enrollments.js, services/enrollmentService.js, client/src/pages/CatalogPage.jsx · docs/architecture/03-student-enrollment-flow.html
+    </p>
+  </div>
+
+  <script>
+    async function copyAsImage(btn) {
+      const orig = btn.textContent;
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        btn.textContent = '✓ Copied!';
+      } catch (e) { btn.textContent = '✗ Failed'; }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+    async function downloadPNG(btn) {
+      const orig = btn.textContent; btn.textContent = '⏳ ...';
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const link = document.createElement('a');
+        link.download = 'metableton-enrollment-flow.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        btn.textContent = '✓ Done!';
+      } catch (e) { btn.textContent = '✗ Failed'; }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+    async function downloadPDF(btn) {
+      const orig = btn.textContent; btn.textContent = '⏳ ...';
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const orientation = canvas.width > canvas.height ? 'landscape' : 'portrait';
+        const pdf = new jsPDF({ orientation, unit: 'px', format: [canvas.width, canvas.height], hotfixes: ['px_scaling'] });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save('metableton-enrollment-flow.pdf');
+        btn.textContent = '✓ Done!';
+      } catch (e) { btn.textContent = '✗ Failed'; }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+  </script>
+</body>
+</html>
