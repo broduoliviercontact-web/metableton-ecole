@@ -221,7 +221,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
       {status === 'rejected' && course.id && (
         <div className="mt-2">
           <Link
-            to={`/courses/${course.id}`}
+            to={`/catalog/${course.id}`}
             className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
           >
             Voir la page du cours →
@@ -292,7 +292,7 @@ function ClassroomLink({ classroomUrl, courseId }) {
         <>
           {' '}
           <Link
-            to={`/courses/${courseId}`}
+            to={`/catalog/${courseId}`}
             className="text-emerald-400 transition-colors hover:text-emerald-300"
           >
             Voir le cours
