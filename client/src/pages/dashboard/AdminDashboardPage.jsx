@@ -77,7 +77,8 @@ export default function AdminDashboardPage() {
       );
       setRowErrors((prev) => ({
         ...prev,
-        [userId]: err.message || 'Erreur lors de la mise à jour du rôle.',
+        [userId]:
+          err.message || "Impossible de modifier le rôle. Veuillez réessayer.",
       }));
     } finally {
       setSavingId(null);

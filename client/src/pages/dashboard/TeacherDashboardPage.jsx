@@ -89,7 +89,11 @@ export default function TeacherDashboardPage() {
       setPendingEnrollments(snapshot);
       setRowErrors((prev) => ({
         ...prev,
-        [enrollmentId]: err.message || `Erreur lors de ${action === 'approve' ? "l'approbation" : 'la rejection'}.`,
+        [enrollmentId]:
+          err.message ||
+          (action === 'approve'
+            ? "Impossible d'approuver la demande. Veuillez réessayer."
+            : "Impossible de refuser la demande. Veuillez réessayer."),
       }));
     } finally {
       setActionInFlight(null);
