@@ -5,8 +5,8 @@ import Button from '../../components/ui/Button.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
-import { getMyEnrollments } from '../../api/enrollments.js';
-import { SKILL_LABELS } from '../../data/mockCourses.js';
+import { getMyEnrollments, cancelEnrollment } from '../../api/enrollments.js';
+import { SKILL_LABELS } from '../../constants.js';
 
 // Status copy — French, kept here so all three messages live next to the
 // statuses they describe.
@@ -54,6 +54,13 @@ export default function StudentDashboardPage() {
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  // Callback for EnrollmentCard to remove enrollment after cancel
+  const handleCancelEnrollment = useCallback((enrollmentId) => {
+    setEnrollments((prev) =>
+      prev ? prev.filter((e) => e.id !== enrollmentId) : []
+    );
   }, []);
 
   useEffect(() => {
@@ -113,7 +120,11 @@ export default function StudentDashboardPage() {
 
       <div className="space-y-4">
         {enrollments.map((enrollment) => (
-          <EnrollmentCard key={enrollment.id} enrollment={enrollment} />
+          <EnrollmentCard
+            key={enrollment.id}
+            enrollment={enrollment}
+            onCancelEnrollment={handleCancelEnrollment}
+          />
         ))}
       </div>
     </div>
@@ -123,7 +134,7 @@ export default function StudentDashboardPage() {
 // ── EnrollmentCard ──────────────────────────────────────────────────
 // Renders one enrollment row with course details, status panel, and
 // (for approved enrollments) a Classroom link if the course has one.
-function EnrollmentCard({ enrollment }) {
+function EnrollmentCard({ enrollment, onCancelEnrollment }) {
   const course = enrollment.courses || {};
   const teacher = course.profiles || {};
   const status = enrollment.status;
@@ -131,11 +142,37 @@ function EnrollmentCard({ enrollment }) {
   const statusMessage = STATUS_MESSAGES[status];
   const statusPanelClass = STATUS_PANEL_CLASS[status] || 'border-white/10 bg-white/5 text-gray-300';
 
+  const [isCanceling, setIsCanceling] = useState(false);
+  const [cancelError, setCancelError] = useState(null);
+
   // The "updated" timestamp is the most recent state change — for a pending
   // request that's the submission time, for approved/rejected it's the
   // decision time. Prefer it; fall back to created_at.
   const lastChange = formatDate(enrollment.updated_at || enrollment.created_at);
   const requestedAt = formatDate(enrollment.created_at);
+
+  // Handler for canceling a pending enrollment
+  async function handleCancel() {
+    setIsCanceling(true);
+    setCancelError(null);
+    try {
+      await cancelEnrollment(enrollment.id);
+      if (onCancelEnrollment) {
+        onCancelEnrollment(enrollment.id);
+      }
+    } catch (err) {
+      // Map server errors to user-friendly messages
+      if (err?.status === 409) {
+        setCancelError('Cette demande ne peut pas être annulée.');
+      } else if (err?.status === 403) {
+        setCancelError('Vous n\'avez pas les droits pour annuler cette demande.');
+      } else {
+        setCancelError('Une erreur est survenue. Veuillez réessayer.');
+      }
+    } finally {
+      setIsCanceling(false);
+    }
+  }
 
   return (
     <article className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
@@ -204,6 +241,25 @@ function EnrollmentCard({ enrollment }) {
           {status === 'rejected' && lastChange && (
             <span>Refusée le {lastChange}</span>
           )}
+        </div>
+      )}
+
+      {/* Cancel button — only for pending enrollments */}
+      {status === 'pending' && (
+        <div className="mt-4 pt-4 border-t border-white/5">
+          {cancelError && (
+            <div className="mb-2 text-xs text-red-400">
+              {cancelError}
+            </div>
+          )}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleCancel}
+            disabled={isCanceling}
+          >
+            {isCanceling ? 'Annulation en cours…' : 'Annuler la demande'}
+          </Button>
         </div>
       )}
     </article>

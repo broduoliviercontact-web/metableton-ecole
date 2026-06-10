@@ -147,4 +147,61 @@ router.post(
   }
 );
 
+// ── DELETE /api/enrollments/:id ─────────────────────────────────────
+// Auth required. Student can cancel their own pending enrollment request.
+// - If enrollment is pending and belongs to user → delete, return 204
+// - If enrollment is not pending (already approved/rejected) → 409 CONFLICT
+// - If enrollment belongs to another user → 403 FORBIDDEN
+// - If enrollment not found → 404 NOT_FOUND
+router.delete(
+  '/:id',
+  requireAuth,
+  async (req, res, next) => {
+    try {
+      const enrollmentInfo = await enrollmentService.getEnrollmentCourseTeacher(
+        req.params.id
+      );
+
+      if (!enrollmentInfo) {
+        return res.status(404).json({
+          error: { code: 'NOT_FOUND', message: 'Enrollment not found.' },
+        });
+      }
+
+      // Check ownership: student can only cancel their own enrollment
+      if (enrollmentInfo.studentId !== req.user.userId) {
+        return res.status(403).json({
+          error: {
+            code: 'FORBIDDEN',
+            message: 'You can only cancel your own enrollment requests.',
+          },
+        });
+      }
+
+      // Check status: only pending enrollments can be canceled
+      if (enrollmentInfo.status !== 'pending') {
+        return res.status(409).json({
+          error: {
+            code: 'INVALID_TRANSITION',
+            message: `Cannot cancel an enrollment that is ${enrollmentInfo.status}.`,
+          },
+        });
+      }
+
+      const { getSupabase } = await import('../config/supabase.js');
+      const supabase = await getSupabase();
+      const { error } = await supabase
+        .from('enrollments')
+        .delete()
+        .eq('id', req.params.id);
+
+      if (error) throw error;
+
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 export default router;

@@ -12,6 +12,42 @@
 
 ---
 
+## Production status — 2026-06-10
+
+**Production login and admin dashboard are now working end-to-end on Vercel + Render + Supabase Cloud.**
+
+### Production fixes applied after the original MVP handoff
+
+- Added a root-level `server.js` entrypoint in the server package so `node server.js` works locally when needed
+- Replaced fragile local `node --watch` usage with `nodemon` for dev stability
+- Switched Supabase and Google config loading to lazy imports to avoid heavy boot-time blocking locally
+- Added Vercel SPA rewrite rules:
+  - `client/vercel.json`
+  - `vercel.json`
+- Adjusted those rewrites to exclude static assets so Vite JS files are not served as HTML
+- Exposed `role` from `AuthContext` so route guards can evaluate permissions correctly
+- Fixed production cookie settings for cross-site auth:
+  - `sameSite: 'none'` in production
+  - `secure: true` in production
+- Enabled `app.set('trust proxy', 1)` in production so secure cookies work correctly behind Render's proxy
+
+### Working production assumptions
+
+- Frontend host: `https://metableton-ecole.vercel.app`
+- API host: `https://metableton-ecole-api.onrender.com`
+- `SUPABASE_URL` must be the project base URL only, with no `/rest/v1`
+- `DATABASE_URL` must use the Supabase **Session pooler** URI, not the direct `db.<project>.supabase.co:5432` host
+
+### Important production reference
+
+See:
+
+- `docs/production-deployment-notes.md`
+
+This file captures the deployment settings, environment variable rules, and failure modes we hit during production stabilization.
+
+---
+
 ## Completed BMAD artifacts
 
 | Artifact | Path |

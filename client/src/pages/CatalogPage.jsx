@@ -5,7 +5,7 @@ import EmptyState from '../components/ui/EmptyState.jsx';
 import LoadingSpinner from '../components/ui/LoadingSpinner.jsx';
 import ErrorMessage from '../components/ui/ErrorMessage.jsx';
 import { getPublishedCourses } from '../api/courses.js';
-import { SKILL_LABELS } from '../data/mockCourses.js';
+import { SKILL_LABELS } from '../constants.js';
 
 export default function CatalogPage() {
   const [courses, setCourses] = useState(null); // null = not loaded

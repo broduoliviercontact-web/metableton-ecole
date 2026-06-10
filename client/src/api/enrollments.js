@@ -61,3 +61,15 @@ export async function rejectEnrollment(enrollmentId) {
   });
   return res.data;
 }
+
+/**
+ * Cancel a pending enrollment request.
+ * Student can cancel their own pending enrollment.
+ * @param {string} enrollmentId
+ * @returns {Promise<void>}
+ */
+export async function cancelEnrollment(enrollmentId) {
+  await apiClient(`/enrollments/${enrollmentId}`, {
+    method: 'DELETE',
+  });
+}

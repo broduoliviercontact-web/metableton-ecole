@@ -6,7 +6,7 @@ import EmptyState from '../components/ui/EmptyState.jsx';
 import LoadingSpinner from '../components/ui/LoadingSpinner.jsx';
 import ErrorMessage from '../components/ui/ErrorMessage.jsx';
 import { getPublishedCourseById } from '../api/courses.js';
-import { SKILL_LABELS } from '../data/mockCourses.js';
+import { SKILL_LABELS } from '../constants.js';
 import { useAuth } from '../hooks/useAuth.js';
 import { getMyEnrollments, requestEnrollment } from '../api/enrollments.js';
 
@@ -33,6 +33,7 @@ export default function CourseDetailPage() {
   const [isRequesting, setIsRequesting] = useState(false);
   const [requestError, setRequestError] = useState(null);
   const [retryMessage, setRetryMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   // Load the published course by id
   const loadCourse = useCallback(async () => {
@@ -88,10 +89,18 @@ export default function CourseDetailPage() {
     setIsRequesting(true);
     setRequestError(null);
     setRetryMessage(null);
+    setSuccessMessage(null);
     try {
       const result = await requestEnrollment(courseId);
       // Refresh enrollments to pick up the new state
       await loadEnrollments();
+
+      // Success message after initial request
+      if (!result?.previousStatus) {
+        setSuccessMessage('Votre demande d\'inscription a été envoyée. Vous recevrez une notification une fois validée.');
+      }
+
+      // Retry message if re-requesting after rejection
       if (result?.previousStatus === 'rejected') {
         setRetryMessage('Votre nouvelle demande a été enregistrée.');
       }
@@ -330,7 +339,7 @@ function EnrollmentCTA({
         <div className="mb-2 text-2xl">⏳</div>
         <h2 className="mb-2 font-semibold text-white">Demande en cours</h2>
         <p className="text-sm text-gray-300">
-          Votre demande d&apos;inscription est en attente d&apos;approbation par
+          Votre demande d&apos;inscription est en attente de validation par
           l&apos;enseignant. Vous serez notifié dès qu&apos;elle sera traitée.
         </p>
       </div>
@@ -350,14 +359,14 @@ function EnrollmentCTA({
         {requestError && (
           <ErrorMessage
             title="Erreur lors de la nouvelle demande"
-            message={requestError.message || 'Une erreur est survenue.'}
+            message={requestError.message || 'Une erreur est survenue. Veuillez réessayer.'}
           />
         )}
         {retryMessage && (
           <p className="mb-3 text-sm text-emerald-400">{retryMessage}</p>
         )}
         <Button onClick={onRequest} disabled={isRequesting}>
-          {isRequesting ? 'Envoi…' : 'Redemander l’inscription'}
+          {isRequesting ? 'Envoi en cours…' : 'Redemander l’inscription'}
         </Button>
       </div>
     );
@@ -371,14 +380,19 @@ function EnrollmentCTA({
         Demandez votre inscription à ce cours. L&apos;enseignant examinera votre
         demande et vous donnera accès au Google Classroom.
       </p>
+      {successMessage && (
+        <div className="mb-4 rounded-lg bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+          {successMessage}
+        </div>
+      )}
       {requestError && (
         <ErrorMessage
           title="Erreur lors de la demande"
-          message={requestError.message || 'Une erreur est survenue.'}
+          message={requestError.message || 'Une erreur est survenue. Veuillez réessayer.'}
         />
       )}
       <Button onClick={onRequest} disabled={isRequesting}>
-        {isRequesting ? 'Envoi…' : 'Demander l’inscription'}
+        {isRequesting ? 'Envoi en cours…' : 'Demander l’inscription'}
       </Button>
     </div>
   );

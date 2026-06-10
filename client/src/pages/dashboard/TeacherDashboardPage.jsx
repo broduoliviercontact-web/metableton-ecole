@@ -11,13 +11,7 @@ import {
   approveEnrollment,
   rejectEnrollment,
 } from '../../api/enrollments.js';
-
-const SKILL_LABELS = {
-  beginner: 'Débutant',
-  intermediate: 'Intermédiaire',
-  advanced: 'Avancé',
-  all_levels: 'Tous niveaux',
-};
+import { SKILL_LABELS } from '../../constants.js';
 
 function formatDate(iso) {
   if (!iso) return null;
