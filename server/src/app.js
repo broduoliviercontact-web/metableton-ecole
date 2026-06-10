@@ -10,6 +10,12 @@ import adminRouter from './routes/admin.js';
 
 const app = express();
 
+// Render terminates TLS at the proxy layer. Trust the first proxy in production
+// so secure session cookies can be set and read correctly.
+if (env.isProduction) {
+  app.set('trust proxy', 1);
+}
+
 // CORS — allow Vite dev server with credentials (cookies)
 app.use(cors({
   origin: env.clientOrigin,
