@@ -280,6 +280,13 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
         <ClassroomLink classroomUrl={course.classroom_url} courseId={course.id} />
       )}
 
+      {/* Google Classroom reminder for all approved enrollments */}
+      {status === 'approved' && course.classroom_url && (
+        <div className="mt-3 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-xs text-amber-200">
+          <span className="font-semibold">Accès Google Classroom :</span> Le professeur doit vous inviter. Google vous envoie un email d'invitation — acceptez-le avant d'ouvrir le cours. Si vous voyez "Cours introuvable", vérifiez que vous avez accepté l'invitation et que vous utilisez le bon compte Google.
+        </div>
+      )}
+
       {/* Rejected → link to the course to retry */}
       {status === 'rejected' && course.id && (
         <div className="mt-2">

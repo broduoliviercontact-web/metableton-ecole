@@ -315,7 +315,7 @@ function EnrollmentCTA({
     );
   }
 
-  // 4a. Already approved — show success state (no Classroom link yet — Story 3.7)
+  // 4a. Already approved — show success state
   if (currentEnrollment?.status === 'approved') {
     return (
       <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center">
@@ -325,6 +325,9 @@ function EnrollmentCTA({
           Vous êtes inscrit à ce cours. Le lien vers le Google Classroom sera
           disponible sur votre tableau de bord.
         </p>
+        <div className="mt-4 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-2 text-xs text-amber-200">
+          <span className="font-semibold">Accès Google Classroom :</span> Le professeur doit vous inviter. Google vous envoie un email d'invitation — acceptez-le avant d'ouvrir le cours. Si vous voyez "Cours introuvable", vérifiez que vous avez accepté l'invitation et que vous utilisez le bon compte Google.
+        </div>
         <div className="mt-4">
           <Link to="/dashboard">
             <Button size="sm">Mon tableau de bord</Button>

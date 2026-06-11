@@ -215,6 +215,9 @@ function CourseRow({ course }) {
           >
             Ouvrir Google Classroom <span aria-hidden="true">↗</span>
           </a>
+          <div className="mt-2 text-xs text-gray-500">
+            Pensez à inviter les étudiants directement dans Google Classroom. Google leur enverra automatiquement un email d'invitation.
+          </div>
         </div>
       )}
 
