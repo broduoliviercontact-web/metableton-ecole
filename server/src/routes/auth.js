@@ -13,7 +13,12 @@ router.get('/api/auth/google', async (_req, res, next) => {
     const authUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',
-      scope: ['openid', 'profile', 'email'],
+      scope: [
+        'openid',
+        'profile',
+        'email',
+        'https://www.googleapis.com/auth/classroom.courses.readonly',
+      ],
     });
 
     res.redirect(authUrl);

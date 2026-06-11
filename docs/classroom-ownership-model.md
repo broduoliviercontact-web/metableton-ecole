@@ -97,6 +97,8 @@ Metableton agit comme **la vitrine et l'orchestrateur** :
 | Inscription refusée | Bouton "Redemander l'inscription" |
 | En attente de validation | Message "Demande en attente de validation" |
 
+**Important : Pour accéder au Google Classroom, l'étudiant doit être invité/ajouté comme élève dans le Classroom Google.** Metableton ne synchronise pas encore automatiquement le roster. Le teacher/admin doit inviter manuellement les élèves dans Google Classroom pour qu'ils puissent accéder au cours.
+
 **Le dashboard étudiant affiche l'état réel des inscriptions et les liens Classroom disponibles.**
 
 ## Implications futures pour les fonctionnalités Classroom
@@ -147,7 +149,7 @@ Metableton agit comme **la vitrine et l'orchestrateur** :
 
 ## Migration de données future
 
-Si Metableton besoin d'afficher des données Classroom (élèves, devoirs) :
+Si Metableton **trouve** besoin d'afficher des données Classroom (élèves, devoirs) :
 
 1. **Récupération à la demande** : Appeler l'API Classroom quand l'utilisateur clique
 2. **Caching intelligent** : Stocker temporairement pour éviter les rate limits
