@@ -11,6 +11,7 @@ import {
   approveEnrollment,
   rejectEnrollment,
 } from '../../api/enrollments.js';
+import ClassroomConnectButton from '../../components/ClassroomConnectButton.jsx';
 import { SKILL_LABELS } from '../../constants.js';
 
 function formatDate(iso) {
@@ -104,9 +105,12 @@ export default function TeacherDashboardPage() {
   const HeaderActions = () => (
     <div className="mb-6 flex items-center justify-between">
       <h1 className="text-2xl font-bold text-white">Mes cours</h1>
-      <Link to="/dashboard/teacher/courses/new">
-        <Button>Créer un cours</Button>
-      </Link>
+      <div className="flex items-center gap-3">
+        <ClassroomConnectButton />
+        <Link to="/dashboard/teacher/courses/new">
+          <Button>Créer un cours</Button>
+        </Link>
+      </div>
     </div>
   );
 

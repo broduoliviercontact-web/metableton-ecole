@@ -5,6 +5,7 @@ import Button from '../../components/ui/Button.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
+import ClassroomConnectButton from '../../components/ClassroomConnectButton.jsx';
 import { getUsers, updateUserRole } from '../../api/admin.js';
 import { useAuth } from '../../hooks/useAuth.js';
 
@@ -128,12 +129,15 @@ export default function AdminDashboardPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-white">Administration</h1>
-        <Link
-          to="/dashboard/admin/courses"
-          className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
-        >
-          Voir tous les cours →
-        </Link>
+        <div className="flex items-center gap-3">
+          <ClassroomConnectButton />
+          <Link
+            to="/dashboard/admin/courses"
+            className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
+          >
+            Voir tous les cours →
+          </Link>
+        </div>
       </div>
       <p className="mb-6 text-sm text-gray-400">
         {users.length} utilisateur{users.length > 1 ? 's' : ''}
