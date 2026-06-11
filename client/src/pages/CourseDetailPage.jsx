@@ -235,6 +235,7 @@ export default function CourseDetailPage() {
           isRequesting={isRequesting}
           requestError={requestError}
           retryMessage={retryMessage}
+          successMessage={successMessage}
           onRequest={handleRequestEnrollment}
         />
       </div>
@@ -256,6 +257,7 @@ function EnrollmentCTA({
   isRequesting,
   requestError,
   retryMessage,
+  successMessage,
   onRequest,
 }) {
   // 1. Auth is still loading
