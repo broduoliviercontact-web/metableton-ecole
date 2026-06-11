@@ -188,7 +188,6 @@ export async function listClassroomCourses(tokens) {
 
   try {
     const res = await classroom.courses.list({
-      courseId: '',
       courseStates: ['ACTIVE', 'ARCHIVED', 'PROVISIONED', 'DECLINED'],
       pageSize: 100,
     });
