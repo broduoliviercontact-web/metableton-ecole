@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — Intégration Google Classroom</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}.container{max-width:1050px;margin:0 auto}.header{text-align:center;margin-bottom:2rem}.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:.75rem;vertical-align:middle}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}h1{font-size:1.75rem;font-weight:700}.subtitle{color:#94a3b8;font-size:.9rem;margin-top:.5rem}.diagram-container{background:rgba(15,23,42,.5);border-radius:1rem;border:1px solid #1e293b;padding:1.5rem;overflow-x:auto}svg{width:100%;min-width:900px;display:block}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-top:2rem}.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.25rem}.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}.card-dot{width:8px;height:8px;border-radius:50%}.card-dot.cyan{background:#22d3ee}.card-dot.emerald{background:#34d399}.card-dot.violet{background:#a78bfa}.card-dot.amber{background:#fbbf24}.card h3{font-size:.85rem;font-weight:600}.card ul{list-style:none;color:#94a3b8;font-size:.72rem}.card li{margin-bottom:.3rem}.footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.72rem}.toolbar{display:flex;gap:.5rem;margin-left:auto;align-items:center}.toolbar-toggle{background:transparent;border:none;color:#475569;cursor:pointer;font-size:1.25rem;padding:.25rem .5rem;border-radius:.375rem}.toolbar-toggle:hover{color:#94a3b8;background:rgba(30,41,59,.5)}.toolbar-actions{display:none;gap:.5rem}.toolbar.expanded .toolbar-actions{display:flex}.toolbar-actions button{background:rgba(30,41,59,.8);border:1px solid #334155;color:#94a3b8;padding:.375rem .75rem;border-radius:.375rem;font-family:inherit;font-size:.72rem;cursor:pointer;transition:all .2s}.toolbar-actions button:hover{background:rgba(51,65,85,.8);color:white;border-color:#475569}@media print{body{background:#020617;padding:1rem}.toolbar{display:none!important}}
+</style>
+</head>
+<body>
+<div class="container" id="report-container">
+<div class="header">
+<h1><span class="pulse-dot"></span>Intégration Google Classroom</h1>
+<p class="subtitle">Metableton Ecole orchestre l'inscription et l'organisation. Google Classroom héberge l'espace pédagogique. Chacun fait ce qu'il fait le mieux.</p>
+</div>
+<div class="diagram-container">
+<svg viewBox="0 0 1000 560">
+<defs>
+<marker id="ah" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#64748b"/></marker>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+<rect x="30" y="50" width="400" height="480" rx="12" fill="rgba(22,211,238,.03)" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="8,4"/>
+<text x="230" y="80" fill="#22d3ee" font-size="15" font-weight="700" text-anchor="middle">Metableton Ecole</text>
+<text x="230" y="100" fill="#94a3b8" font-size="9" text-anchor="middle">Couche de gestion et d'orchestration</text>
+<rect x="60" y="120" width="340" height="50" rx="6" fill="#0f172a"/>
+<rect x="60" y="120" width="340" height="50" rx="6" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="230" y="142" fill="white" font-size="11" font-weight="600" text-anchor="middle">Catalogue de cours</text>
+<text x="230" y="158" fill="#94a3b8" font-size="8" text-anchor="middle">Liste publique avec niveaux, infos prof</text>
+<rect x="60" y="185" width="340" height="50" rx="6" fill="#0f172a"/>
+<rect x="60" y="185" width="340" height="50" rx="6" fill="rgba(6,78,59,.3)" stroke="#34d399" stroke-width="1.5"/>
+<text x="230" y="207" fill="white" font-size="11" font-weight="600" text-anchor="middle">Système d'inscription</text>
+<text x="230" y="223" fill="#94a3b8" font-size="8" text-anchor="middle">Demande → en attente → accepté/refusé</text>
+<rect x="60" y="250" width="340" height="50" rx="6" fill="#0f172a"/>
+<rect x="60" y="250" width="340" height="50" rx="6" fill="rgba(136,19,55,.25)" stroke="#fb7185" stroke-width="1.5"/>
+<text x="230" y="272" fill="white" font-size="11" font-weight="600" text-anchor="middle">Gestion des rôles</text>
+<text x="230" y="288" fill="#94a3b8" font-size="8" text-anchor="middle">Étudiant · Professeur · Admin · RBAC</text>
+<rect x="60" y="315" width="340" height="50" rx="6" fill="#0f172a"/>
+<rect x="60" y="315" width="340" height="50" rx="6" fill="rgba(251,191,36,.15)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="230" y="337" fill="white" font-size="11" font-weight="600" text-anchor="middle">Google OAuth</text>
+<text x="230" y="353" fill="#94a3b8" font-size="8" text-anchor="middle">Connexion unique · gestion des tokens</text>
+<rect x="60" y="380" width="340" height="50" rx="6" fill="#0f172a"/>
+<rect x="60" y="380" width="340" height="50" rx="6" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="230" y="402" fill="white" font-size="11" font-weight="600" text-anchor="middle">Dashboards</text>
+<text x="230" y="418" fill="#94a3b8" font-size="8" text-anchor="middle">Vues étudiant · professeur · admin</text>
+<rect x="60" y="445" width="340" height="50" rx="6" fill="#0f172a"/>
+<rect x="60" y="445" width="340" height="50" rx="6" fill="rgba(251,191,36,.1)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="230" y="467" fill="white" font-size="11" font-weight="600" text-anchor="middle">Validation lien Classroom</text>
+<text x="230" y="483" fill="#94a3b8" font-size="8" text-anchor="middle">Validation API · parsing URL · persistance</text>
+<rect x="440" y="220" width="120" height="100" rx="8" fill="rgba(34,211,238,.05)" stroke="#22d3ee" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="500" y="255" fill="#22d3ee" font-size="10" font-weight="600" text-anchor="middle">Intégration</text>
+<text x="500" y="275" fill="#94a3b8" font-size="8" text-anchor="middle">Google OAuth</text>
+<text x="500" y="293" fill="#94a3b8" font-size="8" text-anchor="middle">API Classroom</text>
+<text x="500" y="311" fill="#94a3b8" font-size="8" text-anchor="middle">liens de cours</text>
+<line x1="430" y1="270" x2="438" y2="270" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah)"/>
+<line x1="430" y1="300" x2="438" y2="300" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah)"/>
+<line x1="562" y1="270" x2="570" y2="270" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah)"/>
+<line x1="562" y1="300" x2="570" y2="300" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="580" y="50" width="390" height="480" rx="12" fill="rgba(251,191,36,.03)" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="8,4"/>
+<text x="775" y="80" fill="#fbbf24" font-size="15" font-weight="700" text-anchor="middle">Google Classroom</text>
+<text x="775" y="100" fill="#94a3b8" font-size="9" text-anchor="middle">Couche d'apprentissage et de contenu</text>
+<rect x="610" y="120" width="330" height="50" rx="6" fill="#0f172a"/>
+<rect x="610" y="120" width="330" height="50" rx="6" fill="rgba(120,53,15,.2)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="775" y="142" fill="white" font-size="11" font-weight="600" text-anchor="middle">Contenu de cours</text>
+<text x="775" y="158" fill="#94a3b8" font-size="8" text-anchor="middle">Leçons · Supports · Ressources</text>
+<rect x="610" y="185" width="330" height="50" rx="6" fill="#0f172a"/>
+<rect x="610" y="185" width="330" height="50" rx="6" fill="rgba(120,53,15,.2)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="775" y="207" fill="white" font-size="11" font-weight="600" text-anchor="middle">Devoirs et notation</text>
+<text x="775" y="223" fill="#94a3b8" font-size="8" text-anchor="middle">Exercices · Rendu · Feedback</text>
+<rect x="610" y="250" width="330" height="50" rx="6" fill="#0f172a"/>
+<rect x="610" y="250" width="330" height="50" rx="6" fill="rgba(120,53,15,.2)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="775" y="272" fill="white" font-size="11" font-weight="600" text-anchor="middle">Communication</text>
+<text x="775" y="288" fill="#94a3b8" font-size="8" text-anchor="middle">Annonces · Questions · Flux</text>
+<rect x="610" y="315" width="330" height="50" rx="6" fill="#0f172a"/>
+<rect x="610" y="315" width="330" height="50" rx="6" fill="rgba(120,53,15,.2)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="775" y="337" fill="white" font-size="11" font-weight="600" text-anchor="middle">Google Drive</text>
+<text x="775" y="353" fill="#94a3b8" font-size="8" text-anchor="middle">Docs · Slides · Sheets</text>
+<rect x="610" y="380" width="330" height="50" rx="6" fill="#0f172a"/>
+<rect x="610" y="380" width="330" height="50" rx="6" fill="rgba(120,53,15,.2)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="775" y="402" fill="white" font-size="11" font-weight="600" text-anchor="middle">Visio</text>
+<text x="775" y="418" fill="#94a3b8" font-size="8" text-anchor="middle">Intégration Google Meet</text>
+<rect x="610" y="445" width="330" height="50" rx="6" fill="#0f172a"/>
+<rect x="610" y="445" width="330" height="50" rx="6" fill="rgba(120,53,15,.2)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="775" y="467" fill="white" font-size="11" font-weight="600" text-anchor="middle">Agenda</text>
+<text x="775" y="483" fill="#94a3b8" font-size="8" text-anchor="middle">Échéances · Rappels</text>
+</svg>
+</div>
+<div class="cards">
+<div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Ce que fait Metableton</h3></div><ul><li>• Catalogue et découverte de cours</li><li>• Workflow d'inscription</li><li>• Gestion des rôles (RBAC)</li><li>• Dashboards par rôle</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot amber"></div><h3>Ce que fait Classroom</h3></div><ul><li>• Hébergement du contenu pédagogique</li><li>• Devoirs et notation</li><li>• Communication prof-élève</li><li>• Écosystème Google (Drive, Meet, Agenda)</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>Idée clé</h3></div><ul><li>• Metableton NE remplace PAS Classroom</li><li>• Il ajoute la couche de gestion manquante</li><li>• Chaque outil se concentre sur sa force</li><li>• Pas de LMS maison à construire</li></ul></div>
+</div>
+<p class="footer">Metableton Ecole · Intégration Google Classroom · docs/presentation-diagrams/07-google-classroom-integration-fr.html</p>
+</div>
+<script>async function copyAsImage(b){const o=b.textContent;try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),bl=await new Promise(r=>c.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':bl})]),b.textContent='✓ Copié !'}catch(e){b.textContent='✗ Échec'}setTimeout(()=>b.textContent=o,2000)}async function downloadPNG(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),a=document.createElement('a');a.download='integration-classroom.png',a.href=c.toDataURL('image/png'),a.click(),b.textContent='✓ Fait !'}catch(e){b.textContent='✗ Échec'}setTimeout(()=>b.textContent=o,2000)}async function downloadPDF(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),d=c.toDataURL('image/png'),{jsPDF:j}=window.jspdf,o2=c.width>c.height?'paysage':'portrait',pdf=new j({orientation:o2,unit:'px',format:[c.width,c.height],hotfixes:['px_scaling']});pdf.addImage(d,'PNG',0,0,c.width,c.height),pdf.save('integration-classroom.pdf'),b.textContent='✓ Fait !'}catch(e){b.textContent='✗ Échec'}setTimeout(()=>b.textContent=o,2000)}</script>
+</body>
+</html>

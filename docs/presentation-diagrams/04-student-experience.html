@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — Student Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}.container{max-width:1100px;margin:0 auto}.header{text-align:center;margin-bottom:2rem}.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:.75rem;vertical-align:middle}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}h1{font-size:1.75rem;font-weight:700}.subtitle{color:#94a3b8;font-size:.9rem;margin-top:.5rem}.diagram-container{background:rgba(15,23,42,.5);border-radius:1rem;border:1px solid #1e293b;padding:1.5rem;overflow-x:auto}svg{width:100%;min-width:900px;display:block}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:2rem}.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.25rem}.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}.card-dot{width:8px;height:8px;border-radius:50%}.card-dot.cyan{background:#22d3ee}.card-dot.emerald{background:#34d399}.card-dot.violet{background:#a78bfa}.card-dot.amber{background:#fbbf24}.card h3{font-size:.85rem;font-weight:600}.card ul{list-style:none;color:#94a3b8;font-size:.72rem}.card li{margin-bottom:.3rem}.footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.72rem}.toolbar{display:flex;gap:.5rem;margin-left:auto;flex-shrink:0;align-items:center}.toolbar-toggle{background:transparent;border:none;color:#475569;cursor:pointer;font-size:1.25rem;padding:.25rem .5rem;border-radius:.375rem}.toolbar-toggle:hover{color:#94a3b8;background:rgba(30,41,59,.5)}.toolbar-actions{display:none;gap:.5rem}.toolbar.expanded .toolbar-actions{display:flex}.toolbar-actions button{background:rgba(30,41,59,.8);border:1px solid #334155;color:#94a3b8;padding:.375rem .75rem;border-radius:.375rem;font-family:inherit;font-size:.72rem;cursor:pointer;transition:all .2s}.toolbar-actions button:hover{background:rgba(51,65,85,.8);color:white;border-color:#475569}@media print{body{background:#020617;padding:1rem}.toolbar{display:none!important}}
+</style>
+</head>
+<body>
+<div class="container" id="report-container">
+<div class="header">
+<h1><span class="pulse-dot"></span>Student Experience</h1>
+<p class="subtitle">De la découverte du catalogue à l'accès à l'espace pédagogique — un parcours simple en 7 étapes.</p>
+</div>
+<div class="diagram-container">
+<svg viewBox="0 0 1050 550">
+<defs>
+<marker id="ac" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#22d3ee"/></marker>
+<marker id="ag" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#34d399"/></marker>
+<marker id="ar" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#fb7185"/></marker>
+<marker id="aa" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#fbbf24"/></marker>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+
+<!-- Timeline connector -->
+<path d="M 120 230 L 930 230" fill="none" stroke="#1e293b" stroke-width="2"/>
+<line x1="120" y1="210" x2="120" y2="250" stroke="#22d3ee" stroke-width="2"/>
+<line x1="255" y1="210" x2="255" y2="250" stroke="#22d3ee" stroke-width="2"/>
+<line x1="390" y1="210" x2="390" y2="250" stroke="#fbbf24" stroke-width="2"/>
+<line x1="525" y1="210" x2="525" y2="250" stroke="#34d399" stroke-width="2"/>
+<line x1="660" y1="210" x2="660" y2="250" stroke="#34d399" stroke-width="2"/>
+<line x1="795" y1="210" x2="795" y2="250" stroke="#22d3ee" stroke-width="2"/>
+<line x1="930" y1="210" x2="930" y2="250" stroke="#34d399" stroke-width="2"/>
+
+<!-- Step 1 -->
+<circle cx="120" cy="230" r="16" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+<text x="120" y="235" fill="#22d3ee" font-size="11" font-weight="700" text-anchor="middle">1</text>
+<rect x="40" y="130" width="160" height="70" rx="8" fill="#0f172a"/>
+<rect x="40" y="130" width="160" height="70" rx="8" fill="rgba(8,51,68,.3)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="120" y="156" fill="white" font-size="11" font-weight="600" text-anchor="middle">Discover Catalog</text>
+<text x="120" y="174" fill="#94a3b8" font-size="8" text-anchor="middle">Browse published</text>
+<text x="120" y="190" fill="#94a3b8" font-size="8" text-anchor="middle">courses · no login</text>
+
+<!-- Step 2 -->
+<line x1="136" y1="230" x2="239" y2="230" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ac)"/>
+<circle cx="255" cy="230" r="16" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+<text x="255" y="235" fill="#22d3ee" font-size="11" font-weight="700" text-anchor="middle">2</text>
+<rect x="175" y="280" width="160" height="70" rx="8" fill="#0f172a"/>
+<rect x="175" y="280" width="160" height="70" rx="8" fill="rgba(8,51,68,.3)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="255" y="306" fill="white" font-size="11" font-weight="600" text-anchor="middle">View Course</text>
+<text x="255" y="324" fill="#94a3b8" font-size="8" text-anchor="middle">Title · Description</text>
+<text x="255" y="340" fill="#94a3b8" font-size="8" text-anchor="middle">Skill level · Teacher</text>
+
+<!-- Step 3 -->
+<line x1="271" y1="230" x2="374" y2="230" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#aa)"/>
+<circle cx="390" cy="230" r="16" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+<text x="390" y="235" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">3</text>
+<rect x="310" y="130" width="160" height="70" rx="8" fill="#0f172a"/>
+<rect x="310" y="130" width="160" height="70" rx="8" fill="rgba(251,191,36,.12)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="390" y="156" fill="white" font-size="11" font-weight="600" text-anchor="middle">Sign In</text>
+<text x="390" y="174" fill="#94a3b8" font-size="8" text-anchor="middle">Google OAuth</text>
+<text x="390" y="190" fill="#94a3b8" font-size="8" text-anchor="middle">One click · no password</text>
+
+<!-- Step 4 -->
+<line x1="406" y1="230" x2="509" y2="230" stroke="#34d399" stroke-width="1.5" marker-end="url(#ag)"/>
+<circle cx="525" cy="230" r="16" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+<text x="525" y="235" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">4</text>
+<rect x="445" y="280" width="160" height="70" rx="8" fill="#0f172a"/>
+<rect x="445" y="280" width="160" height="70" rx="8" fill="rgba(6,78,59,.25)" stroke="#34d399" stroke-width="1.5"/>
+<text x="525" y="306" fill="white" font-size="11" font-weight="600" text-anchor="middle">Request Access</text>
+<text x="525" y="324" fill="#94a3b8" font-size="8" text-anchor="middle">Click "Request"</text>
+<text x="525" y="340" fill="#94a3b8" font-size="8" text-anchor="middle">→ pending status</text>
+
+<!-- Step 5 -->
+<line x1="541" y1="230" x2="644" y2="230" stroke="#34d399" stroke-width="1.5" marker-end="url(#ag)"/>
+<circle cx="660" cy="230" r="16" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+<text x="660" y="235" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">5</text>
+<rect x="580" y="130" width="160" height="70" rx="8" fill="#0f172a"/>
+<rect x="580" y="130" width="160" height="70" rx="8" fill="rgba(6,78,59,.25)" stroke="#34d399" stroke-width="1.5"/>
+<text x="660" y="156" fill="white" font-size="11" font-weight="600" text-anchor="middle">Track Status</text>
+<text x="660" y="174" fill="#94a3b8" font-size="8" text-anchor="middle">Dashboard shows</text>
+<text x="660" y="190" fill="#94a3b8" font-size="8" text-anchor="middle">pending/approved/rejected</text>
+
+<!-- Step 6 -->
+<line x1="676" y1="230" x2="779" y2="230" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ac)"/>
+<circle cx="795" cy="230" r="16" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+<text x="795" y="235" fill="#22d3ee" font-size="11" font-weight="700" text-anchor="middle">6</text>
+<rect x="715" y="280" width="160" height="70" rx="8" fill="#0f172a"/>
+<rect x="715" y="280" width="160" height="70" rx="8" fill="rgba(8,51,68,.3)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="795" y="306" fill="white" font-size="11" font-weight="600" text-anchor="middle">Access Dashboard</text>
+<text x="795" y="324" fill="#94a3b8" font-size="8" text-anchor="middle">See enrolled courses</text>
+<text x="795" y="340" fill="#94a3b8" font-size="8" text-anchor="middle">Teacher info · status</text>
+
+<!-- Step 7 -->
+<line x1="811" y1="230" x2="914" y2="230" stroke="#34d399" stroke-width="1.5" marker-end="url(#ag)"/>
+<circle cx="930" cy="230" r="16" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+<text x="930" y="235" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">7</text>
+<rect x="850" y="130" width="160" height="70" rx="8" fill="#0f172a"/>
+<rect x="850" y="130" width="160" height="70" rx="8" fill="rgba(6,78,59,.35)" stroke="#34d399" stroke-width="1.5"/>
+<text x="930" y="156" fill="white" font-size="11" font-weight="600" text-anchor="middle">Join Classroom</text>
+<text x="930" y="174" fill="#94a3b8" font-size="8" text-anchor="middle">Click Classroom link</text>
+<text x="930" y="190" fill="#94a3b8" font-size="8" text-anchor="middle">Start learning!</text>
+
+<!-- Rejection branch -->
+<line x1="660" y1="246" x2="660" y2="370" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#ar)"/>
+<rect x="590" y="375" width="140" height="50" rx="6" fill="rgba(136,19,55,.15)" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="660" y="398" fill="#fb7185" font-size="9" text-anchor="middle">If rejected</text>
+<text x="660" y="414" fill="#94a3b8" font-size="8" text-anchor="middle">→ can re-request</text>
+
+<!-- Key message -->
+<rect x="30" y="470" width="990" height="55" rx="8" fill="rgba(34,211,238,.04)" stroke="#22d3ee" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="525" y="494" fill="#22d3ee" font-size="11" text-anchor="middle">Simple · No friction · Google sign-in · Clear status tracking · Direct Classroom access</text>
+<text x="525" y="514" fill="#94a3b8" font-size="9" text-anchor="middle">From discovery to learning in less than 2 minutes</text>
+</svg>
+</div>
+<div class="cards">
+<div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Key Benefits</h3></div><ul><li>• No account creation needed</li><li>• Public catalog is always visible</li><li>• One-click Google sign-in</li><li>• Instant enrollment request</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>Transparency</h3></div><ul><li>• See request status in real time</li><li>• Pending → Approved → Classroom</li><li>• Rejected? Re-request anytime</li><li>• No more "where's my request?"</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot amber"></div><h3>Classroom Access</h3></div><ul><li>• Direct link from dashboard</li><li>• Teacher validates via Google API</li><li>• Seamless transition to learning</li></ul></div>
+</div>
+<p class="footer">Metableton Ecole · Student Experience · docs/presentation-diagrams/04-student-experience.html</p>
+</div>
+<script>async function copyAsImage(b){const o=b.textContent;try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),bl=await new Promise(r=>c.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':bl})]),b.textContent='✓ Copied!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPNG(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),a=document.createElement('a');a.download='student-experience.png',a.href=c.toDataURL('image/png'),a.click(),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPDF(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),d=c.toDataURL('image/png'),{jsPDF:j}=window.jspdf,o2=c.width>c.height?'landscape':'portrait',pdf=new j({orientation:o2,unit:'px',format:[c.width,c.height],hotfixes:['px_scaling']});pdf.addImage(d,'PNG',0,0,c.width,c.height),pdf.save('student-experience.pdf'),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}</script>
+</body>
+</html>

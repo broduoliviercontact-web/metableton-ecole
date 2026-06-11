@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — Value Proposition</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}.container{max-width:1100px;margin:0 auto}.header{text-align:center;margin-bottom:2rem}.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:.75rem;vertical-align:middle}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}h1{font-size:1.75rem;font-weight:700}.subtitle{color:#94a3b8;font-size:.9rem;margin-top:.5rem}.diagram-container{background:rgba(15,23,42,.5);border-radius:1rem;border:1px solid #1e293b;padding:1.5rem;overflow-x:auto}svg{width:100%;min-width:900px;display:block}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:2rem}.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.25rem}.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}.card-dot{width:8px;height:8px;border-radius:50%}.card-dot.cyan{background:#22d3ee}.card-dot.emerald{background:#34d399}.card-dot.violet{background:#a78bfa}.card-dot.amber{background:#fbbf24}.card-dot.rose{background:#fb7185}.card h3{font-size:.85rem;font-weight:600}.card ul{list-style:none;color:#94a3b8;font-size:.72rem}.card li{margin-bottom:.3rem}.footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.72rem}.toolbar{display:flex;gap:.5rem;margin-left:auto;flex-shrink:0;align-items:center}.toolbar-toggle{background:transparent;border:none;color:#475569;cursor:pointer;font-size:1.25rem;padding:.25rem .5rem;border-radius:.375rem}.toolbar-toggle:hover{color:#94a3b8;background:rgba(30,41,59,.5)}.toolbar-actions{display:none;gap:.5rem}.toolbar.expanded .toolbar-actions{display:flex}.toolbar-actions button{background:rgba(30,41,59,.8);border:1px solid #334155;color:#94a3b8;padding:.375rem .75rem;border-radius:.375rem;font-family:inherit;font-size:.72rem;cursor:pointer;transition:all .2s}.toolbar-actions button:hover{background:rgba(51,65,85,.8);color:white;border-color:#475569}@media print{body{background:#020617;padding:1rem}.toolbar{display:none!important}}
+</style>
+</head>
+<body>
+<div class="container" id="report-container">
+<div class="header">
+<h1><span class="pulse-dot"></span>Why Metableton Ecole Is Attractive</h1>
+<p class="subtitle">Un MVP moderne pour digitaliser une école de musique sans réinventer l'infrastructure pédagogique.</p>
+</div>
+<div class="diagram-container">
+<svg viewBox="0 0 1050 580">
+<defs>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+
+<!-- Column 1: Students -->
+<rect x="30" y="30" width="230" height="525" rx="10" fill="rgba(8,51,68,.08)" stroke="#22d3ee" stroke-width="1"/>
+<rect x="30" y="30" width="230" height="40" rx="10" fill="rgba(8,51,68,.3)"/>
+<rect x="30" y="50" width="230" height="20" fill="rgba(8,51,68,.3)"/>
+<text x="145" y="56" fill="white" font-size="14" font-weight="700" text-anchor="middle">For Students</text>
+<circle cx="60" cy="50" r="6" fill="#22d3ee"/>
+
+<text x="50" y="100" fill="#22d3ee" font-size="11" font-weight="600">Simple Google Sign-in</text>
+<text x="50" y="122" fill="#94a3b8" font-size="9">One click, no password.</text>
+<text x="50" y="140" fill="#94a3b8" font-size="9">Automatic profile creation.</text>
+
+<text x="50" y="180" fill="#22d3ee" font-size="11" font-weight="600">Clear Course Catalog</text>
+<text x="50" y="202" fill="#94a3b8" font-size="9">Browse published courses.</text>
+<text x="50" y="220" fill="#94a3b8" font-size="9">Filter by skill level.</text>
+<text x="50" y="238" fill="#94a3b8" font-size="9">See teacher info.</text>
+
+<text x="50" y="278" fill="#22d3ee" font-size="11" font-weight="600">Easy Enrollment</text>
+<text x="50" y="300" fill="#94a3b8" font-size="9">Request access in one click.</text>
+<text x="50" y="318" fill="#94a3b8" font-size="9">Track status in dashboard.</text>
+<text x="50" y="336" fill="#94a3b8" font-size="9">Re-request if rejected.</text>
+
+<text x="50" y="376" fill="#22d3ee" font-size="11" font-weight="600">Personal Dashboard</text>
+<text x="50" y="398" fill="#94a3b8" font-size="9">See all your courses.</text>
+<text x="50" y="416" fill="#94a3b8" font-size="9">Direct link to Classroom.</text>
+
+<text x="50" y="470" fill="#475569" font-size="10">Zero friction. From discovery</text>
+<text x="50" y="490" fill="#475569" font-size="10">to learning in minutes.</text>
+
+<!-- Column 2: Teachers -->
+<rect x="280" y="30" width="230" height="525" rx="10" fill="rgba(251,191,36,.06)" stroke="#fbbf24" stroke-width="1"/>
+<rect x="280" y="30" width="230" height="40" rx="10" fill="rgba(251,191,36,.2)"/>
+<rect x="280" y="50" width="230" height="20" fill="rgba(251,191,36,.2)"/>
+<text x="395" y="56" fill="white" font-size="14" font-weight="700" text-anchor="middle">For Teachers</text>
+<circle cx="310" cy="50" r="6" fill="#fbbf24"/>
+
+<text x="300" y="100" fill="#fbbf24" font-size="11" font-weight="600">Course Management</text>
+<text x="300" y="122" fill="#94a3b8" font-size="9">Create and edit courses.</text>
+<text x="300" y="140" fill="#94a3b8" font-size="9">Set title, description, level.</text>
+<text x="300" y="158" fill="#94a3b8" font-size="9">Publish when ready.</text>
+
+<text x="300" y="198" fill="#fbbf24" font-size="11" font-weight="600">Enrollment Review</text>
+<text x="300" y="220" fill="#94a3b8" font-size="9">See pending requests.</text>
+<text x="300" y="238" fill="#94a3b8" font-size="9">Approve or reject.</text>
+<text x="300" y="256" fill="#94a3b8" font-size="9">Ownership-based access.</text>
+
+<text x="300" y="296" fill="#fbbf24" font-size="11" font-weight="600">Google Classroom Link</text>
+<text x="300" y="318" fill="#94a3b8" font-size="9">Link your Classroom course.</text>
+<text x="300" y="336" fill="#94a3b8" font-size="9">Auto-validated via API.</text>
+
+<text x="300" y="390" fill="#fbbf24" font-size="11" font-weight="600">Student Tracking</text>
+<text x="300" y="412" fill="#94a3b8" font-size="9">See who's enrolled.</text>
+<text x="300" y="430" fill="#94a3b8" font-size="9">Manage access.</text>
+
+<text x="300" y="470" fill="#475569" font-size="10">Less admin. More teaching.</text>
+<text x="300" y="490" fill="#475569" font-size="10">Built for music teachers.</text>
+
+<!-- Column 3: School / Admin -->
+<rect x="530" y="30" width="230" height="525" rx="10" fill="rgba(136,19,55,.06)" stroke="#fb7185" stroke-width="1"/>
+<rect x="530" y="30" width="230" height="40" rx="10" fill="rgba(136,19,55,.2)"/>
+<rect x="530" y="50" width="230" height="20" fill="rgba(136,19,55,.2)"/>
+<text x="645" y="56" fill="white" font-size="14" font-weight="700" text-anchor="middle">For Schools</text>
+<circle cx="560" cy="50" r="6" fill="#fb7185"/>
+
+<text x="550" y="100" fill="#fb7185" font-size="11" font-weight="600">Centralized Control</text>
+<text x="550" y="122" fill="#94a3b8" font-size="9">Manage all users in one place.</text>
+<text x="550" y="140" fill="#94a3b8" font-size="9">Assign roles: student,</text>
+<text x="550" y="158" fill="#94a3b8" font-size="9">teacher, admin.</text>
+
+<text x="550" y="198" fill="#fb7185" font-size="11" font-weight="600">Course Oversight</text>
+<text x="550" y="220" fill="#94a3b8" font-size="9">See all courses.</text>
+<text x="550" y="238" fill="#94a3b8" font-size="9">Manage the catalog.</text>
+<text x="550" y="256" fill="#94a3b8" font-size="9">No blind spots.</text>
+
+<text x="550" y="296" fill="#fb7185" font-size="11" font-weight="600">Enrollment Supervision</text>
+<text x="550" y="318" fill="#94a3b8" font-size="9">Global view of all requests.</text>
+<text x="550" y="336" fill="#94a3b8" font-size="9">Approve/reject any.</text>
+
+<text x="550" y="376" fill="#fb7185" font-size="11" font-weight="600">Scalable Foundation</text>
+<text x="550" y="398" fill="#94a3b8" font-size="9">Modern stack.</text>
+<text x="550" y="416" fill="#94a3b8" font-size="9">Ready to scale.</text>
+<text x="550" y="434" fill="#94a3b8" font-size="9">Extensible architecture.</text>
+
+<text x="550" y="470" fill="#475569" font-size="10">Professionalize your</text>
+<text x="550" y="490" fill="#475569" font-size="10">music school operations.</text>
+
+<!-- Column 4: Technical -->
+<rect x="780" y="30" width="240" height="525" rx="10" fill="rgba(6,78,59,.06)" stroke="#34d399" stroke-width="1"/>
+<rect x="780" y="30" width="240" height="40" rx="10" fill="rgba(6,78,59,.2)"/>
+<rect x="780" y="50" width="240" height="20" fill="rgba(6,78,59,.2)"/>
+<text x="900" y="56" fill="white" font-size="14" font-weight="700" text-anchor="middle">Technical Stack</text>
+<circle cx="810" cy="50" r="6" fill="#34d399"/>
+
+<text x="800" y="100" fill="#34d399" font-size="11" font-weight="600">Modern Frontend</text>
+<text x="800" y="122" fill="#94a3b8" font-size="9">React 19 + Vite 6</text>
+<text x="800" y="140" fill="#94a3b8" font-size="9">Tailwind CSS 4</text>
+<text x="800" y="158" fill="#94a3b8" font-size="9">React Router</text>
+
+<text x="800" y="198" fill="#34d399" font-size="11" font-weight="600">Robust Backend</text>
+<text x="800" y="220" fill="#94a3b8" font-size="9">Node.js + Express 5</text>
+<text x="800" y="238" fill="#94a3b8" font-size="9">REST API with sessions</text>
+<text x="800" y="256" fill="#94a3b8" font-size="9">Role-based middleware</text>
+
+<text x="800" y="296" fill="#34d399" font-size="11" font-weight="600">Google Integration</text>
+<text x="800" y="318" fill="#94a3b8" font-size="9">OAuth 2.0 authentication</text>
+<text x="800" y="336" fill="#94a3b8" font-size="9">Classroom API (read)</text>
+<text x="800" y="354" fill="#94a3b8" font-size="9">No custom LMS needed</text>
+
+<text x="800" y="394" fill="#34d399" font-size="11" font-weight="600">Production Ready</text>
+<text x="800" y="416" fill="#94a3b8" font-size="9">Vercel hosting</text>
+<text x="800" y="434" fill="#94a3b8" font-size="9">Supabase PostgreSQL</text>
+<text x="800" y="452" fill="#94a3b8" font-size="9">Server-side sessions</text>
+
+<text x="800" y="490" fill="#475569" font-size="10">Built to last.</text>
+<text x="800" y="506" fill="#475569" font-size="10">Ready to evolve.</text>
+</svg>
+</div>
+<div class="cards">
+<div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Time Saved</h3></div><ul><li>• No manual enrollment tracking</li><li>• Automated Google sign-in</li><li>• Self-service course catalog</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot amber"></div><h3>Professional Image</h3></div><ul><li>• Modern web platform</li><li>• Clean course presentation</li><li>• Structured enrollment process</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>No Lock-in</h3></div><ul><li>• Google Classroom = your LMS</li><li>• Supabase = your database</li><li>• Open architecture, portable data</li></ul></div>
+</div>
+<p class="footer">Metableton Ecole · Value Proposition · docs/presentation-diagrams/02-value-proposition.html</p>
+</div>
+<script>async function copyAsImage(b){const o=b.textContent;try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),bl=await new Promise(r=>c.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':bl})]),b.textContent='✓ Copied!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPNG(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),a=document.createElement('a');a.download='value-proposition.png',a.href=c.toDataURL('image/png'),a.click(),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPDF(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),d=c.toDataURL('image/png'),{jsPDF:j}=window.jspdf,o2=c.width>c.height?'landscape':'portrait',pdf=new j({orientation:o2,unit:'px',format:[c.width,c.height],hotfixes:['px_scaling']});pdf.addImage(d,'PNG',0,0,c.width,c.height),pdf.save('value-proposition.pdf'),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}</script>
+</body>
+</html>

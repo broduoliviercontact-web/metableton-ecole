@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — MVP Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}.container{max-width:1100px;margin:0 auto}.header{text-align:center;margin-bottom:2rem}.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:.75rem;vertical-align:middle}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}h1{font-size:1.75rem;font-weight:700}.subtitle{color:#94a3b8;font-size:.9rem;margin-top:.5rem}.diagram-container{background:rgba(15,23,42,.5);border-radius:1rem;border:1px solid #1e293b;padding:1.5rem;overflow-x:auto}svg{width:100%;min-width:900px;display:block}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:2rem}.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.25rem}.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}.card-dot{width:8px;height:8px;border-radius:50%}.card-dot.cyan{background:#22d3ee}.card-dot.emerald{background:#34d399}.card-dot.violet{background:#a78bfa}.card-dot.amber{background:#fbbf24}.card h3{font-size:.85rem;font-weight:600}.card ul{list-style:none;color:#94a3b8;font-size:.72rem}.card li{margin-bottom:.3rem}.footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.72rem}.toolbar{display:flex;gap:.5rem;margin-left:auto;align-items:center}.toolbar-toggle{background:transparent;border:none;color:#475569;cursor:pointer;font-size:1.25rem;padding:.25rem .5rem;border-radius:.375rem}.toolbar-toggle:hover{color:#94a3b8;background:rgba(30,41,59,.5)}.toolbar-actions{display:none;gap:.5rem}.toolbar.expanded .toolbar-actions{display:flex}.toolbar-actions button{background:rgba(30,41,59,.8);border:1px solid #334155;color:#94a3b8;padding:.375rem .75rem;border-radius:.375rem;font-family:inherit;font-size:.72rem;cursor:pointer;transition:all .2s}.toolbar-actions button:hover{background:rgba(51,65,85,.8);color:white;border-color:#475569}@media print{body{background:#020617;padding:1rem}.toolbar{display:none!important}}
+</style>
+</head>
+<body>
+<div class="container" id="report-container">
+<div class="header">
+<h1><span class="pulse-dot"></span>MVP Roadmap</h1>
+<p class="subtitle">Une base technique saine pour construire progressivement une vraie école de musique en ligne. 4 phases, du MVP à la communauté.</p>
+</div>
+<div class="diagram-container">
+<svg viewBox="0 0 1050 580">
+<defs>
+<marker id="ah" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#64748b"/></marker>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+
+<!-- Timeline -->
+<line x1="50" y1="40" x2="1000" y2="40" stroke="#1e293b" stroke-width="3"/>
+<circle cx="100" cy="40" r="10" fill="#22d3ee"/><circle cx="100" cy="40" r="18" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="2,2"/>
+<circle cx="340" cy="40" r="10" fill="#fbbf24"/><circle cx="340" cy="40" r="18" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="2,2"/>
+<circle cx="580" cy="40" r="10" fill="#a78bfa"/><circle cx="580" cy="40" r="18" fill="none" stroke="#a78bfa" stroke-width="1" stroke-dasharray="2,2"/>
+<circle cx="820" cy="40" r="10" fill="#94a3b8"/><circle cx="820" cy="40" r="18" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2,2"/>
+
+<!-- Phase 1: Existing -->
+<rect x="30" y="70" width="235" height="480" rx="10" fill="rgba(34,211,238,.06)" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="30" y="70" width="235" height="32" rx="10" fill="rgba(34,211,238,.2)"/>
+<rect x="30" y="86" width="235" height="16" fill="rgba(34,211,238,.2)"/>
+<text x="147" y="92" fill="#22d3ee" font-size="12" font-weight="700" text-anchor="middle">Phase 1 — MVP Core</text>
+<rect x="105" y="62" width="85" height="18" rx="9" fill="#22d3ee"/>
+<text x="147" y="75" fill="#020617" font-size="8" font-weight="700" text-anchor="middle">EXISTING ✓</text>
+
+<text x="50" y="130" fill="#22d3ee" font-size="10" font-weight="600">Auth & onboarding</text>
+<text x="50" y="152" fill="#94a3b8" font-size="8">✓ Google OAuth 2.0</text>
+<text x="50" y="170" fill="#94a3b8" font-size="8">✓ Server-side sessions</text>
+<text x="50" y="188" fill="#94a3b8" font-size="8">✓ Profile auto-creation</text>
+<text x="50" y="206" fill="#94a3b8" font-size="8">✓ Admin bootstrap</text>
+
+<text x="50" y="240" fill="#22d3ee" font-size="10" font-weight="600">Course management</text>
+<text x="50" y="262" fill="#94a3b8" font-size="8">✓ CRUD courses</text>
+<text x="50" y="280" fill="#94a3b8" font-size="8">✓ Public catalog</text>
+<text x="50" y="298" fill="#94a3b8" font-size="8">✓ Course detail page</text>
+<text x="50" y="316" fill="#94a3b8" font-size="8">✓ Draft/published states</text>
+
+<text x="50" y="350" fill="#22d3ee" font-size="10" font-weight="600">Enrollments</text>
+<text x="50" y="372" fill="#94a3b8" font-size="8">✓ Request → pending</text>
+<text x="50" y="390" fill="#94a3b8" font-size="8">✓ Approve/reject</text>
+<text x="50" y="408" fill="#94a3b8" font-size="8">✓ Re-request (rejected)</text>
+<text x="50" y="426" fill="#94a3b8" font-size="8">✓ Student dashboard</text>
+
+<text x="50" y="460" fill="#22d3ee" font-size="10" font-weight="600">Role system</text>
+<text x="50" y="482" fill="#94a3b8" font-size="8">✓ Student / Teacher / Admin</text>
+<text x="50" y="500" fill="#94a3b8" font-size="8">✓ RBAC middleware</text>
+<text x="50" y="518" fill="#94a3b8" font-size="8">✓ Last-admin guard</text>
+
+<!-- Phase 2: In Progress -->
+<rect x="280" y="70" width="235" height="480" rx="10" fill="rgba(251,191,36,.06)" stroke="#fbbf24" stroke-width="1.5"/>
+<rect x="280" y="70" width="235" height="32" rx="10" fill="rgba(251,191,36,.2)"/>
+<rect x="280" y="86" width="235" height="16" fill="rgba(251,191,36,.2)"/>
+<text x="397" y="92" fill="#fbbf24" font-size="12" font-weight="700" text-anchor="middle">Phase 2 — Classroom</text>
+<rect x="335" y="62" width="125" height="18" rx="9" fill="#fbbf24"/>
+<text x="397" y="75" fill="#020617" font-size="8" font-weight="700" text-anchor="middle">IN PROGRESS ⚡</text>
+
+<text x="300" y="130" fill="#fbbf24" font-size="10" font-weight="600">Classroom integration</text>
+<text x="300" y="152" fill="#94a3b8" font-size="8">✓ Link Classroom to course</text>
+<text x="300" y="170" fill="#94a3b8" font-size="8">✓ API validation</text>
+<text x="300" y="188" fill="#94a3b8" font-size="8">○ Auto-provisioning</text>
+<text x="300" y="206" fill="#94a3b8" font-size="8">○ Roster sync</text>
+
+<text x="300" y="240" fill="#fbbf24" font-size="10" font-weight="600">Teacher tools</text>
+<text x="300" y="262" fill="#94a3b8" font-size="8">○ Bulk enrollment actions</text>
+<text x="300" y="280" fill="#94a3b8" font-size="8">○ Student progress view</text>
+<text x="300" y="298" fill="#94a3b8" font-size="8">○ Classroom sync status</text>
+
+<text x="300" y="350" fill="#fbbf24" font-size="10" font-weight="600">Student experience</text>
+<text x="300" y="372" fill="#94a3b8" font-size="8">○ Classroom deep link</text>
+<text x="300" y="390" fill="#94a3b8" font-size="8">○ Enrollment history</text>
+
+<!-- Phase 3: Next -->
+<rect x="530" y="70" width="235" height="480" rx="10" fill="rgba(167,139,250,.06)" stroke="#a78bfa" stroke-width="1.5"/>
+<rect x="530" y="70" width="235" height="32" rx="10" fill="rgba(167,139,250,.2)"/>
+<rect x="530" y="86" width="235" height="16" fill="rgba(167,139,250,.2)"/>
+<text x="647" y="92" fill="#a78bfa" font-size="12" font-weight="700" text-anchor="middle">Phase 3 — Learning</text>
+<rect x="600" y="62" width="95" height="18" rx="9" fill="#a78bfa"/>
+<text x="647" y="75" fill="#020617" font-size="8" font-weight="700" text-anchor="middle">NEXT →</text>
+
+<text x="550" y="130" fill="#a78bfa" font-size="10" font-weight="600">Learning experience</text>
+<text x="550" y="152" fill="#94a3b8" font-size="8">○ Course resources page</text>
+<text x="550" y="170" fill="#94a3b8" font-size="8">○ Student progress tracking</text>
+<text x="550" y="188" fill="#94a3b8" font-size="8">○ Teacher feedback system</text>
+
+<text x="550" y="240" fill="#a78bfa" font-size="10" font-weight="600">Content enrichment</text>
+<text x="550" y="262" fill="#94a3b8" font-size="8">○ Video embeds</text>
+<text x="550" y="280" fill="#94a3b8" font-size="8">○ Rich course descriptions</text>
+<text x="550" y="298" fill="#94a3b8" font-size="8">○ Prerequisites system</text>
+
+<text x="550" y="350" fill="#a78bfa" font-size="10" font-weight="600">Communication</text>
+<text x="550" y="372" fill="#94a3b8" font-size="8">○ Email notifications</text>
+<text x="550" y="390" fill="#94a3b8" font-size="8">○ Enrollment status alerts</text>
+<text x="550" y="408" fill="#94a3b8" font-size="8">○ In-app messages</text>
+
+<!-- Phase 4: Future -->
+<rect x="780" y="70" width="240" height="480" rx="10" fill="rgba(148,163,184,.05)" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="780" y="70" width="240" height="32" rx="10" fill="rgba(148,163,184,.15)"/>
+<rect x="780" y="86" width="240" height="16" fill="rgba(148,163,184,.15)"/>
+<text x="900" y="92" fill="#94a3b8" font-size="12" font-weight="700" text-anchor="middle">Phase 4 — Scale</text>
+<rect x="860" y="62" width="80" height="18" rx="9" fill="#475569"/>
+<text x="900" y="75" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="middle">FUTURE</text>
+
+<text x="800" y="130" fill="#94a3b8" font-size="10" font-weight="600">Multi-school</text>
+<text x="800" y="152" fill="#64748b" font-size="8">○ Multiple schools on</text>
+<text x="800" y="170" fill="#64748b" font-size="8">  one platform</text>
+<text x="800" y="188" fill="#64748b" font-size="8">○ School branding</text>
+
+<text x="800" y="240" fill="#94a3b8" font-size="10" font-weight="600">Automation</text>
+<text x="800" y="262" fill="#64748b" font-size="8">○ Course templates</text>
+<text x="800" y="280" fill="#64748b" font-size="8">○ Auto-enrollment rules</text>
+<text x="800" y="298" fill="#64748b" font-size="8">○ Scheduled publishing</text>
+
+<text x="800" y="350" fill="#94a3b8" font-size="10" font-weight="600">Analytics</text>
+<text x="800" y="372" fill="#64748b" font-size="8">○ Dashboard analytics</text>
+<text x="800" y="390" fill="#64748b" font-size="8">○ Enrollment trends</text>
+<text x="800" y="408" fill="#64748b" font-size="8">○ Teacher performance</text>
+
+<text x="800" y="460" fill="#94a3b8" font-size="10" font-weight="600">Community</text>
+<text x="800" y="482" fill="#64748b" font-size="8">○ Metableton network</text>
+<text x="800" y="500" fill="#64748b" font-size="8">○ Course marketplace</text>
+<text x="800" y="518" fill="#64748b" font-size="8">○ Teacher directory</text>
+
+<!-- Legend -->
+<text x="50" y="555" fill="white" font-size="9" font-weight="600">✓ = implemented and confirmed in code</text>
+<text x="50" y="572" fill="#94a3b8" font-size="8">○ = planned, not yet implemented</text>
+</svg>
+</div>
+<div class="cards">
+<div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Phase 1: Done ✓</h3></div><ul><li>• Auth, catalog, enrollments</li><li>• 3 roles, RBAC middleware</li><li>• Session-based auth</li><li>• PostgreSQL schema</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot amber"></div><h3>Phase 2: Active ⚡</h3></div><ul><li>• Classroom link validation</li><li>• Teacher dashboard</li><li>• Deep Classroom integration</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot violet"></div><h3>Phase 3-4: Planned</h3></div><ul><li>• Learning experience layer</li><li>• Notifications & analytics</li><li>• Multi-school & community</li></ul></div>
+</div>
+<p class="footer">Metableton Ecole · MVP Roadmap · Confirmed features marked with ✓, planned features marked with ○ · docs/presentation-diagrams/08-mvp-roadmap.html</p>
+</div>
+<script>async function copyAsImage(b){const o=b.textContent;try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),bl=await new Promise(r=>c.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':bl})]),b.textContent='✓ Copied!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPNG(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),a=document.createElement('a');a.download='mvp-roadmap.png',a.href=c.toDataURL('image/png'),a.click(),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}async function downloadPDF(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),d=c.toDataURL('image/png'),{jsPDF:j}=window.jspdf,o2=c.width>c.height?'landscape':'portrait',pdf=new j({orientation:o2,unit:'px',format:[c.width,c.height],hotfixes:['px_scaling']});pdf.addImage(d,'PNG',0,0,c.width,c.height),pdf.save('mvp-roadmap.pdf'),b.textContent='✓ Done!'}catch(e){b.textContent='✗ Failed'}setTimeout(()=>b.textContent=o,2000)}</script>
+</body>
+</html>

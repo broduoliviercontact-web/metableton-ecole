@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — Roue de Croissance</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}.container{max-width:1050px;margin:0 auto}.header{text-align:center;margin-bottom:2rem}.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:.75rem;vertical-align:middle}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}h1{font-size:1.75rem;font-weight:700}.subtitle{color:#94a3b8;font-size:.9rem;margin-top:.5rem}.diagram-container{background:rgba(15,23,42,.5);border-radius:1rem;border:1px solid #1e293b;padding:1.5rem;overflow-x:auto}svg{width:100%;min-width:900px;display:block}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-top:2rem}.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.25rem}.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}.card-dot{width:8px;height:8px;border-radius:50%}.card-dot.cyan{background:#22d3ee}.card-dot.emerald{background:#34d399}.card-dot.violet{background:#a78bfa}.card-dot.amber{background:#fbbf24}.card h3{font-size:.85rem;font-weight:600}.card ul{list-style:none;color:#94a3b8;font-size:.72rem}.card li{margin-bottom:.3rem}.footer{text-align:center;margin-top:1.5rem;color:#475569;font-size:.72rem}.toolbar{display:flex;gap:.5rem;margin-left:auto;align-items:center}.toolbar-toggle{background:transparent;border:none;color:#475569;cursor:pointer;font-size:1.25rem;padding:.25rem .5rem;border-radius:.375rem}.toolbar-toggle:hover{color:#94a3b8;background:rgba(30,41,59,.5)}.toolbar-actions{display:none;gap:.5rem}.toolbar.expanded .toolbar-actions{display:flex}.toolbar-actions button{background:rgba(30,41,59,.8);border:1px solid #334155;color:#94a3b8;padding:.375rem .75rem;border-radius:.375rem;font-family:inherit;font-size:.72rem;cursor:pointer;transition:all .2s}.toolbar-actions button:hover{background:rgba(51,65,85,.8);color:white;border-color:#475569}@media print{body{background:#020617;padding:1rem}.toolbar{display:none!important}}
+</style>
+</head>
+<body>
+<div class="container" id="report-container">
+<div class="header">
+<h1><span class="pulse-dot"></span>Roue de Croissance</h1>
+<p class="subtitle">Plus la plateforme est utilisée, plus l'école devient structurée, visible et efficace. Chaque étape alimente la suivante.</p>
+</div>
+<div class="diagram-container">
+<svg viewBox="0 0 1000 550">
+<defs>
+<marker id="ah" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#64748b"/></marker>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+<circle cx="500" cy="275" r="200" fill="none" stroke="#1e293b" stroke-width="2" stroke-dasharray="12,6"/>
+<circle cx="500" cy="275" r="200" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3,9" opacity=".4"/>
+<circle cx="500" cy="275" r="55" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+<text x="500" y="268" fill="white" font-size="12" font-weight="700" text-anchor="middle">Metableton</text>
+<text x="500" y="286" fill="white" font-size="12" font-weight="700" text-anchor="middle">Ecole</text>
+<text x="500" y="302" fill="#22d3ee" font-size="7" text-anchor="middle">Moteur</text>
+<rect x="408" y="40" width="184" height="50" rx="8" fill="#0f172a"/>
+<rect x="408" y="40" width="184" height="50" rx="8" fill="rgba(251,191,36,.15)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="500" y="62" fill="white" font-size="10" font-weight="700" text-anchor="middle">1 Les profs publient</text>
+<text x="500" y="78" fill="#94a3b8" font-size="8" text-anchor="middle">Créent et publient des cours</text>
+<path d="M 592 55 Q 720 55 720 150" fill="none" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="650" y="155" width="184" height="50" rx="8" fill="#0f172a"/>
+<rect x="650" y="155" width="184" height="50" rx="8" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="742" y="177" fill="white" font-size="10" font-weight="700" text-anchor="middle">2 Les étudiants découvrent</text>
+<text x="742" y="193" fill="#94a3b8" font-size="8" text-anchor="middle">Parcourent le catalogue public</text>
+<path d="M 720 205 Q 720 300 630 330" fill="none" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="555" y="325" width="184" height="50" rx="8" fill="#0f172a"/>
+<rect x="555" y="325" width="184" height="50" rx="8" fill="rgba(6,78,59,.3)" stroke="#34d399" stroke-width="1.5"/>
+<text x="647" y="347" fill="white" font-size="10" font-weight="700" text-anchor="middle">3 Les étudiants s'inscrivent</text>
+<text x="647" y="363" fill="#94a3b8" font-size="8" text-anchor="middle">Demandent l'accès · en attente</text>
+<path d="M 555 350 Q 400 350 380 300" fill="none" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="261" y="285" width="184" height="50" rx="8" fill="#0f172a"/>
+<rect x="261" y="285" width="184" height="50" rx="8" fill="rgba(251,146,60,.15)" stroke="#fb923c" stroke-width="1.5"/>
+<text x="353" y="307" fill="white" font-size="10" font-weight="700" text-anchor="middle">4 L'école organise</text>
+<text x="353" y="323" fill="#94a3b8" font-size="8" text-anchor="middle">Accepte/refuse · gère</text>
+<path d="M 261 310 Q 180 310 180 200" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="126" y="155" width="184" height="50" rx="8" fill="#0f172a"/>
+<rect x="126" y="155" width="184" height="50" rx="8" fill="rgba(76,29,149,.3)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="218" y="177" fill="white" font-size="10" font-weight="700" text-anchor="middle">5 Les cours vivent</text>
+<text x="218" y="193" fill="#94a3b8" font-size="8" text-anchor="middle">Dans Google Classroom</text>
+<path d="M 180 155 Q 180 55 300 55" fill="none" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="308" y="40" width="184" height="50" rx="8" fill="#0f172a"/>
+<rect x="308" y="40" width="184" height="50" rx="8" fill="rgba(251,191,36,.08)" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="400" y="62" fill="white" font-size="10" font-weight="700" text-anchor="middle">6 Le catalogue grandit</text>
+<text x="400" y="78" fill="#94a3b8" font-size="8" text-anchor="middle">Plus de cours · plus riche</text>
+<circle cx="500" cy="275" r="215" fill="none" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah)" stroke-dasharray="8,4" opacity=".5"/>
+<rect x="30" y="400" width="940" height="130" rx="10" fill="rgba(15,23,42,.4)" stroke="#1e293b" stroke-width="1"/>
+<text x="50" y="435" fill="white" font-size="11" font-weight="700">L'Effet Roue de Croissance</text>
+<rect x="50" y="450" width="210" height="65" rx="6" fill="rgba(8,51,68,.1)" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="60" y="470" fill="#22d3ee" font-size="9" font-weight="600">Visibilité ↗</text>
+<text x="60" y="488" fill="#94a3b8" font-size="8">Plus de cours → catalogue</text>
+<text x="60" y="504" fill="#94a3b8" font-size="8">plus riche → plus d'intérêt</text>
+<rect x="280" y="450" width="210" height="65" rx="6" fill="rgba(6,78,59,.1)" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="290" y="470" fill="#34d399" font-size="9" font-weight="600">Structure ↗</text>
+<text x="290" y="488" fill="#94a3b8" font-size="8">Plus d'inscriptions → école</text>
+<text x="290" y="504" fill="#94a3b8" font-size="8">mieux organisée</text>
+<rect x="510" y="450" width="210" height="65" rx="6" fill="rgba(76,29,149,.1)" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="520" y="470" fill="#a78bfa" font-size="9" font-weight="600">Efficacité ↗</text>
+<text x="520" y="488" fill="#94a3b8" font-size="8">Moins d'admin → plus</text>
+<text x="520" y="504" fill="#94a3b8" font-size="8">d'enseignement → meilleure expérience</text>
+<rect x="740" y="450" width="210" height="65" rx="6" fill="rgba(34,211,238,.06)" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="750" y="470" fill="#22d3ee" font-size="9" font-weight="600">Croissance ↗</text>
+<text x="750" y="488" fill="#94a3b8" font-size="8">Meilleure réputation → plus</text>
+<text x="750" y="504" fill="#94a3b8" font-size="8">d'étudiants et de profs</text>
+</svg>
+</div>
+<div class="cards">
+<div class="card"><div class="card-header"><div class="card-dot amber"></div><h3>Côté Offre</h3></div><ul><li>• Les profs publient des cours</li><li>• Le catalogue s'enrichit</li><li>• Les cours vivent dans Classroom</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Côté Demande</h3></div><ul><li>• Les étudiants découvrent</li><li>• Inscription en un clic</li><li>• Accès direct à Classroom</li></ul></div>
+<div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>Effet Réseau</h3></div><ul><li>• Plus de cours = plus d'étudiants</li><li>• Plus d'étudiants = plus de profs</li><li>• La roue accélère avec le temps</li></ul></div>
+</div>
+<p class="footer">Metableton Ecole · Roue de Croissance · docs/presentation-diagrams/06-platform-flywheel-fr.html</p>
+</div>
+<script>async function copyAsImage(b){const o=b.textContent;try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),bl=await new Promise(r=>c.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':bl})]),b.textContent='✓ Copié !'}catch(e){b.textContent='✗ Échec'}setTimeout(()=>b.textContent=o,2000)}async function downloadPNG(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),a=document.createElement('a');a.download='roue-croissance.png',a.href=c.toDataURL('image/png'),a.click(),b.textContent='✓ Fait !'}catch(e){b.textContent='✗ Échec'}setTimeout(()=>b.textContent=o,2000)}async function downloadPDF(b){const o=b.textContent;b.textContent='⏳ ...';try{const e=document.getElementById('report-container'),r=e.getBoundingClientRect(),p=32,c=await html2canvas(document.body,{backgroundColor:'#020617',scale:2,useCORS:true,ignoreElements:e=>e.classList&&e.classList.contains('toolbar'),x:r.left+window.scrollX-p,y:r.top+window.scrollY-p,width:r.width+p*2,height:r.height+p*2}),d=c.toDataURL('image/png'),{jsPDF:j}=window.jspdf,o2=c.width>c.height?'paysage':'portrait',pdf=new j({orientation:o2,unit:'px',format:[c.width,c.height],hotfixes:['px_scaling']});pdf.addImage(d,'PNG',0,0,c.width,c.height),pdf.save('roue-croissance.pdf'),b.textContent='✓ Fait !'}catch(e){b.textContent='✗ Échec'}setTimeout(()=>b.textContent=o,2000)}</script>
+</body>
+</html>

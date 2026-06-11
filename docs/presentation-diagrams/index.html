@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Metableton Ecole — Presentation Diagrams</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'JetBrains Mono',monospace;background:#020617;min-height:100vh;padding:2rem;color:white}
+.container{max-width:950px;margin:0 auto}
+.header{text-align:center;margin-bottom:3rem}
+.pulse-dot{width:12px;height:12px;background:#22d3ee;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:.75rem;vertical-align:middle}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+h1{font-size:1.75rem;font-weight:700;margin-bottom:.5rem}
+.subtitle{color:#94a3b8;font-size:.875rem;max-width:650px;margin:0 auto;line-height:1.5}
+.intro{margin-bottom:2rem;color:#64748b;font-size:.8rem;line-height:1.6;text-align:center;max-width:700px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:3rem}
+.card{background:rgba(15,23,42,.5);border-radius:.75rem;border:1px solid #1e293b;padding:1.5rem;transition:border-color .2s,background .2s;text-decoration:none;display:block;color:inherit}
+.card:hover{border-color:#475569;background:rgba(30,41,59,.5)}
+.card-number{font-size:.7rem;color:#475569;margin-bottom:.5rem}
+.card-title{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.card-use{font-size:.72rem;color:#94a3b8;margin-bottom:.6rem}
+.card-desc{font-size:.72rem;color:#64748b;line-height:1.4}
+.card-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:.4rem;vertical-align:middle}
+.dot-cyan{background:#22d3ee}.dot-amber{background:#fbbf24}.dot-rose{background:#fb7185}.dot-emerald{background:#34d399}.dot-violet{background:#a78bfa}
+.usage-section{margin-top:2rem;text-align:center}
+.usage-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;margin-top:1rem}
+.usage-tag{background:rgba(15,23,42,.5);border:1px solid #1e293b;border-radius:2rem;padding:.375rem 1rem;font-size:.72rem;color:#94a3b8}
+.footer{text-align:center;margin-top:2.5rem;color:#475569;font-size:.7rem;line-height:1.6}
+.footer a{color:#94a3b8;text-decoration:none}.footer a:hover{color:white}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1><span class="pulse-dot"></span>Metableton Ecole — Presentation Diagrams</h1>
+<p class="subtitle">8 diagrammes de présentation pour pitcher le projet à des professeurs, écoles, partenaires et investisseurs.</p>
+</div>
+
+<p class="intro">Ces diagrammes sont conçus pour être ouverts directement dans un navigateur. Chaque fichier est autonome, dark-themed, avec export intégré (Copy PNG, Download PNG, Download PDF).</p>
+
+<div class="grid">
+<a href="01-product-vision.html" class="card">
+<div class="card-number">01</div>
+<div class="card-title"><span class="card-dot dot-cyan"></span>Product Vision</div>
+<div class="card-use">Pitch · Présentation école · README</div>
+<div class="card-desc">Vue d'ensemble hub-and-spoke : Metableton Ecole au centre, étudiants, profs, admin, catalogue, Classroom et Supabase autour.</div>
+</a>
+<a href="02-value-proposition.html" class="card">
+<div class="card-number">02</div>
+<div class="card-title"><span class="card-dot dot-amber"></span>Value Proposition</div>
+<div class="card-use">Pitch investisseur · Partenaires</div>
+<div class="card-desc">4 piliers de valeur : pour les étudiants, les profs, l'école, et la stack technique. Gain de temps, clarté, professionnalisation.</div>
+</a>
+<a href="03-user-ecosystem.html" class="card">
+<div class="card-number">03</div>
+<div class="card-title"><span class="card-dot dot-rose"></span>User Ecosystem</div>
+<div class="card-use">Documentation · Onboarding</div>
+<div class="card-desc">4 rôles autour de la plateforme : visitor, student, teacher, admin. Chaque rôle connecté au frontend, API, DB et Classroom.</div>
+</a>
+<a href="04-student-experience.html" class="card">
+<div class="card-number">04</div>
+<div class="card-title"><span class="card-dot dot-cyan"></span>Student Experience</div>
+<div class="card-use">Présentation étudiants · Site web</div>
+<div class="card-desc">Parcours étudiant en 7 étapes : découvrir → voir → se connecter → demander → suivre → dashboard → Classroom.</div>
+</a>
+<a href="05-teacher-experience.html" class="card">
+<div class="card-number">05</div>
+<div class="card-title"><span class="card-dot dot-amber"></span>Teacher Experience</div>
+<div class="card-use">Présentation profs · Écoles</div>
+<div class="card-desc">3 zones : créer & publier, gérer les inscriptions, lier Classroom. Workflow clair pour les professeurs de musique.</div>
+</a>
+<a href="06-platform-flywheel.html" class="card">
+<div class="card-number">06</div>
+<div class="card-title"><span class="card-dot dot-emerald"></span>Platform Flywheel</div>
+<div class="card-use">Pitch investisseur · Roadmap</div>
+<div class="card-desc">Boucle de croissance : profs publient → étudiants découvrent → inscrivent → école organise → cours vivent → catalogue s'enrichit.</div>
+</a>
+<a href="07-google-classroom-integration.html" class="card">
+<div class="card-number">07</div>
+<div class="card-title"><span class="card-dot dot-violet"></span>Classroom Integration</div>
+<div class="card-use">Pitch technique · Partenaires Google</div>
+<div class="card-desc">Comparaison gauche-droite : Metableton = management layer, Classroom = learning layer. Chacun fait ce qu'il fait le mieux.</div>
+</a>
+<a href="08-mvp-roadmap.html" class="card">
+<div class="card-number">08</div>
+<div class="card-title"><span class="card-dot dot-amber"></span>MVP Roadmap</div>
+<div class="card-use">Documentation · Planification</div>
+<div class="card-desc">4 phases : MVP Core (done ✓), Classroom Integration (active ⚡), Learning Experience (next →), Scale & Community (future).</div>
+</a>
+</div>
+
+<div class="usage-section">
+<h2 style="font-size:1rem;font-weight:600;margin-bottom:.5rem">Usage recommandé</h2>
+<div class="usage-grid">
+<span class="usage-tag">Pitch école de musique</span>
+<span class="usage-tag">Présentation investisseur</span>
+<span class="usage-tag">README GitHub</span>
+<span class="usage-tag">Documentation produit</span>
+<span class="usage-tag">Onboarding équipe</span>
+<span class="usage-tag">Discussion partenaire</span>
+<span class="usage-tag">Site web projet</span>
+<span class="usage-tag">Demo Day</span>
+</div>
+</div>
+
+<div class="footer">
+<p>Generated from repo analysis — metableton-ecole</p>
+<p>Date: 2026-06-10 · <a href="00-presentation-audit.md">Audit file</a> · <a href="README.md">README</a></p>
+</div>
+</div>
+</body>
+</html>
