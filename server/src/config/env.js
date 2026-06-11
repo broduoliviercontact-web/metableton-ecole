@@ -37,6 +37,10 @@ const env = {
   // When true, teacher/admin can manually trigger OAuth flow
   classroomOAuthEnabled: process.env.CLASSROOM_OAUTH_ENABLED === 'true',
 
+  // Debug log for P-26C bug investigation
+  // Remove after fixing - to be deleted
+  _classroomOAuthDebug: `CLASSROOM_OAUTH_ENABLED=${process.env.CLASSROOM_OAUTH_ENABLED}`,
+
   isProduction: process.env.NODE_ENV === 'production',
 };
 

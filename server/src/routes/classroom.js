@@ -53,6 +53,14 @@ router.get('/diagnostic', requireAuth, requireRole('teacher', 'admin'), (req, re
 // Returns 404 if feature flag is disabled.
 router.get('/oauth/start', requireAuth, requireRole('teacher', 'admin'), (req, res, next) => {
   try {
+    // Debug log for P-26C bug investigation
+    // Remove after fixing - to be deleted
+    if (env.isProduction) {
+      console.log('classroomOAuthEnabled:', env.classroomOAuthEnabled);
+      console.log('CLASSROOM_OAUTH_ENABLED env:', process.env.CLASSROOM_OAUTH_ENABLED);
+      console.log('route reached: yes');
+    }
+
     if (!env.classroomOAuthEnabled) {
       return res.status(404).json({
         error: { code: 'NOT_FOUND', message: 'Classroom OAuth is disabled.' },
