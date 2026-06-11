@@ -67,9 +67,12 @@ router.get('/oauth/start', requireAuth, requireRole('teacher', 'admin'), (req, r
       });
     }
 
-    const oauth2Client = getOauth2Client();
+    // Use dedicated redirect URI for Classroom OAuth
+    const redirectUri = env.clientOrigin + '/api/classroom/oauth/callback';
+    const oauth2Client = getOauth2Client(redirectUri);
+
     oauth2Client.then((client) => {
-      const redirectUri = env.clientOrigin + '/api/classroom/oauth/callback';
+      console.error('[oauth-start] redirectUri used for Classroom OAuth:', redirectUri);
       const scopes = ['https://www.googleapis.com/auth/classroom.courses.readonly'];
       const state = 'classroom_oauth_' + Math.random().toString(36).substring(2);
 
@@ -137,7 +140,10 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
       });
     }
 
-    const oauth2Client = getOauth2Client();
+    // Use same redirect URI as in /oauth/start for token exchange
+    const redirectUri = env.clientOrigin + '/api/classroom/oauth/callback';
+    console.error('[oauth-callback] redirectUri used for token exchange:', redirectUri);
+    const oauth2Client = getOauth2Client(redirectUri);
     oauth2Client.then((client) => {
       return client.getToken(code);
     }).then((tokens) => {
