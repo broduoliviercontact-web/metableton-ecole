@@ -289,8 +289,8 @@ export default function CourseFormPage({ mode }) {
 // P-26H enhancement: Shows a dropdown list of available Classroom courses
 // when OAuth is connected, with fallback to manual input.
 function ClassroomSection({ courseId, classroomId, classroomUrl, onLinked }) {
-  const [status, setStatus] = useState(null); // null = not loaded
-  const [courses, setCourses] = useState(null); // null = not loaded
+  const [status, setStatus] = useState(null); // null = not loaded, { connected: bool, oauthEnabled: bool }
+  const [courses, setCourses] = useState(null); // null = not loaded, [] = loaded but empty
   const [isCoursesLoading, setIsCoursesLoading] = useState(false);
   const [input, setInput] = useState('');
   const [isLinking, setIsLinking] = useState(false);
@@ -301,8 +301,7 @@ function ClassroomSection({ courseId, classroomId, classroomUrl, onLinked }) {
   useEffect(() => {
     async function loadStatus() {
       try {
-        const data = await getClassroomOAuthStatus();
-        setStatus(data);
+        setStatus(await getClassroomOAuthStatus());
       } catch (err) {
         // 404/CLASSROOM_OAUTH_DISABLED is now handled by backend returning
         // oauthEnabled: false with status 200
