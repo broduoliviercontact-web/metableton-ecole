@@ -107,9 +107,9 @@ export default function CatalogPage() {
               {course.title}
             </h2>
 
-            {/* Description */}
+            {/* Description — truncated on cards for readability */}
             {course.description ? (
-              <p className="mb-4 flex-1 text-sm leading-relaxed text-gray-400">
+              <p className="mb-4 flex-1 text-sm leading-relaxed text-gray-400 line-clamp-3">
                 {course.description}
               </p>
             ) : (
