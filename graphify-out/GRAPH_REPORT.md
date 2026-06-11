@@ -1,16 +1,16 @@
 # Graph Report - metableton-ecole  (2026-06-11)
 
 ## Corpus Check
-- 112 files · ~57,360 words
+- 112 files · ~57,874 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 625 nodes · 777 edges · 68 communities (32 shown, 36 thin omitted)
+- 625 nodes · 779 edges · 68 communities (32 shown, 36 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e93b6af2`
+- Built from commit: `8d8911f5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -98,14 +98,14 @@
 ## Surprising Connections (you probably didn't know these)
 - `listManageableCourses()` --calls--> `apiClient()`  [EXTRACTED]
   client/src/api/courses.js → client/src/api/client.js
+- `approveEnrollment()` --calls--> `apiClient()`  [EXTRACTED]
+  client/src/api/enrollments.js → client/src/api/client.js
+- `cancelApprovedEnrollment()` --calls--> `apiClient()`  [EXTRACTED]
+  client/src/api/enrollments.js → client/src/api/client.js
+- `cancelEnrollment()` --calls--> `apiClient()`  [EXTRACTED]
+  client/src/api/enrollments.js → client/src/api/client.js
 - `getMyEnrollments()` --calls--> `apiClient()`  [EXTRACTED]
   client/src/api/enrollments.js → client/src/api/client.js
-- `RequireAuth()` --calls--> `useAuth()`  [EXTRACTED]
-  client/src/components/RequireAuth.jsx → client/src/hooks/useAuth.js
-- `DashboardLayout()` --calls--> `useAuth()`  [EXTRACTED]
-  client/src/components/layout/DashboardLayout.jsx → client/src/hooks/useAuth.js
-- `Header()` --calls--> `useAuth()`  [EXTRACTED]
-  client/src/components/layout/Header.jsx → client/src/hooks/useAuth.js
 
 ## Import Cycles
 - None detected.
@@ -113,11 +113,11 @@
 ## Communities (68 total, 36 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.06
-Nodes (31): getMyEnrollments(), DEFAULT_DASHBOARDS, RequireAuth(), AdminCoursesPage(), computeStats(), CourseRow(), formatDate(), STATUS_LABELS (+23 more)
+Cohesion: 0.05
+Nodes (39): approveEnrollment(), cancelApprovedEnrollment(), cancelEnrollment(), getMyEnrollments(), getPendingEnrollments(), rejectEnrollment(), requestEnrollment(), DEFAULT_DASHBOARDS (+31 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.05
+Cohesion: 0.06
 Nodes (46): env, getOauth2Client(), getSupabase(), requireAuth(), errorHandler(), mapStatusCodeToErrorCode(), requireRole(), pgPool (+38 more)
 
 ### Community 2 - "Community 2"
@@ -125,8 +125,8 @@ Cohesion: 0.05
 Nodes (38): Additional Requirements (from Architecture), Epic 1: School Foundation & Public Presence, Epic 1: School Foundation & Public Presence, Epic 2: Authentication & Role-Based Access, Epic 2: Authentication & Role-Based Access, Epic 3: Courses, Enrollment & Google Classroom, Epic 3: Courses, Enrollment & Google Classroom, Epic 4: Admin Operations (+30 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.11
-Nodes (26): getAdminCourses(), getUsers(), updateUserRole(), getMe(), logout(), apiClient(), createCourse(), getManageableCourseById() (+18 more)
+Cohesion: 0.15
+Nodes (18): getAdminCourses(), getUsers(), updateUserRole(), getMe(), logout(), apiClient(), createCourse(), getManageableCourseById() (+10 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.07
@@ -251,10 +251,10 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `Return 'code' or 'id' if every table item carries that *same* field.      All it`, `Shape-aware array merge. Base + override combined tables may opt into     keyed`, `Recursively merge override into base using structural rules.     - Table + table` to the rest of the system?**
   _326 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.05516431924882629 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.05432595573440644 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.055130784708249496 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.1092436974789916 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1476923076923077 - nodes in this community are weakly interconnected._

@@ -32,6 +32,11 @@ const env = {
   // When true, diagnostic endpoint returns status info
   classroomDiagnosticEnabled: process.env.CLASSROOM_DIAGNOSTIC_ENABLED === 'true',
 
+  // P-26C: Classroom OAuth feature flag
+  // When false (default), OAuth routes return 404 for testing
+  // When true, teacher/admin can manually trigger OAuth flow
+  classroomOAuthEnabled: process.env.CLASSROOM_OAUTH_ENABLED === 'true',
+
   isProduction: process.env.NODE_ENV === 'production',
 };
 

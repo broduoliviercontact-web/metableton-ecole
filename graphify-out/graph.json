@@ -650,7 +650,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_enrollments",
-      "community": 3,
+      "community": 0,
       "norm_label": "enrollments.js"
     },
     {
@@ -660,7 +660,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "api_enrollments_requestenrollment",
-      "community": 3,
+      "community": 0,
       "norm_label": "requestenrollment()"
     },
     {
@@ -680,7 +680,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "api_enrollments_getpendingenrollments",
-      "community": 3,
+      "community": 0,
       "norm_label": "getpendingenrollments()"
     },
     {
@@ -690,7 +690,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "api_enrollments_approveenrollment",
-      "community": 3,
+      "community": 0,
       "norm_label": "approveenrollment()"
     },
     {
@@ -700,7 +700,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "api_enrollments_rejectenrollment",
-      "community": 3,
+      "community": 0,
       "norm_label": "rejectenrollment()"
     },
     {
@@ -710,7 +710,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "api_enrollments_cancelenrollment",
-      "community": 3,
+      "community": 0,
       "norm_label": "cancelenrollment()"
     },
     {
@@ -720,7 +720,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "api_enrollments_cancelapprovedenrollment",
-      "community": 3,
+      "community": 0,
       "norm_label": "cancelapprovedenrollment()"
     },
     {
@@ -1410,7 +1410,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "dashboard_studentdashboardpage_formatdate",
-      "community": 3,
+      "community": 0,
       "norm_label": "formatdate()"
     },
     {
@@ -1430,7 +1430,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "dashboard_studentdashboardpage_enrollmentcard",
-      "community": 3,
+      "community": 0,
       "norm_label": "enrollmentcard()"
     },
     {
@@ -2067,7 +2067,7 @@
       "label": "router",
       "file_type": "code",
       "source_file": "server/src/routes/classroom.js",
-      "source_location": "L6",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "routes_classroom_router",
       "community": 1,
@@ -9678,9 +9678,9 @@
       "source_file": "server/src/app.js",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_src_app_js_src_app",
-      "target": "routes_classroom",
-      "confidence_score": 1.0
+      "target": "routes_classroom"
     },
     {
       "relation": "imports_from",
@@ -9785,9 +9785,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "config_env",
-      "confidence_score": 1.0
+      "target": "config_env"
     },
     {
       "relation": "imports_from",
@@ -9825,6 +9825,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/classroom.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "routes_classroom",
+      "target": "config_google",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "server/src/services/classroomService.js",
       "source_location": "L1",
       "weight": 1.0,
@@ -9842,6 +9853,17 @@
       "confidence_score": 1.0,
       "source": "routes_auth",
       "target": "config_google_getoauth2client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/classroom.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "routes_classroom",
+      "target": "config_google_getoauth2client",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10244,9 +10266,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "middleware_auth",
-      "confidence_score": 1.0
+      "target": "middleware_auth"
     },
     {
       "relation": "imports_from",
@@ -10288,9 +10310,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "middleware_auth_requireauth",
-      "confidence_score": 1.0
+      "target": "middleware_auth_requireauth"
     },
     {
       "relation": "imports",
@@ -10383,9 +10405,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "middleware_role",
-      "confidence_score": 1.0
+      "target": "middleware_role"
     },
     {
       "relation": "imports_from",
@@ -10427,9 +10449,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "middleware_role_requirerole",
-      "confidence_score": 1.0
+      "target": "middleware_role_requirerole"
     },
     {
       "relation": "imports",
@@ -10564,9 +10586,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "routes_classroom_router",
-      "confidence_score": 1.0
+      "target": "routes_classroom_router"
     },
     {
       "relation": "contains",
@@ -14290,5 +14312,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e93b6af25be7e167f7b3c8c88df07c73592837a1"
+  "built_at_commit": "8d8911f5fce56ce4d0aa1af47530dd3b116a3888"
 }
