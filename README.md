@@ -11,7 +11,7 @@ Online music school portal for modern music creation, built on top of Google Cla
 | Database  | Supabase PostgreSQL                     |
 | Auth      | Google OAuth 2.0 (server-side sessions) |
 
-## Project structure
+## Project structure :)
 
 ```
 metableton-ecole/
