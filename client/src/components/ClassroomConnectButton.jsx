@@ -55,7 +55,7 @@ export default function ClassroomConnectButton() {
       setCourses(data.courses || []);
     } catch (err) {
       // 401/CLASSROOM_NOT_CONNECTED — just clear courses, no error needed
-      if (err.status === 401) {
+      if (err.status === 401 || err.status === 400 || err.status === 403) {
         setCourses([]);
       } else {
         setError(err);

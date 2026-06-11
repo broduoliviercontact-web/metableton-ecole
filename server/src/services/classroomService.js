@@ -189,7 +189,7 @@ export async function listClassroomCourses(tokens) {
   try {
     const res = await classroom.courses.list({
       courseId: '',
-      courseStates: ['ACTIVE', 'ARCHIVED', 'PROVISIONED', 'DRAFT'],
+      courseStates: ['ACTIVE', 'ARCHIVED', 'PROVISIONED', 'DECLINED'],
       pageSize: 100,
     });
 
@@ -206,6 +206,29 @@ export async function listClassroomCourses(tokens) {
     const reason = err?.response?.data?.error?.errors?.[0]?.reason;
     const message = err?.response?.data?.error?.message;
 
+    // Safe debug logs (no tokens, no secrets)
+    console.error('[classroom-courses] Google API error status:', status);
+    console.error('[classroom-courses] Google API error reason:', reason);
+    console.error('[classroom-courses] Google API error message:', message);
+
+    if (status === 400) {
+      // Invalid argument - might be DRAFT or other invalid course state
+      throw httpError(
+        400,
+        message || 'Requête Google Classroom invalide. Vérifiez vos paramètres.',
+        'CLASSROOM_INVALID_ARGUMENT'
+      );
+    }
+
+    if (status === 401) {
+      // Token expired or not connected
+      throw httpError(
+        401,
+        message || 'Accès refusé à Google Classroom. Reconnectez-vous.',
+        'CLASSROOM_NOT_CONNECTED'
+      );
+    }
+
     if (status === 403 && (reason === 'insufficient_scope' || reason === 'forbidden')) {
       throw httpError(
         403,
@@ -214,11 +237,11 @@ export async function listClassroomCourses(tokens) {
       );
     }
 
-    if (status === 401 || status === 403) {
+    if (status === 403) {
       throw httpError(
-        status,
-        message || "Accès refusé à Google Classroom. Vérifiez que vous êtes connecté.",
-        status === 401 ? 'UNAUTHORIZED' : 'CLASSROOM_FORBIDDEN'
+        403,
+        message || "Vous n'avez pas la permission d'accéder à Google Classroom.",
+        'CLASSROOM_PERMISSION_DENIED'
       );
     }
 
