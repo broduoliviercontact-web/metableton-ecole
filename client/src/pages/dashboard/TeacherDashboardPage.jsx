@@ -11,8 +11,6 @@ import {
   approveEnrollment,
   rejectEnrollment,
 } from '../../api/enrollments.js';
-import { connectClassroom } from '../../api/auth.js';
-import { useAuth } from '../../hooks/useAuth.js';
 import { SKILL_LABELS } from '../../constants.js';
 
 function formatDate(iso) {
@@ -25,7 +23,6 @@ export default function TeacherDashboardPage() {
   const [courses, setCourses] = useState(null); // null = not loaded yet
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { isAuthenticated, role } = useAuth();
 
   // ── Pending enrollments (Story 3.6) ─────────────────────────────
   const [pendingEnrollments, setPendingEnrollments] = useState(null); // null = not loaded
@@ -36,27 +33,6 @@ export default function TeacherDashboardPage() {
   const [actionInFlight, setActionInFlight] = useState(null);
   // Per-row transient error (e.g., "Impossible d'approuver") shown next to the row.
   const [rowErrors, setRowErrors] = useState({});
-  // Check if Classroom is connected (by trying to fetch and checking for error)
-  const [hasClassroomAccess, setHasClassroomAccess] = useState(null);
-
-  useEffect(() => {
-    if (isAuthenticated && (role === 'teacher' || role === 'admin')) {
-      // Check Classroom connection by attempting to validate a dummy course
-      // If googleClassroomTokens exists, this will work; otherwise we get a 400
-      // For now, just check if googleClassroomTokens exists via a session endpoint
-      apiClient('/auth/me')
-        .then(() => {
-          // If we get here, user is authenticated - we assume Classroom is not connected
-          // until they explicitly connect it. This will be shown as a connect button.
-          setHasClassroomAccess(false);
-        })
-        .catch(() => {
-          setHasClassroomAccess(false);
-        });
-    } else {
-      setHasClassroomAccess(false);
-    }
-  }, [isAuthenticated, role]);
 
   const loadCourses = useCallback(async () => {
     setIsLoading(true);
@@ -124,11 +100,21 @@ export default function TeacherDashboardPage() {
     }
   }
 
+  // Header with create button (shared across all states)
+  const HeaderActions = () => (
+    <div className="mb-6 flex items-center justify-between">
+      <h1 className="text-2xl font-bold text-white">Mes cours</h1>
+      <Link to="/dashboard/teacher/courses/new">
+        <Button>Créer un cours</Button>
+      </Link>
+    </div>
+  );
+
   // ── Loading state ───────────────────────────────────────────────
   if (isLoading) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Mes cours</h1>
+        <HeaderActions />
         <LoadingSpinner size="lg" className="py-12" />
       </div>
     );
@@ -138,7 +124,7 @@ export default function TeacherDashboardPage() {
   if (error) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Mes cours</h1>
+        <HeaderActions />
         <ErrorMessage
           title="Impossible de charger vos cours"
           message={error.message || 'Une erreur est survenue lors du chargement.'}
@@ -152,12 +138,7 @@ export default function TeacherDashboardPage() {
   if (!courses || courses.length === 0) {
     return (
       <div>
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-white">Mes cours</h1>
-          <Link to="/dashboard/teacher/courses/new">
-            <Button>Créer un cours</Button>
-          </Link>
-        </div>
+        <HeaderActions />
         <EmptyState
           icon="🎓"
           title="Aucun cours pour le moment"
@@ -180,28 +161,7 @@ export default function TeacherDashboardPage() {
   // ── Populated state ─────────────────────────────────────────────
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Mes cours</h1>
-        <div className="flex items-center gap-3">
-          {role === 'teacher' || role === 'admin' ? (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => connectClassroom()}
-              disabled={hasClassroomAccess === null}
-            >
-              {hasClassroomAccess === null
-                ? 'Vérification…'
-                : hasClassroomAccess
-                ? 'Google Classroom connecté'
-                : 'Connecter Google Classroom'}
-            </Button>
-          ) : null}
-          <Link to="/dashboard/teacher/courses/new">
-            <Button>Créer un cours</Button>
-          </Link>
-        </div>
-      </div>
+      <HeaderActions />
 
       {/* Pending enrollment requests (Story 3.6) */}
       <PendingEnrollmentsSection

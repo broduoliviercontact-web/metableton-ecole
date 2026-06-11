@@ -7,7 +7,6 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
 import { getUsers, updateUserRole } from '../../api/admin.js';
 import { useAuth } from '../../hooks/useAuth.js';
-import { connectClassroom } from '../../api/auth.js';
 
 const ROLE_OPTIONS = [
   { value: 'student', label: 'Étudiant' },
@@ -26,19 +25,11 @@ function formatDate(iso) {
 }
 
 export default function AdminDashboardPage() {
-  const { user: currentUser, role } = useAuth();
+  const { user: currentUser } = useAuth();
 
   const [users, setUsers] = useState(null); // null = not loaded
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [hasClassroomAccess, setHasClassroomAccess] = useState(null);
-
-  // Check Classroom connection status
-  useEffect(() => {
-    if (role === 'admin') {
-      setHasClassroomAccess(false); // Default until connected
-    }
-  }, [role]);
 
   // Track which user id currently has an update in flight so we can
   // disable only that row's controls.
@@ -137,26 +128,12 @@ export default function AdminDashboardPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-white">Administration</h1>
-        <div className="flex items-center gap-3">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => connectClassroom()}
-            disabled={hasClassroomAccess === null}
-          >
-            {hasClassroomAccess === null
-              ? 'Vérification…'
-              : hasClassroomAccess
-              ? 'Google Classroom connecté'
-              : 'Connecter Google Classroom'}
-          </Button>
-          <Link
-            to="/dashboard/admin/courses"
-            className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
-          >
-            Voir tous les cours →
-          </Link>
-        </div>
+        <Link
+          to="/dashboard/admin/courses"
+          className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
+        >
+          Voir tous les cours →
+        </Link>
       </div>
       <p className="mb-6 text-sm text-gray-400">
         {users.length} utilisateur{users.length > 1 ? 's' : ''}
