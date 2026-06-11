@@ -166,3 +166,71 @@ export async function validateClassroomCourse(tokens, classroomId) {
     throw err;
   }
 }
+
+/**
+ * List all Google Classroom courses for the authenticated user.
+ * Calls GET /v1/courses with a simple filter (courseState=ACTIVE).
+ *
+ * @param {Object} tokens — { access_token, refresh_token, expiry_date }
+ * @returns {Promise<Array>} array of course objects with id, name, section, courseState
+ *
+ * Throws with `statusCode` set so the global errorHandler maps it cleanly.
+ */
+export async function listClassroomCourses(tokens) {
+  await refreshIfNeeded(tokens);
+  const { google } = await import('googleapis');
+
+  // Build a one-shot auth client so we never mutate the shared oauth2Client
+  const auth = new google.auth.OAuth2();
+  auth.setCredentials({ access_token: tokens?.access_token });
+
+  const classroom = google.classroom({ version: 'v1', auth });
+
+  try {
+    const res = await classroom.courses.list({
+      courseId: '',
+      courseStates: ['ACTIVE', 'ARCHIVED', 'PROVISIONED', 'DRAFT'],
+      pageSize: 100,
+    });
+
+    // Normalize the response to a minimal shape
+    return (res.data.courses || []).map((course) => ({
+      id: course.id,
+      name: course.name || '',
+      section: course.section || '',
+      courseState: course.courseState || '',
+      alternateLink: course.alternateLink || '',
+    }));
+  } catch (err) {
+    const status = err?.response?.status;
+    const reason = err?.response?.data?.error?.errors?.[0]?.reason;
+    const message = err?.response?.data?.error?.message;
+
+    if (status === 403 && (reason === 'insufficient_scope' || reason === 'forbidden')) {
+      throw httpError(
+        403,
+        "Google Classroom refuse l'accès : votre compte n'a pas la permission requise. Reconnectez-vous avec l'autorisation Google Classroom.",
+        'CLASSROOM_SCOPE_MISSING'
+      );
+    }
+
+    if (status === 401 || status === 403) {
+      throw httpError(
+        status,
+        message || "Accès refusé à Google Classroom. Vérifiez que vous êtes connecté.",
+        status === 401 ? 'UNAUTHORIZED' : 'CLASSROOM_FORBIDDEN'
+      );
+    }
+
+    if (status === 500 || status === 503) {
+      throw httpError(
+        503,
+        message || 'Google Classroom est temporairement indisponible.',
+        'CLASSROOM_UNAVAILABLE'
+      );
+    }
+
+    // Anything else — treat as upstream failure
+    throw err;
+  }
+}

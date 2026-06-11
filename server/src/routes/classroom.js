@@ -3,6 +3,7 @@ import { requireAuth } from '../middleware/auth.js';
 import { requireRole } from '../middleware/role.js';
 import env from '../config/env.js';
 import { getOauth2Client } from '../config/google.js';
+import { listClassroomCourses } from '../services/classroomService.js';
 
 const router = Router();
 
@@ -152,6 +153,52 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
         : '/dashboard/admin';
       res.redirect(redirectUrl);
     }).catch(next);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ── GET /api/classroom/courses ───────────────────────────────────────
+// List Google Classroom courses for the authenticated user.
+//
+// Feature flag: CLASSROOM_OAUTH_ENABLED
+// Access: requireAuth + requireRole('teacher', 'admin')
+//
+// Returns:
+//   - 404 if CLASSROOM_OAUTH_ENABLED=false
+//   - 401/403 if user not connected to Classroom
+//   - 200 with courses array if connected
+//
+// Note: Returns 404 when disabled to allow frontend to show appropriate
+// message (handled by existing ClassroomConnectButton logic).
+router.get('/courses', requireAuth, requireRole('teacher', 'admin'), (req, res, next) => {
+  try {
+    if (!env.classroomOAuthEnabled) {
+      return res.status(404).json({
+        error: {
+          code: 'CLASSROOM_OAUTH_DISABLED',
+          message: 'Classroom OAuth is disabled. Set CLASSROOM_OAUTH_ENABLED=true in Render env vars.'
+        },
+      });
+    }
+
+    // Check if user is connected to Classroom (has access token)
+    const hasAccessToken = Boolean(req.session?.googleClassroomTokens?.access_token);
+    if (!hasAccessToken) {
+      return res.status(401).json({
+        error: {
+          code: 'CLASSROOM_NOT_CONNECTED',
+          message: 'Vous devez d\'abord connecter votre compte Google Classroom.',
+        },
+      });
+    }
+
+    // List courses from Google Classroom
+    listClassroomCourses(req.session.googleClassroomTokens)
+      .then((courses) => {
+        res.json({ courses });
+      })
+      .catch(next);
   } catch (err) {
     next(err);
   }

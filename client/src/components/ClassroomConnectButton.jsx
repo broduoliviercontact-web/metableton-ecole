@@ -2,16 +2,25 @@ import { useState, useEffect } from 'react';
 import Button from './ui/Button.jsx';
 import Badge from './ui/Badge.jsx';
 import LoadingSpinner from './ui/LoadingSpinner.jsx';
-import { getClassroomOAuthStatus } from '../api/classroom.js';
+import EmptyState from './ui/EmptyState.jsx';
+import { getClassroomOAuthStatus, getGoogleClassroomCourses } from '../api/classroom.js';
 
 export default function ClassroomConnectButton() {
   const [status, setStatus] = useState(null); // null = not loaded
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [courses, setCourses] = useState(null); // null = not loaded
+  const [isCoursesLoading, setIsCoursesLoading] = useState(false);
 
   useEffect(() => {
     loadStatus();
   }, []);
+
+  useEffect(() => {
+    if (status?.connected) {
+      loadCourses();
+    }
+  }, [status?.connected]);
 
   async function loadStatus() {
     setIsLoading(true);
@@ -33,7 +42,26 @@ export default function ClassroomConnectButton() {
     }
   }
 
-  // Loading state
+  async function loadCourses() {
+    if (!status?.connected) return;
+    setIsCoursesLoading(true);
+    setError(null);
+    try {
+      const data = await getGoogleClassroomCourses();
+      setCourses(data.courses || []);
+    } catch (err) {
+      // 401/CLASSROOM_NOT_CONNECTED — just clear courses, no error needed
+      if (err.status === 401) {
+        setCourses([]);
+      } else {
+        setError(err);
+      }
+    } finally {
+      setIsCoursesLoading(false);
+    }
+  }
+
+  // Loading state (status)
   if (isLoading) {
     return (
       <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -66,11 +94,31 @@ export default function ClassroomConnectButton() {
     );
   }
 
-  // Connected state
-  if (status?.connected) {
+  // Connected state with courses
+  if (status?.connected && courses !== null) {
     return (
-      <div className="flex items-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-2">
-        <Badge variant="approved">Google Classroom connecté</Badge>
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-2">
+          <Badge variant="approved">Google Classroom connecté</Badge>
+        </div>
+        {isCoursesLoading && (
+          <div className="flex items-center gap-2 text-sm text-gray-400">
+            <LoadingSpinner size="sm" />
+            <span>Chargement des cours...</span>
+          </div>
+        )}
+        {!isCoursesLoading && courses && courses.length > 0 && (
+          <div className="text-sm text-gray-400">
+            {courses.length} cours Google Classroom
+          </div>
+        )}
+        {!isCoursesLoading && courses && courses.length === 0 && (
+          <EmptyState
+            icon="🎓"
+            title="Aucun cours Google Classroom"
+            description="Vous n'avez pas encore de cours dans Google Classroom."
+          />
+        )}
       </div>
     );
   }
