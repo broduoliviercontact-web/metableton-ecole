@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Button from '../../components/ui/Button.jsx';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
+import EmptyState from '../../components/ui/EmptyState.jsx';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
 import {
   getManageableCourseById,
@@ -9,6 +10,11 @@ import {
   updateCourse,
   linkClassroom,
 } from '../../api/courses.js';
+import {
+  getClassroomOAuthStatus,
+  getGoogleClassroomCourses,
+  connectGoogleClassroom,
+} from '../../api/classroom.js';
 
 const SKILL_OPTIONS = [
   { value: 'beginner', label: 'Débutant' },
@@ -275,17 +281,92 @@ export default function CourseFormPage({ mode }) {
 }
 
 // ── ClassroomSection ────────────────────────────────────────────────
-// Story 3.8: lets the teacher / admin link a Google Classroom course to
+// Story 3.8 + P-26H: lets the teacher / admin link a Google Classroom course to
 // this Metableton course. The server validates the Classroom via the
 // Google API before persisting — we just collect the input and show
 // loading / success / error states.
+//
+// P-26H enhancement: Shows a dropdown list of available Classroom courses
+// when OAuth is connected, with fallback to manual input.
 function ClassroomSection({ courseId, classroomId, classroomUrl, onLinked }) {
+  const [status, setStatus] = useState(null); // null = not loaded
+  const [courses, setCourses] = useState(null); // null = not loaded
+  const [isCoursesLoading, setIsCoursesLoading] = useState(false);
   const [input, setInput] = useState('');
   const [isLinking, setIsLinking] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  async function handleSubmit(e) {
+  // Load OAuth status on mount
+  useEffect(() => {
+    async function loadStatus() {
+      try {
+        const data = await getClassroomOAuthStatus();
+        setStatus(data);
+      } catch (err) {
+        // 404/CLASSROOM_OAUTH_DISABLED is now handled by backend returning
+        // oauthEnabled: false with status 200
+        if (err.status === 404) {
+          setStatus({ connected: false, oauthEnabled: false });
+        } else {
+          setError(err);
+        }
+      }
+    }
+    loadStatus();
+  }, []);
+
+  // Load courses when connected
+  useEffect(() => {
+    async function loadCourses() {
+      if (!status?.connected) {
+        setCourses([]);
+        return;
+      }
+      setIsCoursesLoading(true);
+      setError(null);
+      try {
+        const data = await getGoogleClassroomCourses();
+        setCourses(data.courses || []);
+      } catch (err) {
+        // 401/CLASSROOM_NOT_CONNECTED — just clear courses, no error needed
+        if (err.status === 401 || err.status === 400 || err.status === 403) {
+          setCourses([]);
+        } else {
+          setError(err);
+        }
+      } finally {
+        setIsCoursesLoading(false);
+      }
+    }
+    loadCourses();
+  }, [status?.connected]);
+
+  // Link a selected Classroom course
+  async function handleLinkCourse(course) {
+    setIsLinking(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      // Use alternateLink if available (the official Google URL), otherwise use ID
+      const payload = course.alternateLink
+        ? { classroomUrl: course.alternateLink }
+        : { classroomId: course.id };
+      const updated = await linkClassroom(courseId, payload);
+      onLinked(updated);
+      setSuccess('Google Classroom lié avec succès.');
+      // Reload courses to update state if needed
+      const data = await getGoogleClassroomCourses();
+      setCourses(data.courses || []);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLinking(false);
+    }
+  }
+
+  // Fallback: manual link via URL/ID input
+  async function handleManualSubmit(e) {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -296,8 +377,6 @@ function ClassroomSection({ courseId, classroomId, classroomUrl, onLinked }) {
       return;
     }
 
-    // Send whichever field the user filled in. The server treats them
-    // equivalently and parses the ID out of either form.
     const payload = /classroom\.google\.com/.test(trimmed)
       ? { classroomUrl: trimmed }
       : { classroomId: trimmed };
@@ -348,49 +427,138 @@ function ClassroomSection({ courseId, classroomId, classroomUrl, onLinked }) {
         </div>
       )}
 
-      {/* Link form */}
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div>
-          <label
-            htmlFor="classroomInput"
-            className="mb-2 block text-sm font-medium text-white"
-          >
-            {classroomUrl ? 'Remplacer par un autre cours' : 'URL ou identifiant'}
-          </label>
-          <input
-            id="classroomInput"
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            disabled={isLinking}
-            placeholder="ex. https://classroom.google.com/c/123456789012"
-            className="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-white placeholder:text-gray-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 disabled:opacity-50"
-          />
+      {/* Status: OAuth disabled */}
+      {!status && isCoursesLoading && (
+        <div className="flex items-center gap-2 text-sm text-gray-400">
+          <LoadingSpinner size="sm" />
+          <span>Chargement...</span>
         </div>
+      )}
 
-        {error && (
-          <ErrorMessage
-            title="Erreur lors de la liaison"
-            message={error.message || 'Une erreur est survenue.'}
-          />
-        )}
+      {status?.oauthEnabled === false && (
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-200">
+          La connexion Google Classroom est désactivée pour le moment.
+        </div>
+      )}
 
-        {success && (
-          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
-            {success}
-          </div>
-        )}
-
-        <div className="flex items-center justify-end">
-          <Button type="submit" disabled={isLinking}>
-            {isLinking
-              ? 'Vérification…'
-              : classroomUrl
-                ? 'Mettre à jour'
-                : 'Lier le cours'}
+      {/* Status: Not connected */}
+      {status?.oauthEnabled !== false && status?.connected === false && (
+        <div className="mb-5 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-sm">
+          <p className="mb-3 text-gray-300">
+            Connectez Google Classroom depuis le dashboard pour choisir un cours.
+          </p>
+          <Button size="sm" onClick={connectGoogleClassroom}>
+            Connecter Google Classroom
           </Button>
         </div>
-      </form>
+      )}
+
+      {/* Status: Connected - Show course list */}
+      {status?.connected === true && (
+        <>
+          {isCoursesLoading ? (
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <LoadingSpinner size="sm" />
+              <span>Chargement des cours...</span>
+            </div>
+          ) : courses && courses.length > 0 ? (
+            <div className="mb-5 rounded-lg border border-white/10 bg-white/[0.02]">
+              <h3 className="mb-3 px-1 text-sm font-semibold uppercase tracking-widest text-gray-500">
+                Cours Google Classroom disponibles
+              </h3>
+              <ul className="space-y-2">
+                {courses.map((course) => (
+                  <li
+                    key={course.id}
+                    className="flex items-center justify-between px-1 py-2"
+                  >
+                    <div className="min-w-0">
+                      <div className="font-medium text-white">
+                        {course.name || 'Sans nom'}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {course.section && <span className="mr-2">{course.section}</span>}
+                        <span className="text-gray-500">
+                          {course.courseState === 'ACTIVE' ? 'Active' : course.courseState}
+                        </span>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => handleLinkCourse(course)}
+                      disabled={isLinking}
+                    >
+                      Lier ce cours
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <EmptyState
+              icon="🎓"
+              title="Aucun cours disponible"
+              description="Vous n'avez pas encore de cours Google Classroom. Créez-en d'abord sur classroom.google.com."
+              action={
+                <a
+                  href="https://classroom.google.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
+                >
+                  Aller à Google Classroom →
+                </a>
+              }
+            />
+          )}
+
+          {/* Fallback: Manual input */}
+          <div className="mt-4 border-t border-white/10 pt-4">
+            <h3 className="mb-3 text-sm font-medium text-white">
+              Lier manuellement
+            </h3>
+            <form onSubmit={handleManualSubmit} className="space-y-3">
+              <div>
+                <label
+                  htmlFor="classroomInput"
+                  className="mb-2 block text-sm font-medium text-white"
+                >
+                  URL ou identifiant
+                </label>
+                <input
+                  id="classroomInput"
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={isLinking}
+                  placeholder="ex. https://classroom.google.com/c/123456789012 ou 867627730178"
+                  className="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-white placeholder:text-gray-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 disabled:opacity-50"
+                />
+              </div>
+
+              {error && (
+                <ErrorMessage
+                  title="Erreur lors de la liaison"
+                  message={error.message || 'Une erreur est survenue.'}
+                />
+              )}
+
+              {success && (
+                <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+                  {success}
+                </div>
+              )}
+
+              <div className="flex items-center justify-end">
+                <Button type="submit" disabled={isLinking}>
+                  {isLinking ? 'Vérification…' : 'Lier manuellement'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </>
+      )}
     </section>
   );
 }
