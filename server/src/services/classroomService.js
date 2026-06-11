@@ -5,6 +5,8 @@ import { getOauth2Client } from '../config/google.js';
 //   https://classroom.google.com/c/123456789012
 //   https://classroom.google.com/u/0/c/123456789012
 //   https://classroom.google.com/u/1/c/123456789012?usp=sharing
+// Also accepts alternateLink format: https://classroom.google.com/c/ODY3NjI3NzMwMTc4
+// (where the path segment is base64url-encoded)
 const CLASSROOM_URL_RE = /classroom\.google\.com\/(?:u\/\d+\/)?c\/([A-Za-z0-9_-]+)/;
 
 // Errors with shape: code + statusCode — matches the global errorHandler contract
@@ -13,13 +15,33 @@ function httpError(statusCode, message, code) {
 }
 
 /**
+ * Decode a base64url-encoded string to plain text.
+ * Used to decode the ID from Google's alternateLink format.
+ */
+function decodeBase64Url(input) {
+  if (typeof input !== 'string') return null;
+  try {
+    // Replace URL-safe characters with base64 characters
+    const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
+    // Decode base64
+    const decoded = Buffer.from(base64, 'base64').toString('utf8');
+    return decoded;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
  * Extract a Classroom course ID from a raw user input.
  *
  * Accepts:
  *   - the raw ID (e.g. "123456789012")
  *   - a full Classroom URL containing "/c/{id}"
+ *   - a base64url alternateLink like "https://classroom.google.com/c/ODY3NjI3NzMwMTc4"
  *
- * Returns the bare ID, or null if no ID could be extracted.
+ * For alternateLink, decodes the base64url segment to get the numeric ID.
+ *
+ * Returns the bare ID (as a numeric string), or null if no ID could be extracted.
  */
 export function parseClassroomId(input) {
   if (typeof input !== 'string') return null;
@@ -29,13 +51,37 @@ export function parseClassroomId(input) {
   // Looks like a URL → try the regex
   if (/^https?:\/\//i.test(trimmed)) {
     const match = trimmed.match(CLASSROOM_URL_RE);
-    return match ? match[1] : null;
+    if (match) {
+      const segment = match[1];
+      // Check if it's numeric (standard format)
+      if (/^[0-9]+$/.test(segment)) {
+        return segment;
+      }
+      // Try to decode base64url (alternateLink format)
+      const decoded = decodeBase64Url(segment);
+      if (decoded && /^[0-9]+$/.test(decoded)) {
+        return decoded;
+      }
+      // Invalid format
+      return null;
+    }
+    return null;
   }
 
   // Bare ID — accept alphanumeric / dash / underscore (Google IDs are
   // typically numeric but defensively allow a broader charset).
   if (/^[A-Za-z0-9_-]+$/.test(trimmed)) {
-    return trimmed;
+    // Check if it's numeric
+    if (/^[0-9]+$/.test(trimmed)) {
+      return trimmed;
+    }
+    // Try to decode base64url
+    const decoded = decodeBase64Url(trimmed);
+    if (decoded && /^[0-9]+$/.test(decoded)) {
+      return decoded;
+    }
+    // Not a valid numeric ID
+    return null;
   }
 
   return null;

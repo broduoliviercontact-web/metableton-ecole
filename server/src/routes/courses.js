@@ -282,13 +282,14 @@ router.put(
       }
 
       // 5. Validate the course against the Google Classroom API.
-      // validateClassroomCourse throws with statusCode set; the global
-      // errorHandler maps 400/403/404 to JSON, and any other upstream
-      // error becomes a 502.
-      await classroomService.validateClassroomCourse(tokens, parsedId);
+      // validateClassroomCourse returns the course data, including alternateLink.
+      const classroomCourse = await classroomService.validateClassroomCourse(tokens, parsedId);
 
-      // 5. Persist
-      const finalUrl = classroomService.buildClassroomUrl(parsedId);
+      // 6. Use alternateLink if available, otherwise build the URL from the ID.
+      // The alternateLink is the official Google Classroom URL for the course.
+      const finalUrl = classroomCourse.alternateLink || classroomService.buildClassroomUrl(parsedId);
+
+      // 7. Persist
       const updated = await courseService.setClassroomLink(req.params.id, {
         classroomId: parsedId,
         classroomUrl: finalUrl,
