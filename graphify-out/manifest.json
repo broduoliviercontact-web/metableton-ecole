@@ -195,13 +195,13 @@
     "semantic_hash": ""
   },
   "server/src/app.js": {
-    "mtime": 1781166160.144968,
-    "ast_hash": "e681c7ca89ca03b90a813cb87a3c02b7",
+    "mtime": 1781184741.8900657,
+    "ast_hash": "ecd11cd564df9adacaaf6eecbb1153cd",
     "semantic_hash": ""
   },
   "server/src/config/env.js": {
-    "mtime": 1781075643.7454658,
-    "ast_hash": "5ffcea430bff52c8181ce1cfcac39407",
+    "mtime": 1781184699.6785853,
+    "ast_hash": "94d0df64362d177878b91f166712b9c1",
     "semantic_hash": ""
   },
   "server/src/config/google.js": {
@@ -572,6 +572,11 @@
   "client/index.html": {
     "mtime": 1781019435.3330884,
     "ast_hash": "923f0f0880d856d4550d9192980e1424",
+    "semantic_hash": ""
+  },
+  "server/src/routes/classroom.js": {
+    "mtime": 1781184705.274409,
+    "ast_hash": "32ea8d8a25e76fc538045b223a54b641",
     "semantic_hash": ""
   }
 }

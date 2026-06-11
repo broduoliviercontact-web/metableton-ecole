@@ -1,16 +1,16 @@
 # Graph Report - metableton-ecole  (2026-06-11)
 
 ## Corpus Check
-- 111 files · ~57,178 words
+- 112 files · ~57,360 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 623 nodes · 770 edges · 69 communities (33 shown, 36 thin omitted)
+- 625 nodes · 777 edges · 68 communities (32 shown, 36 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c7acc080`
+- Built from commit: `e93b6af2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,7 +19,6 @@
 - [[_COMMUNITY_Community 1|Community 1]]
 - [[_COMMUNITY_Community 2|Community 2]]
 - [[_COMMUNITY_Community 3|Community 3]]
-- [[_COMMUNITY_Community 4|Community 4]]
 - [[_COMMUNITY_Community 5|Community 5]]
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
@@ -111,15 +110,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (69 total, 36 thin omitted)
+## Communities (68 total, 36 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
 Nodes (31): getMyEnrollments(), DEFAULT_DASHBOARDS, RequireAuth(), AdminCoursesPage(), computeStats(), CourseRow(), formatDate(), STATUS_LABELS (+23 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.10
-Nodes (31): getSupabase(), requireAuth(), requireRole(), router, router, router, countAdmins(), getUserById() (+23 more)
+Cohesion: 0.05
+Nodes (46): env, getOauth2Client(), getSupabase(), requireAuth(), errorHandler(), mapStatusCodeToErrorCode(), requireRole(), pgPool (+38 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
@@ -128,10 +127,6 @@ Nodes (38): Additional Requirements (from Architecture), Epic 1: School Foundati
 ### Community 3 - "Community 3"
 Cohesion: 0.11
 Nodes (26): getAdminCourses(), getUsers(), updateUserRole(), getMe(), logout(), apiClient(), createCourse(), getManageableCourseById() (+18 more)
-
-### Community 4 - "Community 4"
-Cohesion: 0.10
-Nodes (14): env, getOauth2Client(), errorHandler(), mapStatusCodeToErrorCode(), pgPool, PgSessionStore, sessionMiddleware, router (+6 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.07
@@ -242,7 +237,7 @@ Cohesion: 0.50
 Nodes (3): Fix suggestion, Source, What happened
 
 ## Knowledge Gaps
-- **321 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+316 more)
+- **322 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+317 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **36 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -250,16 +245,16 @@ Nodes (3): Fix suggestion, Source, What happened
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `MVP Stabilization Audit — Metableton Ecole` connect `Community 26` to `Community 17`, `Community 21`, `Community 22`, `Community 27`, `Community 29`, `Community 30`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Why does `4. Features` connect `Community 5` to `Community 7`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **Why does `getSupabase()` connect `Community 1` to `Community 4`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **What connects `Return 'code' or 'id' if every table item carries that *same* field.      All it`, `Shape-aware array merge. Base + override combined tables may opt into     keyed`, `Recursively merge override into base using structural rules.     - Table + table` to the rest of the system?**
-  _325 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _326 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.05516431924882629 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.10128205128205128 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05432595573440644 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
+- **Should `Community 3` be split into smaller, more focused modules?**
+  _Cohesion score 0.1092436974789916 - nodes in this community are weakly interconnected._

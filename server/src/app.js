@@ -8,6 +8,7 @@ import authRouter from './routes/auth.js';
 import coursesRouter from './routes/courses.js';
 import enrollmentsRouter from './routes/enrollments.js';
 import adminRouter from './routes/admin.js';
+import classroomRouter from './routes/classroom.js';
 
 const app = express();
 
@@ -46,6 +47,9 @@ app.use('/api/courses', coursesRouter);
 
 // Enrollment routes — student requests, teacher/admin review
 app.use('/api/enrollments', enrollmentsRouter);
+
+// Classroom routes — diagnostic + future Classroom integration
+app.use('/api/classroom', classroomRouter);
 
 // Admin routes — user management + courses overview
 app.use('/api/admin', adminRouter);

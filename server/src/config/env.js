@@ -27,6 +27,11 @@ const env = {
   sessionSecret: requireEnv('SESSION_SECRET'),
   clientOrigin: requireEnv('CLIENT_ORIGIN'),
 
+  // P-26B: Classroom diagnostic feature flag
+  // When false (default), /api/classroom/diagnostic returns 404
+  // When true, diagnostic endpoint returns status info
+  classroomDiagnosticEnabled: process.env.CLASSROOM_DIAGNOSTIC_ENABLED === 'true',
+
   isProduction: process.env.NODE_ENV === 'production',
 };
 
