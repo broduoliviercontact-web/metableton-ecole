@@ -10,6 +10,26 @@
 
 ---
 
+## Règles importantes à connaître avant test
+
+### Comportement par rôle
+
+| Rôle | Cours visibles | Demandes d'inscription visibles | Actions possibles |
+|------|---------------|--------------------------------|-------------------|
+| **Student** | Cours publiés (catalogue public) | SEULEMENT ses propres inscriptions | Annuler SEULEMENT une demande `pending` |
+| **Teacher** | SEULEMENT ses propres cours | SEULEMENT les demandes de SES cours | Approuver/Refuser demandes de SES cours |
+| **Admin** | TOUS les cours | TOUTES les demandes d'inscription | Approuver/Refuser TOUTES les demandes |
+
+### États d'une inscription
+
+| Status | Description | Étudiant peut annuler ? |
+|--------|-------------|------------------------|
+| `pending` | Demande en attente | ✅ Oui |
+| `approved` | Inscription approuvée | ❌ Non (bouton absent) |
+| `rejected` | Demande refusée | ❌ Non (mais peut redemander) |
+
+---
+
 ## Checklist après deploy
 
 1. Vérifier `/api/health` → réponse `{"ok":true}`
@@ -36,9 +56,11 @@
 | Dashboard | `/dashboard` | "Mes cours" visible, liste vide ou cours |
 | Profil | `/dashboard/profile` | Nom, email, avatar affichés |
 | Catalogue | `/catalog` | Bouton "Demander l'inscription" |
-| Inscription | Clic inscription → confirmer | Message succès |
+| Inscription | Clic inscription → confirmer | Message succès, statut `pending` |
 | Profil étudiant | `/dashboard` | "Aucun cours pour le moment" si vide |
 | Réinscription | Refuser → bouton "Redemander" | Bouton fonctionnel |
+| Annuler demande (pending) | `/dashboard` (statut `pending`) | Bouton "Annuler la demande" visible et fonctionnel |
+| Approved non annulable | `/dashboard` (statut `approved`) | PAS de bouton "Annuler la demande" |
 
 ---
 
@@ -48,8 +70,10 @@
 |------|--------|---------|
 | Dashboard | `/dashboard/teacher` | "Mes cours", "Créer un cours" |
 | Créer cours | `/dashboard/teacher/courses/new` | Formulaire valide |
-| Cours list | Vue liste cours | Cours créés visibles |
-| Review demandes | Section "Demandes d'inscription" | Affiche les demandes |
+| Cours list | Vue liste cours | SEULEMENT les cours créés par ce professeur visibles |
+| Review demandes | Section "Demandes d'inscription" | Affiche SEULEMENT les demandes pour SES cours |
+| Approver demande | Clic "Approuver" | Request disparaît, student devient "Approuvée" |
+| Refuser demande | Clic "Refuser" | Request disparaît, student voit "Demande refusée" |
 
 ---
 
@@ -60,7 +84,8 @@
 | Dashboard | `/dashboard/admin` | "Administration", liste utilisateurs |
 | Profil admin | `/dashboard/profile` | Nom, email affichés |
 | Utilisateurs | `/dashboard/admin` | Vue avec users + boutons rôle |
-| Cours | `/dashboard/admin/courses` | Tous les cours avec stats |
+| Cours | `/dashboard/admin/courses` | TOUS les cours (owner + stats) |
+| Review demandes | `/dashboard/teacher` (admin hérite) | Affiche TOUTES les demandes d'inscription |
 
 ---
 
@@ -82,7 +107,7 @@
 - [ ] Connexion Google → redirect vers dashboard
 - [ ] `/dashboard/profile` affiche nom/email pour tous les rôles
 - [ ] Catalogue affiche les cours publiés
-- [ ] Enseignant voit ses cours + bouton créer
+- [ ] Enseignant voit SEULEMENT ses cours + bouton créer
 - [ ] Admin voit la liste des utilisateurs
 - [ ] Aucun warning 404/500 dans la console
 
