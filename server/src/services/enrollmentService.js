@@ -235,14 +235,14 @@ export async function getAllPendingEnrollments() {
 }
 
 /**
- * Get the course that an enrollment belongs to (for ownership check on approve/reject).
- * Returns the course's teacher_id, or null if the enrollment doesn't exist.
+ * Get the course that an enrollment belongs to (for ownership check on approve/reject/cancel).
+ * Returns the course's teacher_id and student_id, or null if the enrollment doesn't exist.
  */
 export async function getEnrollmentCourseTeacher(enrollmentId) {
   const supabase = await getSupabase();
   const { data, error } = await supabase
     .from('enrollments')
-    .select('id, status, courses!inner ( id, teacher_id )')
+    .select('id, status, student_id, courses!inner ( id, teacher_id )')
     .eq('id', enrollmentId)
     .maybeSingle();
 
@@ -254,6 +254,7 @@ export async function getEnrollmentCourseTeacher(enrollmentId) {
   return {
     id: data.id,
     status: data.status,
+    studentId: data.student_id,
     courseId: course.id,
     teacherId: course.teacher_id,
   };
