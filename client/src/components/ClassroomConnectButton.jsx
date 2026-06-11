@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import Button from './Button.jsx';
-import Badge from './Badge.jsx';
-import LoadingSpinner from './LoadingSpinner.jsx';
-import ErrorMessage from './ErrorMessage.jsx';
+import Button from './ui/Button.jsx';
+import Badge from './ui/Badge.jsx';
+import LoadingSpinner from './ui/LoadingSpinner.jsx';
+import ErrorMessage from './ui/ErrorMessage.jsx';
 import { getClassroomOAuthStatus, connectGoogleClassroom } from '../api/classroom.js';
 
 export default function ClassroomConnectButton() {
