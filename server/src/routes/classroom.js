@@ -109,6 +109,10 @@ router.get('/oauth/start', requireAuth, requireRole('teacher', 'admin'), (req, r
 // Returns 404 if feature flag is disabled.
 router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req, res, next) => {
   try {
+    // Debug log for P-26C bug investigation
+    console.error('[oauth-callback] callback reached');
+    console.error('[oauth-callback] state valid:', req.session.classroomOAuthState === req.query.state);
+
     if (!env.classroomOAuthEnabled) {
       return res.status(404).json({
         error: {
@@ -137,6 +141,10 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
     oauth2Client.then((client) => {
       return client.getToken(code);
     }).then((tokens) => {
+      console.error('[oauth-callback] token exchange success');
+      console.error('[oauth-callback] has access_token:', !!tokens.access_token);
+      console.error('[oauth-callback] has refresh_token:', !!tokens.refresh_token);
+
       // Store tokens in session (not in DB)
       req.session.googleClassroomTokens = tokens;
 
@@ -152,6 +160,12 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
         : '/dashboard/admin';
       res.redirect(redirectUrl);
     }).catch((err) => {
+      console.error('[oauth-callback] token exchange error');
+      console.error('[oauth-callback] error message:', err.message);
+      console.error('[oauth-callback] has response:', !!err.response);
+      if (err.response) {
+        console.error('[oauth-callback] response status:', err.response.status);
+      }
       next(err);
     });
   } catch (err) {
