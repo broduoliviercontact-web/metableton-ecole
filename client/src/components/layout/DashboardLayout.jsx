@@ -6,15 +6,18 @@ import Button from '../ui/Button.jsx';
 const NAV_BY_ROLE = {
   student: [
     { to: '/dashboard', label: 'Mes cours', end: true },
+    { to: '/dashboard/profile', label: 'Mon profil', end: false },
   ],
   teacher: [
     { to: '/dashboard/teacher', label: 'Mes cours', end: true },
     { to: '/dashboard/teacher/courses/new', label: 'Créer un cours', end: false },
+    { to: '/dashboard/profile', label: 'Mon profil', end: false },
   ],
   admin: [
     { to: '/dashboard/admin', label: 'Vue d’ensemble', end: true },
     { to: '/dashboard/admin', label: 'Utilisateurs', end: false },
     { to: '/dashboard/admin/courses', label: 'Tous les cours', end: false },
+    { to: '/dashboard/profile', label: 'Mon profil', end: false },
   ],
 };
 

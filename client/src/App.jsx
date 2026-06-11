@@ -11,6 +11,7 @@ import TeacherDashboardPage from './pages/dashboard/TeacherDashboardPage.jsx';
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage.jsx';
 import AdminCoursesPage from './pages/dashboard/AdminCoursesPage.jsx';
 import CourseFormPage from './pages/dashboard/CourseFormPage.jsx';
+import UserProfilePage from './pages/dashboard/UserProfilePage.jsx';
 
 export default function App() {
   return (
@@ -75,6 +76,15 @@ export default function App() {
           element={
             <RequireAuth allow="admin">
               <AdminCoursesPage />
+            </RequireAuth>
+          }
+        />
+        {/* User profile — accessible by all authenticated roles */}
+        <Route
+          path="profile"
+          element={
+            <RequireAuth>
+              <UserProfilePage />
             </RequireAuth>
           }
         />
