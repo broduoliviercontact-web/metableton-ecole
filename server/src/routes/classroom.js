@@ -53,11 +53,6 @@ router.get('/diagnostic', requireAuth, requireRole('teacher', 'admin'), (req, re
 // Returns 404 if feature flag is disabled.
 router.get('/oauth/start', requireAuth, requireRole('teacher', 'admin'), (req, res, next) => {
   try {
-    // Debug log for P-26C bug investigation - use console.error for visibility
-    console.error('[classroom-oauth-debug] classroomOAuthEnabled:', env.classroomOAuthEnabled);
-    console.error('[classroom-oauth-debug] CLASSROOM_OAUTH_ENABLED:', process.env.CLASSROOM_OAUTH_ENABLED);
-    console.error('[classroom-oauth-debug] route reached: yes');
-
     if (!env.classroomOAuthEnabled) {
       return res.status(404).json({
         error: {
@@ -72,7 +67,6 @@ router.get('/oauth/start', requireAuth, requireRole('teacher', 'admin'), (req, r
     const oauth2Client = getOauth2Client(redirectUri);
 
     oauth2Client.then((client) => {
-      console.error('[oauth-start] redirectUri used for Classroom OAuth:', redirectUri);
       const scopes = ['https://www.googleapis.com/auth/classroom.courses.readonly'];
       const state = 'classroom_oauth_' + Math.random().toString(36).substring(2);
 
@@ -112,10 +106,6 @@ router.get('/oauth/start', requireAuth, requireRole('teacher', 'admin'), (req, r
 // Returns 404 if feature flag is disabled.
 router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req, res, next) => {
   try {
-    // Debug log for P-26C bug investigation
-    console.error('[oauth-callback] callback reached');
-    console.error('[oauth-callback] state valid:', req.session.classroomOAuthState === req.query.state);
-
     if (!env.classroomOAuthEnabled) {
       return res.status(404).json({
         error: {
@@ -142,14 +132,10 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
 
     // Use same redirect URI as in /oauth/start for token exchange
     const redirectUri = env.clientOrigin + '/api/classroom/oauth/callback';
-    console.error('[oauth-callback] redirectUri used for token exchange:', redirectUri);
     const oauth2Client = getOauth2Client(redirectUri);
     oauth2Client.then((client) => {
       return client.getToken(code);
     }).then(({ tokens }) => {
-      console.error('[oauth-callback] token exchange success');
-      console.error('[oauth-callback] has access_token:', Boolean(tokens.access_token));
-      console.error('[oauth-callback] has refresh_token:', Boolean(tokens.refresh_token));
 
       // Store tokens in session (not in DB)
       req.session.googleClassroomTokens = tokens;
@@ -165,15 +151,7 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
         ? '/dashboard/teacher'
         : '/dashboard/admin';
       res.redirect(redirectUrl);
-    }).catch((err) => {
-      console.error('[oauth-callback] token exchange error');
-      console.error('[oauth-callback] error message:', err.message);
-      console.error('[oauth-callback] has response:', !!err.response);
-      if (err.response) {
-        console.error('[oauth-callback] response status:', err.response.status);
-      }
-      next(err);
-    });
+    }).catch(next);
   } catch (err) {
     next(err);
   }
