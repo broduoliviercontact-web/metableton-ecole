@@ -37,14 +37,12 @@ export default function Header() {
 
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
-              {(isAdmin || isTeacher) && (
-                <Link
-                  to={isAdmin ? '/dashboard/admin' : '/dashboard/teacher'}
-                  className="text-gray-300 transition-colors hover:text-white"
-                >
-                  Tableau de bord
-                </Link>
-              )}
+              <Link
+                to={isAdmin ? '/dashboard/admin' : isTeacher ? '/dashboard/teacher' : '/dashboard'}
+                className="text-gray-300 transition-colors hover:text-white"
+              >
+                Dashboard
+              </Link>
               <Badge variant={user.role}>{user.role}</Badge>
               <Button variant="ghost" size="sm" onClick={logout}>
                 Se déconnecter
