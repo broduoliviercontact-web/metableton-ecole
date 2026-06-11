@@ -1,0 +1,52 @@
+cd ~/Documents/metableton-ecole
+
+cat > .graphifyignore <<'EOF'
+# Dépendances / builds
+node_modules/
+dist/
+build/
+.next/
+.vercel/
+coverage/
+.cache/
+.tmp/
+.DS_Store
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Sortie Graphify
+graphify-out/
+.graphify/
+
+# Claude / agents / skills trop volumineux
+.claude/
+.cursor/
+.codex/
+.hermes/
+.openclaw/
+bmad*/
+BMAD*/
+**/bmad-*/
+
+# Docs volumineuses non nécessaires au graphe applicatif
+docs/
+documentation/
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.mov
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+EOF

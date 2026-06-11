@@ -79,6 +79,23 @@ export default function DashboardLayout() {
               </NavLink>
             ))}
 
+            {/* Dashboard home link - visible for all authenticated roles */}
+            <div className="mt-4 border-t border-white/5 pt-4">
+              <NavLink
+                to={role === 'admin' ? '/dashboard/admin' : role === 'teacher' ? '/dashboard/teacher' : '/dashboard'}
+                end
+                className={({ isActive }) =>
+                  `rounded-lg px-3 py-2 text-sm transition-colors ${
+                    isActive
+                      ? 'bg-emerald-500/15 text-emerald-300'
+                      : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
+                  }`
+                }
+              >
+                Dashboard
+              </NavLink>
+            </div>
+
             {/* Cross-role links: admin sees teacher link, admin/teacher see student link */}
             {(isAdmin || isTeacher) && (
               <div className="mt-4 border-t border-white/5 pt-4">
