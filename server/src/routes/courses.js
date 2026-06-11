@@ -242,6 +242,12 @@ router.put(
         });
       }
 
+      // Debug log: user role and course ownership
+      console.error(
+        `[classroom-link] user.role=${req.user.role}, userId=${req.user.userId}, ` +
+        `course.teacher_id=${existing.teacher_id}, isOwner=${existing.teacher_id === req.user.userId}`
+      );
+
       // 2. Ownership check: teacher must own the course, admin can edit any
       if (req.user.role !== 'admin' && existing.teacher_id !== req.user.userId) {
         return res.status(403).json({
@@ -264,11 +270,21 @@ router.put(
         });
       }
 
-      // 4. Validate the course against the Google Classroom API.
+      // 4. Check if user is connected to Classroom
+      const tokens = req.session?.googleClassroomTokens;
+      if (!tokens || !tokens.access_token) {
+        return res.status(401).json({
+          error: {
+            code: 'CLASSROOM_NOT_CONNECTED',
+            message: 'Vous devez d\'abord connecter votre compte Google Classroom.',
+          },
+        });
+      }
+
+      // 5. Validate the course against the Google Classroom API.
       // validateClassroomCourse throws with statusCode set; the global
       // errorHandler maps 400/403/404 to JSON, and any other upstream
       // error becomes a 502.
-      const tokens = req.session?.googleTokens || null;
       await classroomService.validateClassroomCourse(tokens, parsedId);
 
       // 5. Persist

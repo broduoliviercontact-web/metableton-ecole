@@ -8,9 +8,12 @@ export function errorHandler(err, req, res, _next) {
 
   // Known HTTP status code (thrown intentionally from route/service)
   if (err.statusCode) {
+    // Use err.code if present (e.g., CLASSROOM_SCOPE_MISSING, CLASSROOM_FORBIDDEN),
+    // otherwise fall back to mapping from statusCode
+    const errorCode = err.code || mapStatusCodeToErrorCode(err.statusCode);
     return res.status(err.statusCode).json({
       error: {
-        code: mapStatusCodeToErrorCode(err.statusCode),
+        code: errorCode,
         message: err.message,
       },
     });
