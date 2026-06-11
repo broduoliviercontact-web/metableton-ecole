@@ -99,7 +99,7 @@ The default values in `server/.env.example` already match the local Supabase por
 3. Enable the **Google Classroom API** (for course validation)
 4. Go to **APIs & Services → Credentials** → Create OAuth 2.0 Client ID
 5. Application type: **Web application**
-6. Authorized redirect URI: `http://localhost:3001/api/auth/google/callback`
+6. Authorized redirect URI: `https://metableton-ecole.vercel.app/api/auth/google/callback` (production)
 7. Note the Client ID and Client Secret → paste into `server/.env`
 
 ### 6. Start the app
@@ -152,7 +152,7 @@ npm start         # Production start
 | `DATABASE_URL`              | Yes      | PostgreSQL URL (used by session store) |
 | `GOOGLE_CLIENT_ID`          | Yes      | Google OAuth 2.0 client ID          |
 | `GOOGLE_CLIENT_SECRET`      | Yes      | Google OAuth 2.0 client secret      |
-| `GOOGLE_REDIRECT_URI`       | Yes      | OAuth callback URL                  |
+| `GOOGLE_REDIRECT_URI`       | Yes      | OAuth callback URL (use Vercel URL in production: `https://metableton-ecole.vercel.app/api/auth/google/callback`) |
 | `SESSION_SECRET`            | Yes      | Random string for session signing   |
 | `CLIENT_ORIGIN`             | Yes      | Client origin allowed by CORS (e.g. `http://localhost:5173`) |
 | `VITE_API_URL` (client)     | No       | Base URL of the API (default: `http://localhost:3001/api`) |
@@ -165,7 +165,9 @@ npm start         # Production start
 |---------|-----|
 | Frontend | https://metableton-ecole.vercel.app |
 | Backend health | https://metableton-ecole-api.onrender.com/api/health |
-| API base | https://metableton-ecole-api.onrender.com/api |
+| API base | `/api` (via Vercel rewrite) |
+
+**Note**: The frontend calls `/api` which is rewritten by Vercel to `https://metableton-ecole-api.onrender.com/api`. This ensures cookies work correctly (same-origin requests from the browser's perspective).
 
 ---
 

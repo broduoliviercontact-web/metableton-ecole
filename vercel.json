@@ -3,6 +3,10 @@
     {
       "source": "/((?!assets/|vite.svg|favicon.ico|.*\\..*).*)",
       "destination": "/"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://metableton-ecole-api.onrender.com/api/:path*"
     }
   ]
 }
