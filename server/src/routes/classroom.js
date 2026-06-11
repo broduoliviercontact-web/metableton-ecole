@@ -161,6 +161,7 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
 // Feature flag: CLASSROOM_OAUTH_ENABLED
 //
 // Returns current OAuth status without exposing tokens.
+// Always returns 200 OK with oauthEnabled flag, regardless of feature state.
 //
 // Access:
 //   - requireAuth (user must be logged in)
@@ -171,18 +172,10 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
 //   - oauthEnabled: true if CLASSROOM_OAUTH_ENABLED is set
 //   - role: current user role
 //
-// Returns 404 if feature flag is disabled.
+// Note: This route always responds with 200 OK to allow frontend to know
+// whether OAuth is enabled or disabled. Use /oauth/start for OAuth flow.
 router.get('/oauth/status', requireAuth, requireRole('teacher', 'admin'), (req, res, next) => {
   try {
-    if (!env.classroomOAuthEnabled) {
-      return res.status(404).json({
-        error: {
-          code: 'CLASSROOM_OAUTH_DISABLED',
-          message: 'Classroom OAuth is disabled. Set CLASSROOM_OAUTH_ENABLED=true in Render env vars.'
-        },
-      });
-    }
-
     // Disable caching - prevents 304 Not Modified
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     res.setHeader('Pragma', 'no-cache');

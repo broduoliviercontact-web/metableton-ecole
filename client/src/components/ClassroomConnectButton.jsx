@@ -20,8 +20,10 @@ export default function ClassroomConnectButton() {
       const data = await getClassroomOAuthStatus();
       setStatus(data);
     } catch (err) {
-      // If 404/disabled, set status but not error (user sees message, not failure)
-      if (err.status === 404 || err.code === 'CLASSROOM_OAUTH_DISABLED') {
+      // 404/CLASSROOM_OAUTH_DISABLED is now handled by backend returning
+      // oauthEnabled: false with status 200, so this catch block should
+      // rarely be reached. Still kept for safety.
+      if (err.status === 404) {
         setStatus({ connected: false, oauthEnabled: false });
       } else {
         setError(err);
