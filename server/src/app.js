@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import env from './config/env.js';
+import requestLogger from './middleware/requestLogger.js';
 import sessionMiddleware from './middleware/session.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRouter from './routes/auth.js';
@@ -24,6 +25,10 @@ app.use(cors({
 
 // Body parsing
 app.use(express.json());
+
+// Request logger — logs method, path, status, duration
+// Does NOT log query strings, body, cookies, or sensitive data
+app.use(requestLogger);
 
 // Session — HTTP-only cookie backed by PostgreSQL
 app.use(sessionMiddleware);
