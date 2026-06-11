@@ -104,6 +104,11 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
 // Returns the current session user, or null if not logged in.
 // Now includes full profile data for user profile page display.
 router.get('/api/auth/me', async (req, res) => {
+  // Disable caching for session endpoint - prevents 304 Not Modified
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
   if (!req.session || !req.session.userId) {
     return res.json({ user: null });
   }
