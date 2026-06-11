@@ -73,3 +73,15 @@ export async function cancelEnrollment(enrollmentId) {
     method: 'DELETE',
   });
 }
+
+/**
+ * Cancel an approved enrollment.
+ * Student can cancel their own approved enrollment.
+ * @param {string} enrollmentId
+ * @returns {Promise<void>}
+ */
+export async function cancelApprovedEnrollment(enrollmentId) {
+  await apiClient(`/enrollments/${enrollmentId}/cancel`, {
+    method: 'PATCH',
+  });
+}

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { requireRole } from '../middleware/role.js';
 import * as enrollmentService from '../services/enrollmentService.js';
+import { getSupabase } from '../config/supabase.js';
 
 const router = Router();
 
@@ -198,6 +199,62 @@ router.delete(
       if (error) throw error;
 
       res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// ── PATCH /api/enrollments/:id/cancel ──────────────────────────────
+// Auth required. Student can cancel their own approved enrollment.
+// - If enrollment is approved and belongs to user → cancel, return 200
+// - If enrollment is not approved → 409 CONFLICT
+// - If enrollment belongs to another user → 403 FORBIDDEN
+// - If enrollment not found → 404 NOT_FOUND
+router.patch(
+  '/:id/cancel',
+  requireAuth,
+  async (req, res, next) => {
+    try {
+      const enrollmentInfo = await enrollmentService.getEnrollmentCourseTeacher(
+        req.params.id
+      );
+
+      if (!enrollmentInfo) {
+        return res.status(404).json({
+          error: { code: 'NOT_FOUND', message: 'Enrollment not found.' },
+        });
+      }
+
+      // Check ownership: student can only cancel their own enrollment
+      if (enrollmentInfo.studentId !== req.user.userId) {
+        return res.status(403).json({
+          error: {
+            code: 'FORBIDDEN',
+            message: 'You can only cancel your own enrollment requests.',
+          },
+        });
+      }
+
+      // Check status: only approved enrollments can be cancelled
+      if (enrollmentInfo.status !== 'approved') {
+        return res.status(409).json({
+          error: {
+            code: 'INVALID_TRANSITION',
+            message: `Cannot cancel an enrollment that is ${enrollmentInfo.status}.`,
+          },
+        });
+      }
+
+      const supabase = await getSupabase();
+      const { error } = await supabase
+        .from('enrollments')
+        .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+        .eq('id', req.params.id);
+
+      if (error) throw error;
+
+      res.status(200).json({ message: 'Enrollment cancelled.' });
     } catch (err) {
       next(err);
     }

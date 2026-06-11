@@ -5,7 +5,7 @@ import Button from '../../components/ui/Button.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
-import { getMyEnrollments, cancelEnrollment } from '../../api/enrollments.js';
+import { getMyEnrollments, cancelEnrollment, cancelApprovedEnrollment } from '../../api/enrollments.js';
 import { SKILL_LABELS } from '../../constants.js';
 
 // Status copy — French, kept here so all three messages live next to the
@@ -14,18 +14,21 @@ const STATUS_LABELS = {
   pending: 'En attente',
   approved: 'Approuvée',
   rejected: 'Refusée',
+  cancelled: 'Désinscrit',
 };
 
 const STATUS_MESSAGES = {
   pending: 'Demande en attente de validation',
   approved: 'Inscription approuvée',
   rejected: 'Demande refusée — vous pouvez redemander depuis la page du cours',
+  cancelled: 'Vous avez quitté ce cours',
 };
 
 const STATUS_PANEL_CLASS = {
   pending: 'border-amber-500/30 bg-amber-500/10 text-amber-200',
   approved: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200',
   rejected: 'border-red-500/30 bg-red-500/10 text-red-200',
+  cancelled: 'border-gray-500/30 bg-gray-500/10 text-gray-400',
 };
 
 function formatDate(iso) {
@@ -48,7 +51,8 @@ export default function StudentDashboardPage() {
     setError(null);
     try {
       const data = await getMyEnrollments();
-      setEnrollments(data || []);
+      // Filter out cancelled enrollments - they are not shown in active dashboard
+      setEnrollments((data || []).filter((e) => e.status !== 'cancelled'));
     } catch (err) {
       setError(err);
     } finally {
@@ -144,6 +148,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
 
   const [isCanceling, setIsCanceling] = useState(false);
   const [cancelError, setCancelError] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // The "updated" timestamp is the most recent state change — for a pending
   // request that's the submission time, for approved/rejected it's the
@@ -173,6 +178,64 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
       setIsCanceling(false);
     }
   }
+
+  // Handler for cancelling an approved enrollment
+  async function handleCancelApproved() {
+    setIsCanceling(true);
+    setCancelError(null);
+    setShowConfirmModal(false);
+    try {
+      await cancelApprovedEnrollment(enrollment.id);
+      if (onCancelEnrollment) {
+        onCancelEnrollment(enrollment.id);
+      }
+    } catch (err) {
+      // Map server errors to user-friendly messages
+      if (err?.status === 409) {
+        setCancelError('Vous ne pouvez pas quitter ce cours.');
+      } else if (err?.status === 403) {
+        setCancelError('Vous n\'avez pas les droits pour quitter ce cours.');
+      } else {
+        setCancelError('Une erreur est survenue. Veuillez réessayer.');
+      }
+    } finally {
+      setIsCanceling(false);
+    }
+  }
+
+  // Confirm dialog for cancelling approved enrollment
+  const ConfirmModal = () => (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4">
+      <div className="w-full max-w-md rounded-xl border border-white/10 bg-gray-900 p-6 shadow-xl">
+        <h3 className="mb-2 text-lg font-semibold text-white">
+          Confirmer la désinscription
+        </h3>
+        <p className="mb-6 text-sm text-gray-300">
+          Voulez-vous vraiment quitter ce cours ? Vous perdrez l'accès depuis
+          votre dashboard et ne pourrez plus accéder au contenu ni au
+          Google Classroom.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setShowConfirmModal(false)}
+            disabled={isCanceling}
+          >
+            Annuler
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={handleCancelApproved}
+            disabled={isCanceling}
+          >
+            {isCanceling ? 'Désinscription en cours…' : 'Confirmer'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <article className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
@@ -262,6 +325,28 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
           </Button>
         </div>
       )}
+
+      {/* Cancel button — only for approved enrollments */}
+      {status === 'approved' && (
+        <div className="mt-4 pt-4 border-t border-white/5">
+          {cancelError && (
+            <div className="mb-2 text-xs text-red-400">
+              {cancelError}
+            </div>
+          )}
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => setShowConfirmModal(true)}
+            disabled={isCanceling}
+          >
+            {isCanceling ? 'Désinscription en cours…' : 'Se désinscrire'}
+          </Button>
+        </div>
+      )}
+
+      {/* Confirm modal for approved enrollment cancellation */}
+      {showConfirmModal && <ConfirmModal />}
     </article>
   );
 }

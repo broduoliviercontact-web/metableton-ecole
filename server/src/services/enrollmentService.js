@@ -8,10 +8,13 @@ import { getSupabase } from '../config/supabase.js';
  *   pending     → approved   (teacher/admin approves)
  *   pending     → rejected   (teacher/admin rejects)
  *   rejected    → pending    (student re-requests — retryable)
+ *   approved    → cancelled  (student cancels enrollment)
  *
  * Terminal states (no further transitions):
- *   approved    → no change  (already enrolled)
+ *   approved    → cancelled  (student cancels)
  *   pending     → no change  (cannot re-request while pending)
+ *   rejected    → no change  (final rejection)
+ *   cancelled   → no change  (final cancellation)
  */
 
 /**
@@ -101,12 +104,20 @@ export async function rejectEnrollment(enrollmentId) {
   return transitionEnrollment(enrollmentId, 'rejected');
 }
 
+/**
+ * Cancel an approved enrollment. Returns the updated enrollment.
+ * Only the student who owns the enrollment can cancel it.
+ */
+export async function cancelEnrollment(enrollmentId) {
+  return transitionEnrollment(enrollmentId, 'cancelled');
+}
+
 async function transitionEnrollment(enrollmentId, newStatus) {
   const supabase = await getSupabase();
   // 1. Look up the enrollment
   const { data: enrollment, error: lookupError } = await supabase
     .from('enrollments')
-    .select('id, status, course_id')
+    .select('id, status, course_id, student_id')
     .eq('id', enrollmentId)
     .maybeSingle();
 
@@ -119,13 +130,30 @@ async function transitionEnrollment(enrollmentId, newStatus) {
     );
   }
 
-  // 2. State machine guard
-  if (enrollment.status !== 'pending') {
-    const verb = newStatus === 'approved' ? 'approve' : 'reject';
-    throw Object.assign(
-      new Error(`Cannot ${verb} an enrollment that is already ${enrollment.status}.`),
-      { statusCode: 400, code: 'INVALID_TRANSITION' }
-    );
+  // 2. State machine guard - check valid transitions
+  const currentStatus = enrollment.status;
+  const allowedFrom = {
+    'approved': ['cancelled'],
+    'pending': ['approved', 'rejected', 'pending'],
+  };
+
+  // Special handling for cancelled - only approved enrollments can be cancelled
+  if (newStatus === 'cancelled') {
+    if (currentStatus !== 'approved') {
+      throw Object.assign(
+        new Error('Cannot cancel an enrollment that is not approved.'),
+        { statusCode: 409, code: 'INVALID_TRANSITION' }
+      );
+    }
+  } else if (newStatus === 'approved' || newStatus === 'rejected') {
+    // For approve/reject, only pending enrollments can be transitioned
+    if (currentStatus !== 'pending') {
+      const verb = newStatus === 'approved' ? 'approve' : 'reject';
+      throw Object.assign(
+        new Error(`Cannot ${verb} an enrollment that is already ${currentStatus}.`),
+        { statusCode: 400, code: 'INVALID_TRANSITION' }
+      );
+    }
   }
 
   // 3. Update
