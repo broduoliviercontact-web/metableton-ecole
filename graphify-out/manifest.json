@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "server/src/config/google.js": {
-    "mtime": 1781077615.8110507,
-    "ast_hash": "58845c092a99cb17cc77c3558884373d",
+    "mtime": 1781189725.4016914,
+    "ast_hash": "f850aca20a68c80b6567ff39af88b1d9",
     "semantic_hash": ""
   },
   "server/src/config/supabase.js": {
@@ -575,8 +575,8 @@
     "semantic_hash": ""
   },
   "server/src/routes/classroom.js": {
-    "mtime": 1781187308.708136,
-    "ast_hash": "8f6e05f5a6d94944e29aa2d130a7e394",
+    "mtime": 1781189777.55147,
+    "ast_hash": "71dbe05f87b59dbb640ad43a3776525b",
     "semantic_hash": ""
   }
 }

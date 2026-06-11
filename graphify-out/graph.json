@@ -1847,7 +1847,7 @@
       "label": "getOauth2Client()",
       "file_type": "code",
       "source_file": "server/src/config/google.js",
-      "source_location": "L5",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "config_google_getoauth2client",
       "community": 1,
@@ -9828,9 +9828,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "config_google",
-      "confidence_score": 1.0
+      "target": "config_google"
     },
     {
       "relation": "imports_from",
@@ -9861,9 +9861,9 @@
       "source_file": "server/src/routes/classroom.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_classroom",
-      "target": "config_google_getoauth2client",
-      "confidence_score": 1.0
+      "target": "config_google_getoauth2client"
     },
     {
       "relation": "imports",
@@ -14312,5 +14312,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8d8911f5fce56ce4d0aa1af47530dd3b116a3888"
+  "built_at_commit": "02eef6beb1a2bcd66282dbebed440a4d7916ef3c"
 }
