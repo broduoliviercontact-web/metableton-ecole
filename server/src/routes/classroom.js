@@ -53,17 +53,17 @@ router.get('/diagnostic', requireAuth, requireRole('teacher', 'admin'), (req, re
 // Returns 404 if feature flag is disabled.
 router.get('/oauth/start', requireAuth, requireRole('teacher', 'admin'), (req, res, next) => {
   try {
-    // Debug log for P-26C bug investigation
-    // Remove after fixing - to be deleted
-    if (env.isProduction) {
-      console.log('classroomOAuthEnabled:', env.classroomOAuthEnabled);
-      console.log('CLASSROOM_OAUTH_ENABLED env:', process.env.CLASSROOM_OAUTH_ENABLED);
-      console.log('route reached: yes');
-    }
+    // Debug log for P-26C bug investigation - use console.error for visibility
+    console.error('[classroom-oauth-debug] classroomOAuthEnabled:', env.classroomOAuthEnabled);
+    console.error('[classroom-oauth-debug] CLASSROOM_OAUTH_ENABLED:', process.env.CLASSROOM_OAUTH_ENABLED);
+    console.error('[classroom-oauth-debug] route reached: yes');
 
     if (!env.classroomOAuthEnabled) {
       return res.status(404).json({
-        error: { code: 'NOT_FOUND', message: 'Classroom OAuth is disabled.' },
+        error: {
+          code: 'NOT_FOUND',
+          message: 'Classroom OAuth is disabled. Set CLASSROOM_OAUTH_ENABLED=true in Render env vars.'
+        },
       });
     }
 
@@ -111,7 +111,10 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
   try {
     if (!env.classroomOAuthEnabled) {
       return res.status(404).json({
-        error: { code: 'NOT_FOUND', message: 'Classroom OAuth is disabled.' },
+        error: {
+          code: 'CLASSROOM_OAUTH_DISABLED',
+          message: 'Classroom OAuth is disabled. Set CLASSROOM_OAUTH_ENABLED=true in Render env vars.'
+        },
       });
     }
 
@@ -174,7 +177,10 @@ router.get('/oauth/status', requireAuth, requireRole('teacher', 'admin'), (req, 
   try {
     if (!env.classroomOAuthEnabled) {
       return res.status(404).json({
-        error: { code: 'NOT_FOUND', message: 'Classroom OAuth is disabled.' },
+        error: {
+          code: 'CLASSROOM_OAUTH_DISABLED',
+          message: 'Classroom OAuth is disabled. Set CLASSROOM_OAUTH_ENABLED=true in Render env vars.'
+        },
       });
     }
 
