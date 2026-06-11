@@ -146,16 +146,16 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
     const oauth2Client = getOauth2Client(redirectUri);
     oauth2Client.then((client) => {
       return client.getToken(code);
-    }).then((tokens) => {
+    }).then(({ tokens }) => {
       console.error('[oauth-callback] token exchange success');
-      console.error('[oauth-callback] has access_token:', !!tokens.access_token);
-      console.error('[oauth-callback] has refresh_token:', !!tokens.refresh_token);
+      console.error('[oauth-callback] has access_token:', Boolean(tokens.access_token));
+      console.error('[oauth-callback] has refresh_token:', Boolean(tokens.refresh_token));
 
       // Store tokens in session (not in DB)
       req.session.googleClassroomTokens = tokens;
 
       // Set flag to indicate classroom access
-      req.session.hasClassroomAccess = true;
+      req.session.hasClassroomAccess = Boolean(tokens.access_token);
 
       // Clear the state from session (one-time use)
       req.session.classroomOAuthState = null;
@@ -204,12 +204,17 @@ router.get('/oauth/status', requireAuth, requireRole('teacher', 'admin'), (req, 
       });
     }
 
-    const hasTokens = !!(req.session?.googleClassroomTokens?.access_token);
-    const hasClassroomAccess = !!(req.session?.hasClassroomAccess);
+    // Disable caching - prevents 304 Not Modified
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
+    // Check if we have a valid access token in session
+    const hasAccessToken = Boolean(req.session?.googleClassroomTokens?.access_token);
 
     res.json({
-      connected: hasTokens,
-      hasClassroomAccess,
+      connected: hasAccessToken,
+      hasClassroomAccess: hasAccessToken,
       role: req.user.role,
     });
   } catch (err) {
