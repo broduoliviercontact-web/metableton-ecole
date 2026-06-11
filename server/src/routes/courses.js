@@ -265,10 +265,16 @@ router.put(
       }
 
       // 4. Validate the course against the Google Classroom API.
-      // validateClassroomCourse throws with statusCode set; the global
-      // errorHandler maps 400/403/404 to JSON, and any other upstream
-      // error becomes a 502.
-      const tokens = req.session?.googleTokens || null;
+      // Uses googleClassroomTokens if available; otherwise throws a clear error.
+      const tokens = req.session?.googleClassroomTokens || null;
+      if (!tokens?.access_token) {
+        return res.status(400).json({
+          error: {
+            code: 'CLASSROOM_NOT_CONNECTED',
+            message: 'Connectez Google Classroom avant de lier un cours.',
+          },
+        });
+      }
       await classroomService.validateClassroomCourse(tokens, parsedId);
 
       // 5. Persist

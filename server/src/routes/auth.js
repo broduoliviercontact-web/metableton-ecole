@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { getOauth2Client } from '../config/google.js';
 import env from '../config/env.js';
 import { findOrCreateGoogleProfile, getCurrentUserProfile } from '../services/profileService.js';
+import { requireAuth } from '../middleware/auth.js';
+import { requireRole } from '../middleware/role.js';
 
 const router = Router();
 
@@ -100,56 +102,82 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
   }
 });
 
-// ── GET /api/auth/me ──────────────────────────────────────────────
-// Returns the current session user, or null if not logged in.
-// Now includes full profile data for user profile page display.
-router.get('/api/auth/me', async (req, res) => {
-  // Disable caching for session endpoint - prevents 304 Not Modified
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+// ── GET /api/auth/google/classroom ────────────────────────────────
+// Initiate OAuth flow for Google Classroom (teacher/admin only).
+// Does NOT modify the main session - just redirects to Google.
+router.get('/api/auth/google/classroom', requireAuth, requireRole('teacher', 'admin'), (_req, res) => {
+  const oauth2Client = getOauth2ClientSync();
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    prompt: 'consent',
+    scope: ['https://www.googleapis.com/auth/classroom.courses.readonly'],
+  });
+  res.redirect(authUrl);
+});
 
-  if (!req.session || !req.session.userId) {
-    return res.json({ user: null });
+// ── GET /api/auth/google/classroom/callback ───────────────────────
+// Handle OAuth callback for Google Classroom.
+// Exchanges code for tokens and stores them in session.
+router.get('/api/auth/google/classroom/callback', async (req, res, next) => {
+  const { code } = req.query;
+
+  if (!code) {
+    return res.status(400).json({
+      error: { code: 'VALIDATION_ERROR', message: 'Authorization code missing.' },
+    });
   }
 
   try {
-    const profile = await getCurrentUserProfile(
-      req.session.userId,
-      req.session.googleProfile || null
-    );
-    res.json({
-      user: {
-        userId: req.session.userId,
-        role: req.session.role,
-        ...profile,
-      },
+    const oauth2Client = getOauth2ClientSync();
+
+    // Exchange authorization code for tokens
+    const { tokens } = await oauth2Client.getToken(code);
+
+    // Store Classroom tokens in session
+    if (!req.session) {
+      return res.status(500).json({
+        error: { code: 'SESSION_ERROR', message: 'Session not found.' },
+      });
+    }
+    req.session.googleClassroomTokens = {
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token || null,
+      expiry_date: tokens.expiry_date || null,
+    };
+    req.session.hasClassroomAccess = true;
+
+    // Save session explicitly, then redirect
+    req.session.save((err) => {
+      if (err) return next(err);
+
+      const dashboardPaths = {
+        teacher: '/dashboard/teacher',
+        admin: '/dashboard/admin',
+      };
+
+      res.redirect(`${env.clientOrigin}${dashboardPaths[req.session.role] || '/dashboard'}`);
     });
   } catch (err) {
-    // Fallback if profile lookup fails
-    res.json({
-      user: {
-        userId: req.session.userId,
-        role: req.session.role,
-      },
-    });
+    next(err);
   }
 });
 
-// ── POST /api/auth/logout ─────────────────────────────────────────
-// Destroys the session and clears the cookie.
-router.post('/api/auth/logout', (req, res, next) => {
-  req.session.destroy((err) => {
-    if (err) return next(err);
-
-    res.clearCookie('connect.sid', {
-      httpOnly: true,
-      secure: env.isProduction,
-      sameSite: env.isProduction ? 'none' : 'lax',
-    });
-
-    res.json({ ok: true });
-  });
+// ── POST /api/auth/google/classroom/disconnect ────────────────────
+// Remove Classroom tokens from session.
+router.post('/api/auth/google/classroom/disconnect', requireAuth, (req, res, next) => {
+  if (req.session) {
+    req.session.googleClassroomTokens = null;
+    req.session.hasClassroomAccess = false;
+  }
+  res.json({ ok: true });
 });
+
+// Sync version of getOauth2Client for route handlers (not async)
+// This is defined AFTER all routes to avoid circular import issues
+// when getOauth2Client is awaited in the main flow but called
+// synchronously here.
+function getOauth2ClientSync() {
+  return getOauth2Client();
+}
 
 export default router;
