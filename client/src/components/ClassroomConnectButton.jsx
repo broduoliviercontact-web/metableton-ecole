@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import Button from './ui/Button.jsx';
 import Badge from './ui/Badge.jsx';
 import LoadingSpinner from './ui/LoadingSpinner.jsx';
-import ErrorMessage from './ui/ErrorMessage.jsx';
-import { getClassroomOAuthStatus, connectGoogleClassroom } from '../api/classroom.js';
+import { getClassroomOAuthStatus } from '../api/classroom.js';
 
 export default function ClassroomConnectButton() {
   const [status, setStatus] = useState(null); // null = not loaded
@@ -21,9 +20,9 @@ export default function ClassroomConnectButton() {
       const data = await getClassroomOAuthStatus();
       setStatus(data);
     } catch (err) {
-      // If 404/disabled, it's not an error — just not connected
-      if (err.status === 404) {
-        setStatus({ connected: false, hasClassroomAccess: false });
+      // If 404/disabled, set status but not error (user sees message, not failure)
+      if (err.status === 404 || err.code === 'CLASSROOM_OAUTH_DISABLED') {
+        setStatus({ connected: false, oauthEnabled: false });
       } else {
         setError(err);
       }
@@ -55,8 +54,18 @@ export default function ClassroomConnectButton() {
     );
   }
 
+  // Disabled state (oauthEnabled === false)
+  if (status?.oauthEnabled === false) {
+    return (
+      <div className="flex items-center gap-2 rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-300">
+        <Badge variant="pending">Google Classroom désactivé</Badge>
+        <span className="text-gray-400">La connexion est désactivée pour le moment.</span>
+      </div>
+    );
+  }
+
   // Connected state
-  if (status?.connected && status?.hasClassroomAccess) {
+  if (status?.connected) {
     return (
       <div className="flex items-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-2">
         <Badge variant="approved">Google Classroom connecté</Badge>
@@ -64,13 +73,13 @@ export default function ClassroomConnectButton() {
     );
   }
 
-  // Not connected state
+  // Not connected state (enabled but no token)
   return (
     <div className="flex items-center gap-3">
       <span className="text-sm text-gray-400">
         Connectez votre compte Google Classroom pour synchroniser vos cours.
       </span>
-      <Button size="sm" onClick={() => connectGoogleClassroom()}>
+      <Button size="sm" onClick={() => window.location.href = '/api/classroom/oauth/start'}>
         Connecter Google Classroom
       </Button>
     </div>

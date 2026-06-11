@@ -168,6 +168,7 @@ router.get('/oauth/callback', requireAuth, requireRole('teacher', 'admin'), (req
 //
 // Returns JSON:
 //   - connected: true if googleClassroomTokens exists
+//   - oauthEnabled: true if CLASSROOM_OAUTH_ENABLED is set
 //   - role: current user role
 //
 // Returns 404 if feature flag is disabled.
@@ -192,6 +193,7 @@ router.get('/oauth/status', requireAuth, requireRole('teacher', 'admin'), (req, 
 
     res.json({
       connected: hasAccessToken,
+      oauthEnabled: env.classroomOAuthEnabled,
       hasClassroomAccess: hasAccessToken,
       role: req.user.role,
     });
