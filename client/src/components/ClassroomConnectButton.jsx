@@ -5,6 +5,9 @@ import LoadingSpinner from './ui/LoadingSpinner.jsx';
 import EmptyState from './ui/EmptyState.jsx';
 import { getClassroomOAuthStatus, getGoogleClassroomCourses } from '../api/classroom.js';
 
+// Re-export for local use -ErrorMessage is used in this file
+import ErrorMessage from './ui/ErrorMessage.jsx';
+
 export default function ClassroomConnectButton() {
   const [status, setStatus] = useState(null); // null = not loaded
   const [isLoading, setIsLoading] = useState(true);
@@ -17,10 +20,11 @@ export default function ClassroomConnectButton() {
   }, []);
 
   useEffect(() => {
-    if (status?.connected) {
+    // Only load courses if Classroom is enabled AND connected
+    if (status?.oauthEnabled && status?.connected) {
       loadCourses();
     }
-  }, [status?.connected]);
+  }, [status?.oauthEnabled, status?.connected]);
 
   async function loadStatus() {
     setIsLoading(true);
