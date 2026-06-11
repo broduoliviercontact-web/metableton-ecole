@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getOauth2Client } from '../config/google.js';
 import env from '../config/env.js';
-import { findOrCreateGoogleProfile } from '../services/profileService.js';
+import { findOrCreateGoogleProfile, getCurrentUserProfile } from '../services/profileService.js';
 
 const router = Router();
 
@@ -76,6 +76,12 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
       refresh_token: tokens.refresh_token || null,
       expiry_date: tokens.expiry_date || null,
     };
+    // Store Google profile data for /api/auth/me to use
+    req.session.googleProfile = {
+      email,
+      displayName,
+      avatarUrl,
+    };
 
     // 5. Save session explicitly, then redirect
     req.session.save((err) => {
@@ -96,17 +102,33 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
 
 // ── GET /api/auth/me ──────────────────────────────────────────────
 // Returns the current session user, or null if not logged in.
-router.get('/api/auth/me', (req, res) => {
+// Now includes full profile data for user profile page display.
+router.get('/api/auth/me', async (req, res) => {
   if (!req.session || !req.session.userId) {
     return res.json({ user: null });
   }
 
-  res.json({
-    user: {
-      userId: req.session.userId,
-      role: req.session.role,
-    },
-  });
+  try {
+    const profile = await getCurrentUserProfile(
+      req.session.userId,
+      req.session.googleProfile || null
+    );
+    res.json({
+      user: {
+        userId: req.session.userId,
+        role: req.session.role,
+        ...profile,
+      },
+    });
+  } catch (err) {
+    // Fallback if profile lookup fails
+    res.json({
+      user: {
+        userId: req.session.userId,
+        role: req.session.role,
+      },
+    });
+  }
 });
 
 // ── POST /api/auth/logout ─────────────────────────────────────────

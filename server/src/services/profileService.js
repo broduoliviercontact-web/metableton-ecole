@@ -1,5 +1,8 @@
 import { getSupabase } from '../config/supabase.js';
 
+// Columns to return for user profile data
+const USER_COLUMNS = 'id, email, display_name, avatar_url, role, created_at, updated_at';
+
 /**
  * Find an existing profile by Google subject, or create one.
  *
@@ -77,4 +80,49 @@ export async function findOrCreateGoogleProfile({
   if (insertError) throw insertError;
 
   return { userId: created.id, role: created.role };
+}
+
+/**
+ * Get the current user's profile by session ID.
+ * Returns full profile data for the user in the session.
+ * Updates email, display_name, avatar_url from Google if they're missing.
+ * @param {string} userId - The user ID from session
+ * @param {Object} [googleProfile] - Optional Google profile data to update if missing
+ * @returns {Promise<Object|null>} User profile with email, display_name, avatar_url, role, created_at
+ */
+export async function getCurrentUserProfile(userId, googleProfile) {
+  const supabase = await getSupabase();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select(USER_COLUMNS)
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  // If profile exists but missing Google data, update it
+  if (data && googleProfile) {
+    const needsUpdate =
+      (!data.email || !data.display_name || !data.avatar_url) &&
+      (googleProfile.email || googleProfile.displayName || googleProfile.avatarUrl);
+
+    if (needsUpdate) {
+      const { data: updated, error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          email: googleProfile.email || data.email,
+          display_name: googleProfile.displayName || data.display_name,
+          avatar_url: googleProfile.avatarUrl || data.avatar_url,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', userId)
+        .select(USER_COLUMNS)
+        .maybeSingle();
+
+      if (updateError) throw updateError;
+      return updated;
+    }
+  }
+
+  return data;
 }
