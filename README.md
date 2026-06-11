@@ -116,6 +116,31 @@ cd client && npm run dev
 - Server: `http://localhost:3001`
 - Health check: `http://localhost:3001/api/health`
 
+## Build & Start
+
+### Frontend (client)
+
+```bash
+cd client
+npm install
+npm run dev       # Development server on http://localhost:5173
+npm run build     # Production build in client/dist
+npm run preview   # Preview production build locally
+```
+
+### Backend (server)
+
+```bash
+cd server
+npm install
+npm run dev       # Development with nodemon
+npm start         # Production start
+```
+
+> **Note** : Le projet n'a pas de `package.json` root. Toutes les commandes doivent être exécutées depuis `client/` ou `server/`.
+
+---
+
 ## Environment variables
 
 | Variable                    | Required | Description                         |
@@ -132,6 +157,18 @@ cd client && npm run dev
 | `CLIENT_ORIGIN`             | Yes      | Client origin allowed by CORS (e.g. `http://localhost:5173`) |
 | `VITE_API_URL` (client)     | No       | Base URL of the API (default: `http://localhost:3001/api`) |
 
+---
+
+## Production URLs
+
+| Service | URL |
+|---------|-----|
+| Frontend | https://metableton-ecole.vercel.app |
+| Backend health | https://metableton-ecole-api.onrender.com/api/health |
+| API base | https://metableton-ecole-api.onrender.com/api |
+
+---
+
 ## MVP scope
 
 - 2 teachers, 5 students, 3 courses at launch
@@ -139,5 +176,23 @@ cd client && npm run dev
 - Moderated enrollment flow (request → pending → approve/reject)
 - Google Classroom API: validation-only GET (no course creation, no roster sync)
 - No payments, no custom video hosting, no notifications in v1
+
+---
+
+## Smoke test after deploy
+
+After each production deployment, run the smoke test checklist:
+
+🔗 [docs/production-smoke-test.md](docs/production-smoke-test.md)
+
+The checklist verifies:
+- `/api/health` endpoint
+- Homepage and navigation
+- Course catalog and course detail pages
+- Google OAuth sign-in flow
+- All dashboards (student, teacher, admin)
+- Enrollment workflow and role management
+
+> **Note** : This test takes ~3-5 minutes. Check off items after each deployment.
 
 See `_bmad-output/planning-artifacts/` for the full PRD, architecture, and epic breakdown.
