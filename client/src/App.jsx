@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
 import CourseDetailPage from './pages/CourseDetailPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
+import DesignPreviewPage from './components/metableton-ui/preview/DesignPreviewPage.jsx';
 import StudentDashboardPage from './pages/dashboard/StudentDashboardPage.jsx';
 import TeacherDashboardPage from './pages/dashboard/TeacherDashboardPage.jsx';
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage.jsx';
@@ -92,6 +93,9 @@ export default function App() {
 
       {/* 404 — outside layouts for a clean error page */}
       <Route path="*" element={<NotFoundPage />} />
+
+      {/* Isolated Open Design preview — sandbox, no auth, no API, no prod impact */}
+      <Route path="/design-preview/*" element={<DesignPreviewPage />} />
     </Routes>
   );
 }

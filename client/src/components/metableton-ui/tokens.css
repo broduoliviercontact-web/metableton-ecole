@@ -1,0 +1,91 @@
+/* ============================================================
+   Metableton UI — tokens
+   Scopé sous .metableton-theme. AUCUNE variable ne touche :root.
+   Toutes les variables sont préfixées --mt-*.
+   ============================================================ */
+
+.metableton-theme {
+  /* — Surfaces anthracite (basées sur la home, la plus sombre) — */
+  --mt-bg:       oklch(14% 0.015 280);
+  --mt-surface:  oklch(21% 0.02 280);
+  --mt-raised:   oklch(25% 0.025 280);
+
+  /* — Texte — */
+  --mt-fg:       oklch(94% 0.008 100);
+  --mt-muted:    oklch(62% 0.02 280);
+
+  /* — Bordures — */
+  --mt-border:   oklch(28% 0.03 280);
+
+  /* — Accents — */
+  --mt-cyan:     oklch(72% 0.16 195);   /* Spectrum Analyzer */
+  --mt-green:    oklch(70% 0.12 155);   /* Classroom pill, success */
+  --mt-blue:     oklch(60% 0.10 250);   /* Intermédiaire, info */
+  --mt-orange:   oklch(68% 0.19 50);    /* Ableton / dashboard primary */
+  --mt-danger:   oklch(58% 0.16 25);
+
+  /* — Variantes dérivées — */
+  --mt-cyan-dim:     oklch(45% 0.12 195);
+  --mt-cyan-bright:  oklch(88% 0.08 195);
+  --mt-orange-deep:  oklch(60% 0.17 50);
+
+  /* — Typographies (stacks natives) — */
+  --mt-font-display: -apple-system, BlinkMacSystemFont, 'Inter',
+                     'SF Pro Display', system-ui, sans-serif;
+  --mt-font-body:    -apple-system, BlinkMacSystemFont, 'Inter',
+                     'SF Pro Text', system-ui, sans-serif;
+  --mt-font-mono:    'JetBrains Mono', 'SF Mono', 'IBM Plex Mono',
+                     ui-monospace, monospace;
+
+  /* — Rayons — */
+  --mt-radius-sm: 6px;
+  --mt-radius-md: 10px;
+  --mt-radius-lg: 14px;
+
+  /* — Divers — */
+  --mt-grid-line: rgba(255, 255, 255, 0.025);
+  --mt-grid-line-strong: rgba(255, 255, 255, 0.04);
+
+  /* Reset local, isolé de l'app */
+  color-scheme: dark;
+  background: var(--mt-bg);
+  color: var(--mt-fg);
+  font-family: var(--mt-font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+}
+
+.metableton-theme *,
+.metableton-theme *::before,
+.metableton-theme *::after {
+  box-sizing: border-box;
+}
+
+/* Grille piano-roll en fond, scopée */
+.metableton-theme::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, var(--mt-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--mt-grid-line) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at 70% 40%,
+              rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+/* Halo cyan très discret centré haut */
+.metableton-theme::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 30%,
+              rgba(0, 220, 200, 0.045) 0%, transparent 60%);
+}
