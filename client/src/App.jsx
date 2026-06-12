@@ -15,14 +15,20 @@ import CourseFormPage from './pages/dashboard/CourseFormPage.jsx';
 import UserProfilePage from './pages/dashboard/UserProfilePage.jsx';
 import HomePageV2 from './pages/HomePageV2.jsx';
 
+const isDev = import.meta.env.DEV;
+
 export default function App() {
   return (
     <Routes>
       {/* Public pages — Header + Footer */}
       <Route element={<PublicLayout />}>
         <Route index element={<HomePageV2 />} />
-        <Route path="home-legacy" element={<HomePage />} />
-        <Route path="home-v2" element={<HomePageV2 />} />
+        {isDev && (
+          <>
+            <Route path="home-legacy" element={<HomePage />} />
+            <Route path="home-v2" element={<HomePageV2 />} />
+          </>
+        )}
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="catalog/:courseId" element={<CourseDetailPage />} />
       </Route>
@@ -97,8 +103,8 @@ export default function App() {
       {/* 404 — outside layouts for a clean error page */}
       <Route path="*" element={<NotFoundPage />} />
 
-      {/* Isolated Open Design preview — sandbox, no auth, no API, no prod impact */}
-      <Route path="/design-preview/*" element={<DesignPreviewPage />} />
+      {/* Isolated Open Design preview — sandbox, no auth, no API, no prod impact (DEV only) */}
+      {isDev && <Route path="/design-preview/*" element={<DesignPreviewPage />} />}
     </Routes>
   );
 }
