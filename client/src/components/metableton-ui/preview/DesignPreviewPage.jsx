@@ -11,6 +11,14 @@ import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import HomePreview from '../home/HomePreview.jsx';
 import StudentDashboardPreview from '../dashboards/StudentDashboardPreview.jsx';
 import TeacherDashboardPreview from '../dashboards/TeacherDashboardPreview.jsx';
+import {
+  studentDashboardConfig,
+  studentDashboardMinimalConfig,
+  studentDashboardNoProfileConfig,
+  teacherDashboardConfig,
+  teacherDashboardMinimalConfig,
+  teacherDashboardNoStatsConfig,
+} from '../dashboards/dashboardFixtures.js';
 import DashboardPreviewToolbar from '../dashboards/parts/DashboardPreviewToolbar.jsx';
 import MetabletonButton from '../primitives/MetabletonButton.jsx';
 import '../tokens.css';
@@ -80,6 +88,54 @@ function PreviewIndex() {
         <Link to="/design-preview/dashboard/teacher" style={{ textDecoration: 'none' }}>
           <MetabletonButton>Dashboard professeur</MetabletonButton>
         </Link>
+      </div>
+
+      {/* Section "Dashboard variants" — Phase 1C : tests de modularité */}
+      <div
+        style={{
+          marginTop: '20px',
+          padding: '20px 24px',
+          background: 'var(--mt-surface)',
+          border: '1px solid var(--mt-border)',
+          borderRadius: 'var(--mt-radius-md)',
+          width: '100%',
+          maxWidth: '60ch',
+        }}
+      >
+        <div
+          style={{
+            fontFamily: 'var(--mt-font-mono)',
+            fontSize: '11px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
+            color: 'var(--mt-muted)',
+            marginBottom: '12px',
+          }}
+        >
+          Dashboard variants — tests de modularité
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <VariantLink
+            to="/design-preview/dashboard/student/minimal"
+            label="Élève · minimal"
+            hint="2 stats, pas de sessions, pas de cours"
+          />
+          <VariantLink
+            to="/design-preview/dashboard/teacher/minimal"
+            label="Prof · minimal"
+            hint="pas d'assignments, pas d'activité, pas de bouton"
+          />
+          <VariantLink
+            to="/design-preview/dashboard/student/no-sidebar-profile"
+            label="Élève · sidebar sans profil"
+            hint="profile = null"
+          />
+          <VariantLink
+            to="/design-preview/dashboard/teacher/no-stats"
+            label="Prof · sans stats"
+            hint="stats = []"
+          />
+        </div>
       </div>
 
       <div
@@ -207,6 +263,41 @@ function TeacherDashboardWithToolbar() {
   );
 }
 
+/* Variantes — Phase 1C : passent une config différente aux mêmes composants. */
+function StudentDashboardVariant({ config, label }) {
+  return (
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '32px 0',
+      }}
+    >
+      <div style={{ width: 'min(1200px, 92vw)', margin: '0 auto' }}>
+        <DashboardPreviewToolbar label={label} />
+        <StudentDashboardPreview config={config} />
+      </div>
+    </div>
+  );
+}
+
+function TeacherDashboardVariant({ config, label }) {
+  return (
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '32px 0',
+      }}
+    >
+      <div style={{ width: 'min(1200px, 92vw)', margin: '0 auto' }}>
+        <DashboardPreviewToolbar label={label} />
+        <TeacherDashboardPreview config={config} />
+      </div>
+    </div>
+  );
+}
+
 function NotFoundInPreview() {
   const location = useLocation();
   return (
@@ -255,6 +346,55 @@ function NotFoundInPreview() {
   );
 }
 
+function VariantLink({ to, label, hint }) {
+  return (
+    <Link
+      to={to}
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+        gap: '12px',
+        padding: '8px 10px',
+        borderRadius: 'var(--mt-radius-sm)',
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid var(--mt-border)',
+        textDecoration: 'none',
+        transition: 'background .15s, border-color .15s',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+        e.currentTarget.style.borderColor = 'var(--mt-muted)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+        e.currentTarget.style.borderColor = 'var(--mt-border)';
+      }}
+    >
+      <span
+        style={{
+          color: 'var(--mt-cyan)',
+          fontFamily: 'var(--mt-font-body)',
+          fontSize: '13px',
+          fontWeight: 600,
+        }}
+      >
+        {label}
+      </span>
+      <span
+        style={{
+          color: 'var(--mt-muted)',
+          fontFamily: 'var(--mt-font-mono)',
+          fontSize: '11px',
+          letterSpacing: '0.04em',
+        }}
+      >
+        {hint}
+      </span>
+    </Link>
+  );
+}
+
 export default function DesignPreviewPage() {
   return (
     <div className="metableton-theme">
@@ -263,6 +403,45 @@ export default function DesignPreviewPage() {
         <Route path="home" element={<HomePreviewWithHeader />} />
         <Route path="dashboard/student" element={<StudentDashboardWithToolbar />} />
         <Route path="dashboard/teacher" element={<TeacherDashboardWithToolbar />} />
+
+        {/* Variantes — Phase 1C */}
+        <Route
+          path="dashboard/student/minimal"
+          element={
+            <StudentDashboardVariant
+              config={studentDashboardMinimalConfig}
+              label="Student · minimal"
+            />
+          }
+        />
+        <Route
+          path="dashboard/teacher/minimal"
+          element={
+            <TeacherDashboardVariant
+              config={teacherDashboardMinimalConfig}
+              label="Teacher · minimal"
+            />
+          }
+        />
+        <Route
+          path="dashboard/student/no-sidebar-profile"
+          element={
+            <StudentDashboardVariant
+              config={studentDashboardNoProfileConfig}
+              label="Student · sans profil sidebar"
+            />
+          }
+        />
+        <Route
+          path="dashboard/teacher/no-stats"
+          element={
+            <TeacherDashboardVariant
+              config={teacherDashboardNoStatsConfig}
+              label="Teacher · sans stats"
+            />
+          }
+        />
+
         <Route path="*" element={<NotFoundInPreview />} />
         <Route path="prod" element={<Navigate to="/" replace />} />
       </Routes>

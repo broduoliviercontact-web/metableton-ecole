@@ -70,3 +70,44 @@ export const teacherDashboardConfig = {
     { initials: 'JD', name: 'Jules D.', assignment: 'Mix critique',          status: 'Non rendu', variant: 'danger' },
   ],
 };
+
+/* ============================================================
+   Variantes de test — Phase 1C
+   Construites par spread sur les configs de base : aucune donnée
+   dupliquée. Pour vérifier qu'une section du dashboard peut être
+   retirée sans casser le layout.
+   ============================================================ */
+
+/* Student — minimal : seulement 2 stats, pas de sessions, pas de cours */
+export const studentDashboardMinimalConfig = {
+  ...studentDashboardConfig,
+  stats: [
+    { label: 'Cours actifs',       value: '3',  change: '+1 ce mois' },
+    { label: 'Heures de pratique', value: '48h', change: '+12h cette semaine' },
+  ],
+  courseProgress: [],
+  sessions: [],
+};
+
+/* Teacher — minimal : pas d'assignments, pas d'activité hebdo, pas de bouton */
+export const teacherDashboardMinimalConfig = {
+  ...teacherDashboardConfig,
+  header: {
+    title: 'Tableau de bord',
+    rightSlot: null,
+  },
+  weeklyActivity: { values: [], labels: [] },
+  assignments: [],
+};
+
+/* Student — sidebar sans profil (profile = null) */
+export const studentDashboardNoProfileConfig = {
+  ...studentDashboardConfig,
+  profile: null,
+};
+
+/* Teacher — sans stats (grille disparaît) */
+export const teacherDashboardNoStatsConfig = {
+  ...teacherDashboardConfig,
+  stats: [],
+};
