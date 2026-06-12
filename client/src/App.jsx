@@ -20,7 +20,8 @@ export default function App() {
     <Routes>
       {/* Public pages — Header + Footer */}
       <Route element={<PublicLayout />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<HomePageV2 />} />
+        <Route path="home-legacy" element={<HomePage />} />
         <Route path="home-v2" element={<HomePageV2 />} />
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="catalog/:courseId" element={<CourseDetailPage />} />
