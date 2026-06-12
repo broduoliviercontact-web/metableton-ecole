@@ -1,0 +1,481 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>METABLETON — Studio en ligne</title>
+<style>
+  :root {
+    --bg:        oklch(14% 0.015 280);
+    --surface:   oklch(21% 0.02 280);
+    --raised:    oklch(25% 0.025 280);
+    --fg:        oklch(94% 0.008 100);
+    --muted:     oklch(56% 0.02 280);
+    --border:    oklch(28% 0.03 280);
+    --cyan:      oklch(72% 0.16 195);
+    --cyan-dim:  oklch(45% 0.12 195);
+    --cyan-bright: oklch(88% 0.08 195);
+    --green:     oklch(70% 0.12 155);
+    --blue:      oklch(58% 0.10 250);
+    --font-display: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', system-ui, sans-serif;
+    --font-body:    -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+    --font-mono:    'JetBrains Mono', 'SF Mono', 'IBM Plex Mono', ui-monospace, monospace;
+    --radius: 5px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { overflow: hidden; }
+  @media (max-width: 900px) { body { overflow: auto; } }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at 70% 40%, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0) 70%);
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(0,220,200,0.045) 0%, transparent 60%);
+  }
+  .mt-app {
+    display: flex; flex-direction: column;
+    height: 100vh;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+    position: relative; z-index: 1;
+  }
+  @media (max-width: 900px) {
+    .mt-app { height: auto; min-height: 100vh; padding: 0 24px; }
+  }
+  .mt-nav {
+    flex-shrink: 0;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .mt-nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-display); font-weight: 800; font-size: 16px;
+    letter-spacing: -0.03em; text-decoration: none; color: var(--fg);
+  }
+  .mt-nav-brand .logo-mark {
+    width: 24px; height: 24px; border-radius: var(--radius);
+    background: var(--cyan); display: grid; place-items: center;
+    color: #0a0a0f; font-size: 12px; font-weight: 900;
+    box-shadow: 0 0 14px rgba(0,220,200,0.25);
+  }
+  .mt-nav-links {
+    display: flex; align-items: center; gap: 28px; list-style: none;
+  }
+  .mt-nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 13px;
+    font-weight: 500; letter-spacing: 0.01em; transition: color .2s;
+  }
+  .mt-nav-links a:hover { color: var(--fg); }
+  .mt-classroom-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+    padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border);
+    color: var(--green); background: rgba(100,200,140,0.08);
+  }
+  .mt-classroom-pill::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 6px var(--green);
+  }
+  .mt-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--fg); padding: 10px 20px; border-radius: var(--radius);
+    font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer;
+    transition: .15s ease;
+  }
+  .mt-btn:hover { background: var(--raised); border-color: var(--muted); }
+  .mt-btn-primary {
+    background: var(--cyan); color: oklch(12% 0.02 50);
+    border-color: var(--cyan);
+  }
+  .mt-btn-primary:hover {
+    background: oklch(65% 0.14 195); border-color: oklch(65% 0.14 195);
+    box-shadow: 0 6px 24px rgba(0,220,200,0.28);
+  }
+  @media (max-width: 900px) {
+    .mt-nav { height: 64px; }
+    .mt-nav-links { display: none; }
+  }
+  .mt-hero {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 56px;
+    align-items: center;
+    min-height: 0;
+    padding: 32px 0 20px;
+  }
+  @media (max-width: 900px) {
+    .mt-hero { grid-template-columns: 1fr; padding: 36px 0 28px; gap: 36px; }
+  }
+  .hero-text .kicker {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.25em; color: var(--green); margin-bottom: 20px; display: block;
+  }
+  .hero-text h1 {
+    font-family: var(--font-display); font-size: clamp(38px, 4.6vw, 70px);
+    line-height: 0.95; letter-spacing: -0.04em; font-weight: 800; margin-bottom: 20px;
+    text-wrap: balance;
+  }
+  .hero-text h1 em { color: var(--cyan); font-style: normal; }
+  .hero-text p {
+    color: var(--muted); font-size: 16px; max-width: 42ch; line-height: 1.6; margin-bottom: 34px;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ===== SPECTRUM RACK ===== */
+  .spectrum-rack {
+    background: linear-gradient(180deg, oklch(19% 0.02 280), oklch(15% 0.015 280));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 24px 60px rgba(0,0,0,0.55);
+    display: flex; flex-direction: column;
+    max-height: 390px;
+    overflow: hidden;
+    position: relative;
+  }
+  .spectrum-chrome {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px; flex-shrink: 0;
+  }
+  .spectrum-title-block { display: flex; align-items: baseline; gap: 10px; }
+  .spectrum-title {
+    font-family: var(--font-display); font-weight: 700; font-size: 13px;
+    letter-spacing: -0.01em; color: var(--fg);
+  }
+  .spectrum-meta {
+    font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.12em;
+  }
+  .spectrum-display {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+    min-height: 0;
+    position: relative;
+    padding-top: 10px;
+  }
+  .spectrum-db-scale {
+    width: 24px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+    text-align: right; padding-bottom: 18px;
+    flex-shrink: 0;
+  }
+  .spectrum-graph {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 1px;
+  }
+  .spectrum-grid-h {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
+    pointer-events: none; z-index: 0;
+  }
+  .grid-h {
+    height: 1px; background: rgba(255,255,255,0.035); width: 100%;
+  }
+  .spectrum-curve {
+    position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .spectrum-curve path {
+    fill: none; stroke: var(--cyan); stroke-width: 1.5;
+    filter: drop-shadow(0 0 3px rgba(0,220,200,0.4));
+  }
+  .spectrum-bars {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2px;
+    position: relative;
+    z-index: 2;
+    height: 100%;
+  }
+  .bar {
+    flex: 1; min-height: 2px; border-radius: 1px 1px 0 0;
+    position: relative;
+    transform-origin: bottom;
+    animation: barDrift ease-in-out infinite alternate;
+  }
+  .peak {
+    position: absolute;
+    left: 20%; right: 20%;
+    height: 2px;
+    border-radius: 1px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0 4px rgba(255,255,255,0.5);
+    bottom: var(--pk, 80%);
+    z-index: 3;
+  }
+  .bar {
+    background: linear-gradient(to top, var(--cyan-dim), var(--cyan), var(--cyan-bright));
+    box-shadow: 0 0 12px rgba(0,220,200,0.18);
+  }
+  .peak {
+    opacity: 0.85;
+    height: 1.5px;
+    background: rgba(255,255,255,0.7);
+  }
+  @keyframes barDrift {
+    0%   { transform: scaleY(0.18); opacity: .55; }
+    100% { transform: scaleY(1); opacity: 1; }
+  }
+  .bar:nth-child(1)  { animation-duration: 0.75s; animation-delay: 0.0s; }
+  .bar:nth-child(2)  { animation-duration: 0.95s; animation-delay: 0.12s; }
+  .bar:nth-child(3)  { animation-duration: 0.65s; animation-delay: 0.05s; }
+  .bar:nth-child(4)  { animation-duration: 1.05s; animation-delay: 0.18s; }
+  .bar:nth-child(5)  { animation-duration: 0.85s; animation-delay: 0.08s; }
+  .bar:nth-child(6)  { animation-duration: 0.55s; animation-delay: 0.22s; }
+  .bar:nth-child(7)  { animation-duration: 0.90s; animation-delay: 0.14s; }
+  .bar:nth-child(8)  { animation-duration: 0.70s; animation-delay: 0.03s; }
+  .bar:nth-child(9)  { animation-duration: 1.10s; animation-delay: 0.20s; }
+  .bar:nth-child(10) { animation-duration: 0.60s; animation-delay: 0.10s; }
+  .bar:nth-child(11) { animation-duration: 0.80s; animation-delay: 0.28s; }
+  .bar:nth-child(12) { animation-duration: 0.50s; animation-delay: 0.06s; }
+  .bar:nth-child(13) { animation-duration: 0.92s; animation-delay: 0.16s; }
+  .bar:nth-child(14) { animation-duration: 0.72s; animation-delay: 0.24s; }
+  .bar:nth-child(15) { animation-duration: 1.15s; animation-delay: 0.04s; }
+  .bar:nth-child(16) { animation-duration: 0.62s; animation-delay: 0.12s; }
+  .bar:nth-child(17) { animation-duration: 0.78s; animation-delay: 0.26s; }
+  .bar:nth-child(18) { animation-duration: 0.52s; animation-delay: 0.08s; }
+  .bar:nth-child(19) { animation-duration: 0.88s; animation-delay: 0.18s; }
+  .bar:nth-child(20) { animation-duration: 0.68s; animation-delay: 0.02s; }
+  .bar:nth-child(21) { animation-duration: 1.00s; animation-delay: 0.14s; }
+  .bar:nth-child(22) { animation-duration: 0.58s; animation-delay: 0.22s; }
+  .bar:nth-child(23) { animation-duration: 0.82s; animation-delay: 0.06s; }
+  .bar:nth-child(24) { animation-duration: 0.48s; animation-delay: 0.16s; }
+  .bar.g-wide   { flex: 1.5; }
+  .bar.g-mid    { flex: 1.1; }
+  .bar.g-norm   { flex: 1.0; }
+  .bar.g-treble { flex: 0.75; }
+  .bar.g-air    { flex: 0.55; }
+  .bar:nth-child(1), .bar:nth-child(2), .bar:nth-child(23), .bar:nth-child(24) {
+    opacity: .55; background: linear-gradient(to top, oklch(55% 0.10 195), var(--cyan));
+  }
+  .spectrum-freq-axis {
+    position: relative; height: 18px; flex-shrink: 0;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .freq-label {
+    position: absolute; top: 4px;
+    font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    transform: translateX(-50%);
+  }
+  .spectrum-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 8px; margin-top: 6px; flex-shrink: 0;
+  }
+  .spectrum-readout {
+    font-family: var(--font-mono); font-size: 10px; color: var(--cyan); font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .spectrum-input {
+    font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  /* ===== MODULES ===== */
+  .mt-modules {
+    flex-shrink: 0;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    padding-bottom: 32px;
+  }
+  .mt-module {
+    display: flex; align-items: stretch;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    transition: border-color .2s, transform .2s;
+    cursor: default;
+  }
+  .mt-module:hover { border-color: var(--muted); transform: translateY(-2px); }
+  .mod-strip { width: 4px; flex-shrink: 0; }
+  .mod-strip.cyan  { background: var(--cyan); }
+  .mod-strip.green { background: var(--green); }
+  .mod-strip.blue  { background: var(--blue); }
+  .mod-strip.white { background: rgba(255,255,255,0.35); }
+  .mod-inner { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .mod-inner h4 { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .mod-inner p { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .mod-icon {
+    width: 18px; height: 18px; border-radius: 3px; margin-bottom: 6px;
+    border: 1px solid var(--border); display: grid; place-items: center;
+  }
+  .mod-icon svg { width: 10px; height: 10px; fill: currentColor; }
+
+  @media (max-width: 900px) {
+    .mt-modules { grid-template-columns: repeat(2, 1fr); padding-bottom: 40px; }
+    .spectrum-rack { max-height: none; }
+  }
+  @media (max-width: 480px) {
+    .mt-modules { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="mt-app">
+
+    <nav class="mt-nav">
+      <a href="#" class="mt-nav-brand">
+        <span class="logo-mark">M</span>
+        METABLETON
+      </a>
+      <div style="display:flex;align-items:center;gap:20px;">
+        <ul class="mt-nav-links">
+          <li><a href="#">Cours</a></li>
+          <li><a href="#">Professeurs</a></li>
+          <li><span class="mt-classroom-pill">Classroom</span></li>
+        </ul>
+        <a href="#" class="mt-btn mt-btn-primary">Se connecter</a>
+      </div>
+    </nav>
+
+    <section class="mt-hero">
+      <div class="hero-text">
+        <span class="kicker">École en ligne — MAO & Production</span>
+        <h1>Maîtrisez <em>Ableton&nbsp;Live</em> comme un studio.</h1>
+        <p>Synthèse, production, mix. Des cours professionnels dans une interface pensée comme un DAW.</p>
+        <div class="hero-actions">
+          <a href="#" class="mt-btn mt-btn-primary">Commencer</a>
+          <a href="#" class="mt-btn">Voir le programme</a>
+        </div>
+      </div>
+
+      <div class="spectrum-rack">
+        <div class="spectrum-chrome">
+          <div class="spectrum-title-block">
+            <span class="spectrum-title">Spectrum</span>
+            <span class="spectrum-meta">FFT · 4096 · LIN</span>
+          </div>
+        </div>
+
+        <div class="spectrum-display">
+          <div class="spectrum-db-scale">
+            <span>0</span><span>-12</span><span>-24</span><span>-36</span><span>-48</span><span>-60</span>
+          </div>
+          <div class="spectrum-graph">
+            <div class="spectrum-grid-h">
+              <div class="grid-h"></div><div class="grid-h"></div><div class="grid-h"></div>
+              <div class="grid-h"></div><div class="grid-h"></div><div class="grid-h"></div>
+            </div>
+            <svg class="spectrum-curve" viewBox="0 0 300 100" preserveAspectRatio="none">
+              <path d="M0,90 Q15,88 25,80 T45,65 T60,55 T75,48 T90,42 T105,38 T120,35 T135,33 T150,32 T165,34 T180,38 T195,45 T210,55 T225,68 T240,82 T255,90 T270,94 T285,96 T300,97" />
+            </svg>
+            <div class="spectrum-bars">
+              <div class="bar g-wide"   style="--pk:75%"><div class="peak"></div></div>
+              <div class="bar g-wide"   style="--pk:60%"><div class="peak"></div></div>
+              <div class="bar g-wide"   style="--pk:82%"><div class="peak"></div></div>
+              <div class="bar g-mid"    style="--pk:55%"><div class="peak"></div></div>
+              <div class="bar g-mid"    style="--pk:70%"><div class="peak"></div></div>
+              <div class="bar g-mid"    style="--pk:45%"><div class="peak"></div></div>
+              <div class="bar g-mid"    style="--pk:68%"><div class="peak"></div></div>
+              <div class="bar g-norm"   style="--pk:50%"><div class="peak"></div></div>
+              <div class="bar g-norm"   style="--pk:78%"><div class="peak"></div></div>
+              <div class="bar g-norm"   style="--pk:62%"><div class="peak"></div></div>
+              <div class="bar g-norm"   style="--pk:85%"><div class="peak"></div></div>
+              <div class="bar g-norm"   style="--pk:58%"><div class="peak"></div></div>
+              <div class="bar g-norm"   style="--pk:90%"><div class="peak"></div></div>
+              <div class="bar g-norm"   style="--pk:48%"><div class="peak"></div></div>
+              <div class="bar g-treble" style="--pk:72%"><div class="peak"></div></div>
+              <div class="bar g-treble" style="--pk:40%"><div class="peak"></div></div>
+              <div class="bar g-treble" style="--pk:65%"><div class="peak"></div></div>
+              <div class="bar g-treble" style="--pk:35%"><div class="peak"></div></div>
+              <div class="bar g-treble" style="--pk:55%"><div class="peak"></div></div>
+              <div class="bar g-treble" style="--pk:30%"><div class="peak"></div></div>
+              <div class="bar g-air"    style="--pk:45%"><div class="peak"></div></div>
+              <div class="bar g-air"    style="--pk:25%"><div class="peak"></div></div>
+              <div class="bar g-air"    style="--pk:38%"><div class="peak"></div></div>
+              <div class="bar g-air"    style="--pk:20%"><div class="peak"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spectrum-freq-axis">
+          <span class="freq-label" style="left:0%">20</span>
+          <span class="freq-label" style="left:15%">100</span>
+          <span class="freq-label" style="left:35%">500</span>
+          <span class="freq-label" style="left:55%">1k</span>
+          <span class="freq-label" style="left:75%">5k</span>
+          <span class="freq-label" style="left:92%">16k</span>
+          <span class="freq-label" style="left:100%">20k</span>
+        </div>
+
+        <div class="spectrum-footer">
+          <span class="spectrum-input">Input: Mic 1 · 48 kHz</span>
+          <span class="spectrum-readout">Peak: -4.2 dBFS</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-modules">
+      <div class="mt-module">
+        <div class="mod-strip cyan"></div>
+        <div class="mod-inner">
+          <div class="mod-icon" style="color:var(--cyan);">
+            <svg viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" rx="1"/></svg>
+          </div>
+          <h4>Ableton Live</h4>
+          <p>Session & Arrangement, clips MIDI, racks d’effets.</p>
+        </div>
+      </div>
+      <div class="mt-module">
+        <div class="mod-strip green"></div>
+        <div class="mod-inner">
+          <div class="mod-icon" style="color:var(--green);">
+            <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4"/></svg>
+          </div>
+          <h4>MAO & Setup</h4>
+          <p>Interface DAW, routing, export, organisation.</p>
+        </div>
+      </div>
+      <div class="mt-module">
+        <div class="mod-strip blue"></div>
+        <div class="mod-inner">
+          <div class="mod-icon" style="color:var(--blue);">
+            <svg viewBox="0 0 10 10"><path d="M1 5 L5 1 L9 5 L5 9 Z"/></svg>
+          </div>
+          <h4>Synthèse sonore</h4>
+          <p>Wavetable, Operator, FM, modulations.</p>
+        </div>
+      </div>
+      <div class="mt-module">
+        <div class="mod-strip white"></div>
+        <div class="mod-inner">
+          <div class="mod-icon" style="color:var(--fg);">
+            <svg viewBox="0 0 10 10"><path d="M1 8 L3 4 L5 6 L7 2 L9 5"/></svg>
+          </div>
+          <h4>Mix & Master</h4>
+          <p>Compression, EQ, saturation, export final.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>
