@@ -6,19 +6,23 @@ import HomePage from './pages/HomePage.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
 import CourseDetailPage from './pages/CourseDetailPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
+import DesignPreviewPage from './components/metableton-ui/preview/DesignPreviewPage.jsx';
 import StudentDashboardPage from './pages/dashboard/StudentDashboardPage.jsx';
 import TeacherDashboardPage from './pages/dashboard/TeacherDashboardPage.jsx';
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage.jsx';
 import AdminCoursesPage from './pages/dashboard/AdminCoursesPage.jsx';
 import CourseFormPage from './pages/dashboard/CourseFormPage.jsx';
 import UserProfilePage from './pages/dashboard/UserProfilePage.jsx';
+import HomePageV2 from './pages/HomePageV2.jsx';
 
 export default function App() {
   return (
     <Routes>
       {/* Public pages — Header + Footer */}
       <Route element={<PublicLayout />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<HomePageV2 />} />
+        <Route path="home-legacy" element={<HomePage />} />
+        <Route path="home-v2" element={<HomePageV2 />} />
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="catalog/:courseId" element={<CourseDetailPage />} />
       </Route>
@@ -92,6 +96,9 @@ export default function App() {
 
       {/* 404 — outside layouts for a clean error page */}
       <Route path="*" element={<NotFoundPage />} />
+
+      {/* Isolated Open Design preview — sandbox, no auth, no API, no prod impact */}
+      <Route path="/design-preview/*" element={<DesignPreviewPage />} />
     </Routes>
   );
 }

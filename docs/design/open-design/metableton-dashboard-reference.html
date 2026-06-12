@@ -1,0 +1,646 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>METABLETON — École de musique en ligne</title>
+<style>
+  /* =========================================================
+     TOKENS DESIGN.md
+     ========================================================= */
+  :root {
+    --bg:        oklch(20% 0.015 280);       /* noir doux / anthracite */
+    --surface:   oklch(26% 0.02 280);        /* gris ardoise */
+    --raised:    oklch(30% 0.025 280);
+    --fg:        oklch(94% 0.008 100);       /* blanc cassé */
+    --muted:     oklch(62% 0.02 280);        /* gris lisible */
+    --border:    oklch(32% 0.03 280);        /* bordures fines */
+
+    --orange:    oklch(68% 0.19 50);         /* accent Ableton */
+    --green:     oklch(72% 0.13 155);        /* vert terminal */
+    --blue:      oklch(60% 0.10 250);        /* bleu électrique discret */
+    --danger:    oklch(58% 0.16 25);
+
+    --font-display: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', system-ui, sans-serif;
+    --font-body:    -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Text', system-ui, sans-serif;
+    --font-mono:    'JetBrains Mono', 'SF Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* grille subtile type piano-roll / session view */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+  }
+
+  img { max-width: 100%; display: block; }
+
+  /* =========================================================
+     UTILITAIRES
+     ========================================================= */
+  .container { width: min(1200px, 92vw); margin-inline: auto; position: relative; z-index: 1; }
+  .section { padding: 110px 0; position: relative; z-index: 1; }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 3.2vw, 48px);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .section-sub { color: var(--muted); font-size: 17px; max-width: 58ch; margin-bottom: 52px; line-height: 1.55; }
+  .kicker {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.22em; color: var(--green); margin-bottom: 16px; display: inline-block;
+  }
+
+  /* =========================================================
+     COMPOSANTS REUTILISABLES .mt-
+     ========================================================= */
+  .mt-button {
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--fg);
+    padding: 12px 22px; border-radius: var(--radius-md);
+    font-family: var(--font-body); font-size: 14px; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    transition: transform .12s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .mt-button:hover { transform: translateY(-1px); background: var(--raised); border-color: var(--muted); }
+  .mt-button-primary {
+    background: var(--orange); color: oklch(16% 0.02 50); border-color: var(--orange); font-weight: 700;
+  }
+  .mt-button-primary:hover { background: oklch(60% 0.17 50); border-color: oklch(60% 0.17 50); box-shadow: 0 6px 24px rgba(230,100,40,0.25); }
+
+  .mt-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 26px; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .mt-card:hover { transform: translateY(-2px); border-color: var(--muted); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+
+  .mt-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border);
+    color: var(--muted); background: rgba(255,255,255,0.03);
+  }
+  .mt-badge-orange { color: var(--orange); border-color: rgba(230,120,60,0.25); background: rgba(230,120,60,0.08); }
+  .mt-badge-green  { color: var(--green);  border-color: rgba(100,200,120,0.25); background: rgba(100,200,120,0.08); }
+  .mt-badge-blue   { color: var(--blue);   border-color: rgba(80,140,255,0.25); background: rgba(80,140,255,0.08); }
+
+  .mt-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), var(--green));
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 13px; color: #111; flex-shrink: 0;
+  }
+
+  .mt-progress-ring {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: conic-gradient(var(--orange) calc(var(--p,0)*1%), var(--border) 0);
+    display: grid; place-items: center; position: relative; flex-shrink: 0;
+  }
+  .mt-progress-ring::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--surface); }
+  .mt-progress-ring span { position: relative; font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
+
+  .mt-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .mt-table th { text-align: left; padding: 12px 14px; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .mt-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  .mt-table tr:last-child td { border-bottom: 0; }
+
+  /* =========================================================
+     NAV
+     ========================================================= */
+  .site-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(12,12,18,0.8);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-nav .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-logo {
+    font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.04em;
+    display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg);
+  }
+  .nav-logo .logo-mark {
+    width: 26px; height: 26px; border-radius: var(--radius-sm);
+    background: var(--orange); display: grid; place-items: center; color: #0a0a0f; font-weight: 900; font-size: 13px;
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; transition: color .2s; }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-cta { display: flex; gap: 10px; }
+
+  /* =========================================================
+     HERO
+     ========================================================= */
+  .hero { padding: 130px 0 90px; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+  .hero h1 {
+    font-family: var(--font-display); font-size: clamp(42px, 5.2vw, 76px);
+    line-height: 1.0; letter-spacing: -0.035em; margin-bottom: 24px; font-weight: 800;
+  }
+  .hero h1 em { color: var(--orange); font-style: normal; }
+  .hero p { color: var(--muted); font-size: 18px; max-width: 52ch; margin-bottom: 34px; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .hero-visual {
+    position: relative; aspect-ratio: 4/3; border-radius: var(--radius-lg);
+    background: linear-gradient(145deg, var(--surface), rgba(255,255,255,0.02));
+    border: 1px solid var(--border); overflow: hidden; display: grid; place-items: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  }
+
+  /* waveform à 3 couleurs (Ableton / terminal / bleu) */
+  .waveform { display: flex; align-items: flex-end; gap: 5px; height: 130px; padding: 0 40px; }
+  .waveform span {
+    width: 5px; border-radius: 999px;
+    animation: wave 1.1s ease-in-out infinite; opacity: .9;
+  }
+  .waveform span:nth-child(3n+1) { background: var(--orange); }
+  .waveform span:nth-child(3n+2) { background: var(--green); }
+  .waveform span:nth-child(3n+3) { background: var(--blue); }
+  .waveform span:nth-child(1) { height: 35%; animation-delay: 0s; }
+  .waveform span:nth-child(2) { height: 70%; animation-delay: .08s; }
+  .waveform span:nth-child(3) { height: 50%; animation-delay: .16s; }
+  .waveform span:nth-child(4) { height: 90%; animation-delay: .04s; }
+  .waveform span:nth-child(5) { height: 60%; animation-delay: .12s; }
+  .waveform span:nth-child(6) { height: 45%; animation-delay: .20s; }
+  .waveform span:nth-child(7) { height: 80%; animation-delay: .06s; }
+  .waveform span:nth-child(8) { height: 55%; animation-delay: .14s; }
+  .waveform span:nth-child(9) { height: 100%; animation-delay: .10s; }
+  .waveform span:nth-child(10){ height: 40%; animation-delay: .18s; }
+  @keyframes wave { 0%,100%{transform:scaleY(.92)} 50%{transform:scaleY(1.06)} }
+
+  /* =========================================================
+     COURSES — cartes avec couleurs de piste (style Ableton)
+     ========================================================= */
+  .courses-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .course-card .mt-card { height: 100%; display: flex; flex-direction: column; }
+  .course-header { display: flex; align-items: start; justify-content: space-between; margin-bottom: 16px; }
+  .course-icon {
+    width: 40px; height: 40px; border-radius: var(--radius-sm); display: grid; place-items: center;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-size: 16px;
+  }
+  .course-card h3 { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .course-card p { color: var(--muted); font-size: 13px; line-height: 1.55; flex: 1; }
+  .course-meta { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* couleurs de bordure haut par domaine */
+  .course-card .mt-card { border-top: 3px solid var(--border); }
+  .course-card:nth-child(1) .mt-card { border-top-color: var(--green); }
+  .course-card:nth-child(2) .mt-card { border-top-color: var(--orange); }
+  .course-card:nth-child(3) .mt-card { border-top-color: var(--blue); }
+  .course-card:nth-child(4) .mt-card { border-top-color: var(--fg); }
+
+  /* =========================================================
+     GOOGLE CLASSROOM
+     ========================================================= */
+  .google-section { background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.015) 50%, rgba(255,255,255,0) 100%); }
+  .classroom-row { display: grid; grid-template-columns: 1fr 1.05fr; gap: 56px; align-items: center; }
+  .classroom-copy p { color: var(--muted); font-size: 16px; max-width: 54ch; margin: 14px 0 26px; line-height: 1.6; }
+  .classroom-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 26px; display: flex; flex-direction: column; gap: 14px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .classroom-card .cls-header { display: flex; align-items: center; gap: 12px; }
+  .classroom-card .cls-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .classroom-card .cls-title { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+  .classroom-card .cls-meta { color: var(--muted); font-size: 12px; font-family: var(--font-mono); }
+  .assignment-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  }
+  .assignment-row .a-name { font-size: 13px; font-weight: 500; }
+  .assignment-row .a-due { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+
+  /* =========================================================
+     DASHBOARDS PREVIEWS — style DAW / session view
+     ========================================================= */
+  .dash-preview { background: oklch(14% 0.02 280); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .dash-frame {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    overflow: hidden; display: grid; grid-template-columns: 210px 1fr; min-height: 540px;
+  }
+  .dash-sidebar {
+    background: var(--surface); border-right: 1px solid var(--border);
+    padding: 22px 18px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .dash-sidebar .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: var(--radius-sm);
+    font-size: 13px; color: var(--muted); text-decoration: none; transition: .15s;
+  }
+  .dash-sidebar .nav-item:hover, .dash-sidebar .nav-item.active { background: rgba(255,255,255,0.04); color: var(--fg); }
+  .dash-sidebar .nav-item.active { box-shadow: inset 2px 0 0 var(--orange); }
+  .dash-sidebar .sidebar-foot { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+
+  .dash-main { padding: 26px 30px; display: flex; flex-direction: column; gap: 22px; }
+  .dash-main-header { display: flex; align-items: center; justify-content: space-between; }
+  .dash-main-header h2 { font-family: var(--font-display); font-size: 20px; letter-spacing: -0.02em; }
+  .dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .dash-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; }
+  .dash-stat .ds-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .12em; }
+  .dash-stat .ds-value { font-size: 26px; font-weight: 800; letter-spacing: -0.03em; }
+  .dash-stat .ds-change { font-size: 11px; color: var(--green); margin-top: 6px; font-family: var(--font-mono); }
+
+  /* clip slots style Ableton */
+  .clip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .clip-slot {
+    aspect-ratio: 4/3; border-radius: var(--radius-sm); border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02); display: flex; flex-direction: column; justify-content: space-between;
+    padding: 10px; font-size: 11px; font-family: var(--font-mono); transition: .15s;
+  }
+  .clip-slot:hover { background: rgba(255,255,255,0.04); border-color: var(--muted); }
+  .clip-slot .slot-name { font-weight: 600; font-family: var(--font-body); font-size: 12px; }
+  .clip-slot .slot-time { color: var(--muted); }
+  .clip-slot.orange { border-left: 3px solid var(--orange); background: rgba(230,120,60,0.06); }
+  .clip-slot.green  { border-left: 3px solid var(--green);  background: rgba(100,200,120,0.06); }
+  .clip-slot.blue   { border-left: 3px solid var(--blue);   background: rgba(80,140,255,0.06); }
+  .clip-slot.empty  { opacity: .5; }
+
+  /* bar chart */
+  .bar-chart { display: flex; align-items: flex-end; gap: 10px; height: 130px; }
+  .bar-chart .bar {
+    flex: 1; border-radius: 4px 4px 0 0;
+    background: linear-gradient(to top, var(--orange), oklch(55% 0.14 50));
+    opacity: .85; transition: .2s; min-height: 8px;
+  }
+  .bar-chart .bar:hover { opacity: 1; }
+  .bar-chart .bar:nth-child(1) { height: 55%; }
+  .bar-chart .bar:nth-child(2) { height: 72%; }
+  .bar-chart .bar:nth-child(3) { height: 48%; }
+  .bar-chart .bar:nth-child(4) { height: 90%; }
+  .bar-chart .bar:nth-child(5) { height: 66%; }
+  .bar-chart .bar:nth-child(6) { height: 78%; }
+  .bar-chart .bar:nth-child(7) { height: 60%; }
+  .bar-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 10px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; }
+
+  /* =========================================================
+     FOOTER
+     ========================================================= */
+  .site-footer { padding: 60px 0 40px; color: var(--muted); font-size: 13px; }
+  .site-footer .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .site-footer a { color: var(--muted); text-decoration: none; transition: color .2s; }
+  .site-footer a:hover { color: var(--fg); }
+
+  /* =========================================================
+     RESPONSIVE
+     ========================================================= */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .courses-grid { grid-template-columns: repeat(2, 1fr); }
+    .classroom-row { grid-template-columns: 1fr; }
+    .dash-frame { grid-template-columns: 1fr; }
+    .dash-sidebar { display: none; }
+    .dash-stats { grid-template-columns: repeat(2, 1fr); }
+    .clip-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .courses-grid { grid-template-columns: 1fr; }
+    .dash-stats { grid-template-columns: 1fr; }
+    .section { padding: 72px 0; }
+    .hero { padding: 90px 0 60px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <span class="logo-mark">M</span>
+        METABLETON
+      </a>
+      <ul class="nav-links">
+        <li><a href="#cours">Cours</a></li>
+        <li><a href="#classroom">Classroom</a></li>
+        <li><a href="#eleve">Élève</a></li>
+        <li><a href="#prof">Professeur</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#" class="mt-button">Se connecter</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="kicker">École en ligne — MAO & Production</span>
+        <h1>Maîtrisez la <em>production musicale</em>, de zéro à studio.</h1>
+        <p>Cours animés par des professionnels : Ableton Live, synthèse sonore, mixage et mastering. Un environnement inspiré des DAW modernes, conçu pour apprendre vite.</p>
+        <div class="hero-actions">
+          <a href="#cours" class="mt-button mt-button-primary">Explorer les cours</a>
+          <a href="#classroom" class="mt-button">Intégration Google Classroom</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="waveform">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- COURSES -->
+  <section id="cours" class="section">
+    <div class="container">
+      <span class="kicker">Programme</span>
+      <h2 class="section-title">Cours certifiants par domaine</h2>
+      <p class="section-sub">Quatre parcours progressifs pour structurer votre apprentissage, du premier beat au morceau finalisé.</p>
+      <div class="courses-grid">
+        <article class="course-card">
+          <div class="mt-card">
+            <div class="course-header">
+              <div class="course-icon">◈</div>
+              <span class="mt-badge mt-badge-green">Débutant</span>
+            </div>
+            <h3>Initiation MAO</h3>
+            <p>Comprendre les bases de la production : interface DAW, routing audio, export et organisation de projet.</p>
+            <div class="course-meta">
+              <span class="mt-badge">12 leçons</span>
+              <span class="mt-badge">4h30</span>
+            </div>
+          </div>
+        </article>
+        <article class="course-card">
+          <div class="mt-card">
+            <div class="course-header">
+              <div class="course-icon">▣</div>
+              <span class="mt-badge mt-badge-orange">Intermédiaire</span>
+            </div>
+            <h3>Ableton Live</h3>
+            <p>Session vs Arrangement, clips MIDI, effets racks, mapping clavier et préparation de live set.</p>
+            <div class="course-meta">
+              <span class="mt-badge">20 leçons</span>
+              <span class="mt-badge">8h</span>
+            </div>
+          </div>
+        </article>
+        <article class="course-card">
+          <div class="mt-card">
+            <div class="course-header">
+              <div class="course-icon">◎</div>
+              <span class="mt-badge mt-badge-blue">Avancé</span>
+            </div>
+            <h3>Synthèse sonore</h3>
+            <p>Oscillateurs, filtres, enveloppes ADSR, FM et modulations créatives avec Wavetable et Operator.</p>
+            <div class="course-meta">
+              <span class="mt-badge">16 leçons</span>
+              <span class="mt-badge">6h15</span>
+            </div>
+          </div>
+        </article>
+        <article class="course-card">
+          <div class="mt-card">
+            <div class="course-header">
+              <div class="course-icon">◉</div>
+              <span class="mt-badge">Expert</span>
+            </div>
+            <h3>Production & Mix</h3>
+            <p>Équilibre spectral, compression, réverbération, saturation et préparation mastering pour plateformes.</p>
+            <div class="course-meta">
+              <span class="mt-badge">24 leçons</span>
+              <span class="mt-badge">10h</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOOGLE CLASSROOM -->
+  <section id="classroom" class="section google-section">
+    <div class="container">
+      <div class="classroom-row">
+        <div class="classroom-copy">
+          <span class="kicker">Connexion</span>
+          <h2 class="section-title">Google Classroom intégré</h2>
+          <p>Connectez votre compte Google pour synchroniser devoirs, dates de rendu et notifications directement dans METABLETON. Les professeurs publient, les élèves remettent, sans friction.</p>
+          <a href="#" class="mt-button mt-button-primary">Configurer l'intégration</a>
+        </div>
+        <div class="classroom-card">
+          <div class="cls-header">
+            <div class="cls-dot"></div>
+            <div>
+              <div class="cls-title">Cours connecté : Ableton Live Avancé</div>
+              <div class="cls-meta">Dernière sync : à l'instant · Prof : L. Martin</div>
+            </div>
+          </div>
+          <div class="assignment-row">
+            <div class="a-name">Projet — Drum pattern polymètre</div>
+            <div class="a-due">Pour demain 23:59</div>
+          </div>
+          <div class="assignment-row">
+            <div class="a-name">Rendu — Session de synthèse Wavetable</div>
+            <div class="a-due">Dans 3 jours</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDENT DASHBOARD PREVIEW -->
+  <section id="eleve" class="section dash-preview">
+    <div class="container">
+      <span class="kicker">Aperçu — Élève</span>
+      <h2 class="section-title">Dashboard Élève</h2>
+      <p class="section-sub">Suivi de progression, prochaines séances et devoirs en cours dans une interface claire inspirée des outils de production.</p>
+
+      <div class="dash-frame">
+        <aside class="dash-sidebar">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <div class="mt-avatar">AL</div>
+            <div><div style="font-weight:700;font-size:13px;">Alex L.</div><div style="font-size:11px;color:var(--muted);">Élève</div></div>
+          </div>
+          <a class="nav-item active" href="#">Tableau de bord</a>
+          <a class="nav-item" href="#">Mes cours</a>
+          <a class="nav-item" href="#">Agenda</a>
+          <a class="nav-item" href="#">Devoirs</a>
+          <a class="nav-item" href="#">Progression</a>
+          <div class="sidebar-foot">METABLETON v0.4</div>
+        </aside>
+
+        <div class="dash-main">
+          <div class="dash-main-header">
+            <h2>Bonjour, Alex</h2>
+            <div class="mt-badge mt-badge-orange">Niveau 4 — Intermédiaire</div>
+          </div>
+          <div class="dash-stats">
+            <div class="dash-stat">
+              <div class="ds-label">Cours actifs</div>
+              <div class="ds-value">3</div>
+              <div class="ds-change">+1 ce mois</div>
+            </div>
+            <div class="dash-stat">
+              <div class="ds-label">Heures de pratique</div>
+              <div class="ds-value">48h</div>
+              <div class="ds-change">+12h cette semaine</div>
+            </div>
+            <div class="dash-stat">
+              <div class="ds-label">Progression moyenne</div>
+              <div class="ds-value">72%</div>
+              <div class="ds-change">+5% vs janvier</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="mt-card" style="padding:20px;">
+              <div style="font-weight:700;margin-bottom:14px;font-size:15px;">Cours en cours</div>
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <div class="mt-progress-ring" style="--p:78"><span>78%</span></div>
+                  <div><div style="font-weight:600;font-size:14px;">Ableton Live</div><div style="font-size:12px;color:var(--muted);">Leçon 16/20 · Opérateurs FX</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <div class="mt-progress-ring" style="--p:45"><span>45%</span></div>
+                  <div><div style="font-weight:600;font-size:14px;">Synthèse sonore</div><div style="font-size:12px;color:var(--muted);">Leçon 7/16 · FM Basics</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-card" style="padding:20px;">
+              <div style="font-weight:700;margin-bottom:14px;font-size:15px;">Prochaines sessions (Agenda)</div>
+              <div class="clip-grid">
+                <div class="clip-slot orange"><div class="slot-name">Correction projet</div><div class="slot-time">Mer 14h</div></div>
+                <div class="clip-slot green"><div class="slot-name">Q&A Mix</div><div class="slot-time">Ven 10h</div></div>
+                <div class="clip-slot empty"><div class="slot-name">—</div><div class="slot-time">Lun</div></div>
+                <div class="clip-slot empty"><div class="slot-name">—</div><div class="slot-time">Mar</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEACHER DASHBOARD PREVIEW -->
+  <section id="prof" class="section dash-preview">
+    <div class="container">
+      <span class="kicker">Aperçu — Professeur</span>
+      <h2 class="section-title">Dashboard Professeur</h2>
+      <p class="section-sub">Gestion des classes, suivi des rendus et pilotage pédagogique dans une vue unique.</p>
+
+      <div class="dash-frame">
+        <aside class="dash-sidebar">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <div class="mt-avatar">LM</div>
+            <div><div style="font-weight:700;font-size:13px;">L. Martin</div><div style="font-size:11px;color:var(--muted);">Professeur</div></div>
+          </div>
+          <a class="nav-item active" href="#">Vue d'ensemble</a>
+          <a class="nav-item" href="#">Mes classes</a>
+          <a class="nav-item" href="#">Élèves</a>
+          <a class="nav-item" href="#">Devoirs</a>
+          <a class="nav-item" href="#">Analytique</a>
+          <div class="sidebar-foot">METABLETON v0.4</div>
+        </aside>
+
+        <div class="dash-main">
+          <div class="dash-main-header">
+            <h2>Tableau de bord</h2>
+            <a href="#" class="mt-button mt-button-primary" style="padding:8px 14px;font-size:12px;">+ Nouveau devoir</a>
+          </div>
+          <div class="dash-stats">
+            <div class="dash-stat">
+              <div class="ds-label">Élèves actifs</div>
+              <div class="ds-value">124</div>
+              <div class="ds-change">+8 cette semaine</div>
+            </div>
+            <div class="dash-stat">
+              <div class="ds-label">Cours publiés</div>
+              <div class="ds-value">6</div>
+              <div class="ds-change">2 en brouillon</div>
+            </div>
+            <div class="dash-stat">
+              <div class="ds-label">Taux de complétion</div>
+              <div class="ds-value">81%</div>
+              <div class="ds-change">+3% vs septembre</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:16px;">
+            <div class="mt-card" style="padding:20px;">
+              <div style="font-weight:700;margin-bottom:14px;font-size:15px;">Activité hebdomadaire</div>
+              <div class="bar-chart" aria-hidden="true">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              </div>
+              <div class="bar-labels">
+                <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+              </div>
+            </div>
+            <div class="mt-card" style="padding:0;overflow:hidden;">
+              <table class="mt-table">
+                <thead><tr><th>Élève</th><th>Devoir</th><th>Statut</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="display:flex;align-items:center;gap:10px;">
+                      <div class="mt-avatar" style="width:24px;height:24px;font-size:10px;">AL</div>
+                      <span style="font-size:13px;">Alex L.</span>
+                    </td>
+                    <td style="font-size:13px;">Drum pattern polymètre</td>
+                    <td><span class="mt-badge mt-badge-green">Rendu</span></td>
+                  </tr>
+                  <tr>
+                    <td style="display:flex;align-items:center;gap:10px;">
+                      <div class="mt-avatar" style="width:24px;height:24px;font-size:10px;">SM</div>
+                      <span style="font-size:13px;">Sam M.</span>
+                    </td>
+                    <td style="font-size:13px;">Session Wavetable</td>
+                    <td><span class="mt-badge mt-badge-orange">En cours</span></td>
+                  </tr>
+                  <tr>
+                    <td style="display:flex;align-items:center;gap:10px;">
+                      <div class="mt-avatar" style="width:24px;height:24px;font-size:10px;">JD</div>
+                      <span style="font-size:13px;">Jules D.</span>
+                    </td>
+                    <td style="font-size:13px;">Mix critique</td>
+                    <td><span class="mt-badge" style="color:var(--danger);border-color:var(--danger);">Non rendu</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="logo-mark" style="display:inline-grid;">M</span>
+        <strong style="color:var(--fg);font-weight:800;letter-spacing:-0.02em;">METABLETON</strong>
+      </div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
