@@ -24,7 +24,7 @@ export default function Header() {
     <header className="border-b border-white/10 bg-gray-950/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link to="/" className="text-lg font-bold tracking-tight text-white">
-          Metableton<span className="text-emerald-400">Ecole</span>
+          Metableton<span className="color: var(--mt-cyan)">Ecole</span>
         </Link>
 
         <nav className="flex items-center gap-6 text-sm">
