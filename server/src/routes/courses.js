@@ -242,12 +242,6 @@ router.put(
         });
       }
 
-      // Debug log: user role and course ownership
-      console.error(
-        `[classroom-link] user.role=${req.user.role}, userId=${req.user.userId}, ` +
-        `course.teacher_id=${existing.teacher_id}, isOwner=${existing.teacher_id === req.user.userId}`
-      );
-
       // 2. Ownership check: teacher must own the course, admin can edit any
       if (req.user.role !== 'admin' && existing.teacher_id !== req.user.userId) {
         return res.status(403).json({
