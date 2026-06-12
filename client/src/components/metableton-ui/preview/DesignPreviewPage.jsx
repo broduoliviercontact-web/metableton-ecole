@@ -2,12 +2,16 @@
    - importe tokens.css (uniquement ici, jamais dans main.jsx)
    - encapsule tout dans <div className="metableton-theme"> pour scoper
    - sous-router interne : /home, /dashboard/student, /dashboard/teacher
+   - la DashboardPreviewToolbar est rendue au-dessus des routes dashboard,
+     PAS en position fixed (corrige le chevauchement avec "+ Nouveau devoir"
+     et "Niveau 4 — Intermédiaire").
 */
 import React from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import HomePreview from '../home/HomePreview.jsx';
 import StudentDashboardPreview from '../dashboards/StudentDashboardPreview.jsx';
 import TeacherDashboardPreview from '../dashboards/TeacherDashboardPreview.jsx';
+import DashboardPreviewToolbar from '../dashboards/parts/DashboardPreviewToolbar.jsx';
 import MetabletonButton from '../primitives/MetabletonButton.jsx';
 import '../tokens.css';
 
@@ -26,6 +30,7 @@ function PreviewIndex() {
         margin: '0 auto',
       }}
     >
+      <PreviewHeader />
       <span
         style={{
           fontFamily: 'var(--mt-font-mono)',
@@ -111,6 +116,97 @@ function PreviewIndex() {
   );
 }
 
+function PreviewHeader() {
+  return (
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingBottom: '12px',
+        borderBottom: '1px solid var(--mt-border)',
+      }}
+    >
+      <Link
+        to="/"
+        style={{
+          color: 'var(--mt-fg)',
+          fontFamily: 'var(--mt-font-mono)',
+          fontSize: '11px',
+          textDecoration: 'none',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+        }}
+      >
+        ← retour app
+      </Link>
+      <span
+        style={{
+          color: 'var(--mt-muted)',
+          fontFamily: 'var(--mt-font-mono)',
+          fontSize: '10px',
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+        }}
+      >
+        /design-preview
+      </span>
+    </div>
+  );
+}
+
+function HomePreviewWithHeader() {
+  return (
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '24px 0',
+      }}
+    >
+      <div style={{ width: 'min(1280px, 92vw)', margin: '0 auto 16px' }}>
+        <PreviewHeader />
+      </div>
+      <HomePreview />
+    </div>
+  );
+}
+
+function StudentDashboardWithToolbar() {
+  return (
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '32px 0',
+      }}
+    >
+      <div style={{ width: 'min(1200px, 92vw)', margin: '0 auto' }}>
+        <DashboardPreviewToolbar label="Student dashboard" />
+        <StudentDashboardPreview />
+      </div>
+    </div>
+  );
+}
+
+function TeacherDashboardWithToolbar() {
+  return (
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '32px 0',
+      }}
+    >
+      <div style={{ width: 'min(1200px, 92vw)', margin: '0 auto' }}>
+        <DashboardPreviewToolbar label="Teacher dashboard" />
+        <TeacherDashboardPreview />
+      </div>
+    </div>
+  );
+}
+
 function NotFoundInPreview() {
   const location = useLocation();
   return (
@@ -124,6 +220,7 @@ function NotFoundInPreview() {
         color: 'var(--mt-fg)',
       }}
     >
+      <PreviewHeader />
       <span
         style={{
           fontFamily: 'var(--mt-font-mono)',
@@ -131,6 +228,8 @@ function NotFoundInPreview() {
           textTransform: 'uppercase',
           letterSpacing: '0.22em',
           color: 'var(--mt-green)',
+          display: 'inline-block',
+          marginTop: '24px',
         }}
       >
         Preview — 404
@@ -156,48 +255,15 @@ function NotFoundInPreview() {
   );
 }
 
-function BackToProdLink() {
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: '14px',
-        right: '14px',
-        zIndex: 100,
-        background: 'rgba(0, 0, 0, 0.55)',
-        backdropFilter: 'blur(8px)',
-        border: '1px solid var(--mt-border)',
-        borderRadius: 'var(--mt-radius-sm)',
-        padding: '6px 10px',
-      }}
-    >
-      <Link
-        to="/"
-        style={{
-          color: 'var(--mt-fg)',
-          fontFamily: 'var(--mt-font-mono)',
-          fontSize: '11px',
-          textDecoration: 'none',
-          letterSpacing: '0.08em',
-        }}
-      >
-        ← retour app
-      </Link>
-    </div>
-  );
-}
-
 export default function DesignPreviewPage() {
   return (
     <div className="metableton-theme">
-      <BackToProdLink />
       <Routes>
         <Route index element={<PreviewIndex />} />
-        <Route path="home" element={<HomePreview />} />
-        <Route path="dashboard/student" element={<StudentDashboardPreview />} />
-        <Route path="dashboard/teacher" element={<TeacherDashboardPreview />} />
+        <Route path="home" element={<HomePreviewWithHeader />} />
+        <Route path="dashboard/student" element={<StudentDashboardWithToolbar />} />
+        <Route path="dashboard/teacher" element={<TeacherDashboardWithToolbar />} />
         <Route path="*" element={<NotFoundInPreview />} />
-        {/* Pas de fallback prod, on reste dans le sandbox */}
         <Route path="prod" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
