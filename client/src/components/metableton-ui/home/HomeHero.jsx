@@ -2,7 +2,7 @@
 import React from 'react';
 import MetabletonButton from '../primitives/MetabletonButton.jsx';
 
-export default function HomeHero() {
+export default function HomeHero({ ctaPrimary, ctaSecondary }) {
   return (
     <div className="metableton-home-hero">
       <span
@@ -47,12 +47,16 @@ export default function HomeHero() {
         pensée comme un DAW.
       </p>
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-        <MetabletonButton variant="primary" as="a" href="#">
-          Commencer
-        </MetabletonButton>
-        <MetabletonButton as="a" href="#">
-          Voir le programme
-        </MetabletonButton>
+        {ctaPrimary ?? (
+          <MetabletonButton variant="primary" as="a" href="#">
+            Commencer
+          </MetabletonButton>
+        )}
+        {ctaSecondary ?? (
+          <MetabletonButton as="a" href="#">
+            Voir le programme
+          </MetabletonButton>
+        )}
       </div>
     </div>
   );

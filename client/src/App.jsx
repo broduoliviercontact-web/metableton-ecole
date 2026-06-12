@@ -13,6 +13,7 @@ import AdminDashboardPage from './pages/dashboard/AdminDashboardPage.jsx';
 import AdminCoursesPage from './pages/dashboard/AdminCoursesPage.jsx';
 import CourseFormPage from './pages/dashboard/CourseFormPage.jsx';
 import UserProfilePage from './pages/dashboard/UserProfilePage.jsx';
+import HomePageV2 from './pages/HomePageV2.jsx';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
       {/* Public pages — Header + Footer */}
       <Route element={<PublicLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="home-v2" element={<HomePageV2 />} />
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="catalog/:courseId" element={<CourseDetailPage />} />
       </Route>

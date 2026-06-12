@@ -55,6 +55,7 @@
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   position: relative;
+  overflow: hidden;
   isolation: isolate;
 }
 
@@ -67,7 +68,7 @@
 /* Grille piano-roll en fond, scopée */
 .metableton-theme::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
@@ -82,7 +83,7 @@
 /* Halo cyan très discret centré haut */
 .metableton-theme::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
