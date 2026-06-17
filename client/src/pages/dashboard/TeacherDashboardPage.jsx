@@ -117,7 +117,7 @@ export default function TeacherDashboardPage() {
   // ── Loading state ───────────────────────────────────────────────
   if (isLoading) {
     return (
-      <div>
+      <div aria-busy="true" aria-live="polite">
         <HeaderActions />
         <LoadingSpinner size="lg" className="py-12" />
       </div>
@@ -127,7 +127,7 @@ export default function TeacherDashboardPage() {
   // ── Error state ──────────────────────────────────────────────────
   if (error) {
     return (
-      <div>
+      <div role="alert" aria-live="assertive">
         <HeaderActions />
         <ErrorMessage
           title="Impossible de charger vos cours"
@@ -248,7 +248,7 @@ function PendingEnrollmentsSection({
   rowErrors,
 }) {
   return (
-    <div className="mb-10">
+    <div className="mb-10" aria-busy={isLoading} aria-live="polite">
       <h2 className="mb-4 text-lg font-semibold text-white">
         Demandes d&apos;inscription
       </h2>

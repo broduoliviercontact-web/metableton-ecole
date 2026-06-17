@@ -260,10 +260,19 @@ function EnrollmentCTA({
   successMessage,
   onRequest,
 }) {
+  // Loading state container
+  if (isAuthLoading || isEnrollmentsLoading) {
+    return (
+      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center" aria-busy="true" aria-live="polite">
+        <LoadingSpinner size="md" className="py-2" />
+      </div>
+    );
+  }
+
   // 1. Auth is still loading
   if (isAuthLoading) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center">
+      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center" aria-busy="true" aria-live="polite">
         <LoadingSpinner size="md" className="py-2" />
       </div>
     );
@@ -278,7 +287,7 @@ function EnrollmentCTA({
           Connectez-vous avec votre compte Google pour demander
           l&apos;inscription à ce cours.
         </p>
-        <Button onClick={login}>Se connecter avec Google</Button>
+        <Button onClick={login} aria-label="Se connecter avec Google pour accéder à ce cours">Se connecter avec Google</Button>
       </div>
     );
   }
@@ -286,7 +295,7 @@ function EnrollmentCTA({
   // 3. Logged in as teacher or admin — they don't enroll as students
   if (isTeacher || isAdmin) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center">
+      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center" aria-live="polite">
         <h2 className="mb-2 font-semibold text-white">
           Vous êtes {isAdmin ? 'administrateur' : 'enseignant'}
         </h2>
@@ -297,7 +306,7 @@ function EnrollmentCTA({
         </p>
         <div className="mt-4">
           <Link to={isAdmin ? '/dashboard/admin' : '/dashboard/teacher'}>
-            <Button variant="secondary" size="sm">
+            <Button variant="secondary" size="sm" aria-label="Accéder à mon tableau de bord">
               Mon tableau de bord
             </Button>
           </Link>
@@ -309,7 +318,7 @@ function EnrollmentCTA({
   // 4. Logged in as student — load enrollment state
   if (isEnrollmentsLoading) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center">
+      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center" aria-busy="true" aria-live="polite">
         <LoadingSpinner size="md" className="py-2" />
       </div>
     );
@@ -318,7 +327,7 @@ function EnrollmentCTA({
   // 4a. Already approved — show success state
   if (currentEnrollment?.status === 'approved') {
     return (
-      <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center">
+      <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center" aria-live="polite">
         <div className="mb-2 text-2xl">✅</div>
         <h2 className="mb-2 font-semibold text-white">Inscription approuvée</h2>
         <p className="text-sm text-gray-300">
@@ -327,7 +336,7 @@ function EnrollmentCTA({
         </p>
         <div className="mt-4">
           <Link to="/dashboard">
-            <Button size="sm">Mon tableau de bord</Button>
+            <Button size="sm" aria-label="Accéder à mon tableau de bord">Mon tableau de bord</Button>
           </Link>
         </div>
       </div>
@@ -337,7 +346,7 @@ function EnrollmentCTA({
   // 4b. Pending — show waiting state
   if (currentEnrollment?.status === 'pending') {
     return (
-      <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-6 text-center">
+      <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-6 text-center" aria-live="polite">
         <div className="mb-2 text-2xl">⏳</div>
         <h2 className="mb-2 font-semibold text-white">Demande en cours</h2>
         <p className="text-sm text-gray-300">
@@ -350,7 +359,7 @@ function EnrollmentCTA({
   // 4c. Rejected — show retry option
   if (currentEnrollment?.status === 'rejected') {
     return (
-      <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center">
+      <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center" aria-live="polite">
         <div className="mb-2 text-2xl">⚠️</div>
         <h2 className="mb-2 font-semibold text-white">Demande refusée</h2>
         <p className="mb-4 text-sm text-gray-300">
@@ -365,7 +374,7 @@ function EnrollmentCTA({
         {retryMessage && (
           <p className="mb-3 text-sm text-emerald-400">{retryMessage}</p>
         )}
-        <Button onClick={onRequest} disabled={isRequesting}>
+        <Button onClick={onRequest} disabled={isRequesting} aria-label="Soumettre une nouvelle demande d'inscription">
           {isRequesting ? 'Envoi en cours…' : 'Nouvelle demande'}
         </Button>
       </div>
@@ -374,7 +383,7 @@ function EnrollmentCTA({
 
   // 4d. No enrollment yet — show request button
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center">
+    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center" aria-live="polite">
       <h2 className="mb-2 font-semibold text-white">Rejoignez ce cours</h2>
       <p className="mb-4 text-sm text-gray-400">
         Faites votre demande d&apos;inscription. L&apos;enseignant examinera votre
@@ -391,7 +400,7 @@ function EnrollmentCTA({
           message={requestError.message || 'Une erreur est survenue. Veuillez réessayer.'}
         />
       )}
-      <Button onClick={onRequest} disabled={isRequesting}>
+      <Button onClick={onRequest} disabled={isRequesting} aria-label="Demander l'inscription à ce cours">
         {isRequesting ? 'Envoi en cours…' : 'Demander l\'inscription'}
       </Button>
     </div>

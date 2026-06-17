@@ -32,7 +32,7 @@ export default function CatalogPage() {
   // ── Loading state ───────────────────────────────────────────────
   if (isLoading) {
     return (
-      <div className="px-4 py-16">
+      <div className="px-4 py-16" aria-busy="true" aria-live="polite">
         <h1 className="mb-8 text-center text-3xl font-bold text-white">
           Catalogue des cours
         </h1>
@@ -44,7 +44,7 @@ export default function CatalogPage() {
   // ── Error state ─────────────────────────────────────────────────
   if (error) {
     return (
-      <div className="px-4 py-16">
+      <div className="px-4 py-16" role="alert" aria-live="assertive">
         <h1 className="mb-8 text-center text-3xl font-bold text-white">
           Catalogue des cours
         </h1>
@@ -69,7 +69,7 @@ export default function CatalogPage() {
           title="Le catalogue est en préparation"
           description="Nos premiers parcours Metableton arrivent bientôt. Revenez prochainement ou connectez-vous pour préparer votre espace."
           action={
-            <Link to="/" className="mt-4 inline-block">
+            <Link to="/" className="mt-4 inline-block" aria-label="Retour à la page d'accueil">
               <Button variant="outline" size="sm">
                 Retour à l&apos;accueil
               </Button>
@@ -95,12 +95,14 @@ export default function CatalogPage() {
       </div>
 
       {/* ── Grid ────────────────────────────────────────────────── */}
-      <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list" aria-label="Liste des cours disponibles">
         {courses.map((course) => (
           <Link
             key={course.id}
             to={`/catalog/${course.id}`}
             className="group flex flex-col rounded-xl border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-emerald-500/30 hover:bg-white/[0.06]"
+            aria-label={`Voir les détails du cours ${course.title}`}
+            role="listitem"
           >
             {/* Skill badge */}
             <div className="mb-4">

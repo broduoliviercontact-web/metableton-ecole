@@ -77,12 +77,12 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link to="/catalog">
+            <Link to="/catalog" aria-label="Voir le catalogue complet des cours">
               <Button size="lg">
                 Voir les cours
               </Button>
             </Link>
-            <a href="/api/auth/google">
+            <a href="/api/auth/google" aria-label="Se connecter avec votre compte Google">
               <Button variant="secondary" size="lg">
                 Se connecter avec Google
               </Button>
@@ -135,6 +135,7 @@ export default function HomePage() {
                 key={title}
                 to="/catalog"
                 className="group rounded-xl border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-emerald-500/30 hover:bg-white/[0.06]"
+                aria-label={`Voir le cours ${title}`}
               >
                 <div className="mb-4">
                   <Badge variant={level}>{levelLabel}</Badge>
@@ -150,7 +151,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-10 text-center">
-            <Link to="/catalog">
+            <Link to="/catalog" aria-label="Voir le catalogue complet">
               <Button variant="outline" size="sm">
                 Voir le catalogue complet
               </Button>

@@ -134,6 +134,7 @@ export default function AdminDashboardPage() {
           <Link
             to="/dashboard/admin/courses"
             className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
+            aria-label="Voir tous les cours de la plateforme"
           >
             Voir tous les cours →
           </Link>

@@ -74,7 +74,7 @@ export default function StudentDashboardPage() {
   // ── Loading state ───────────────────────────────────────────────
   if (isLoading) {
     return (
-      <div>
+      <div aria-busy="true" aria-live="polite">
         <h1 className="mb-6 text-2xl font-bold text-white">Mon espace étudiant</h1>
         <LoadingSpinner size="lg" className="py-12" />
       </div>
@@ -84,7 +84,7 @@ export default function StudentDashboardPage() {
   // ── Error state ─────────────────────────────────────────────────
   if (error) {
     return (
-      <div>
+      <div role="alert" aria-live="assertive">
         <h1 className="mb-6 text-2xl font-bold text-white">Mon espace étudiant</h1>
         <ErrorMessage
           title="Impossible de charger vos inscriptions"
@@ -105,7 +105,7 @@ export default function StudentDashboardPage() {
           title="Aucun cours validé pour le moment"
           description="Parcourez le catalogue et demandez votre inscription à un cours. Vos cours approuvés apparaîtront ici."
           action={
-            <Link to="/catalog">
+            <Link to="/catalog" aria-label="Voir le catalogue complet des cours">
               <Button>Voir le catalogue</Button>
             </Link>
           }
@@ -205,9 +205,9 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
 
   // Confirm dialog for cancelling approved enrollment
   const ConfirmModal = () => (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4">
-      <div className="w-full max-w-md rounded-xl border border-white/10 bg-gray-900 p-6 shadow-xl">
-        <h3 className="mb-2 text-lg font-semibold text-white">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+      <div className="w-full max-w-md rounded-xl border border-white/10 bg-gray-900 p-6 shadow-xl" role="document">
+        <h3 id="confirm-modal-title" className="mb-2 text-lg font-semibold text-white">
           Confirmer la désinscription
         </h3>
         <p className="mb-6 text-sm text-gray-300">
@@ -219,6 +219,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
             size="sm"
             onClick={() => setShowConfirmModal(false)}
             disabled={isCanceling}
+            aria-label="Annuler la désinscription et fermer la fenêtre"
           >
             Annuler
           </Button>
@@ -227,6 +228,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
             size="sm"
             onClick={handleCancelApproved}
             disabled={isCanceling}
+            aria-label="Confirmer la désinscription de ce cours"
           >
             {isCanceling ? 'Désinscription en cours…' : 'Confirmer'}
           </Button>
@@ -325,6 +327,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
             size="sm"
             onClick={handleCancel}
             disabled={isCanceling}
+            aria-label={`Annuler la demande d'inscription pour ${course.title}`}
           >
             {isCanceling ? 'Annulation en cours…' : 'Annuler'}
           </Button>
@@ -344,6 +347,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
             size="sm"
             onClick={() => setShowConfirmModal(true)}
             disabled={isCanceling}
+            aria-label={`Se désinscrire du cours ${course.title}`}
           >
             {isCanceling ? 'Désinscription en cours…' : 'Se désinscrire'}
           </Button>
@@ -368,6 +372,7 @@ function ClassroomLink({ classroomUrl, courseId }) {
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-400"
+        aria-label={`Ouvrir le Google Classroom du cours`}
       >
         Ouvrir Google Classroom
         <span aria-hidden="true">↗</span>
@@ -384,6 +389,7 @@ function ClassroomLink({ classroomUrl, courseId }) {
           <Link
             to={`/catalog/${courseId}`}
             className="text-emerald-400 transition-colors hover:text-emerald-300"
+            aria-label={`Voir le cours pour lequel Classroom n'est pas encore lié`}
           >
             Voir le cours
           </Link>

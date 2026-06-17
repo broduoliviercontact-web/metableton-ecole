@@ -133,7 +133,7 @@ export default function ClassroomConnectButton() {
       <div className="rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-300">
         Connectez votre compte Google Classroom pour synchroniser vos cours.
       </div>
-      <Button size="sm" onClick={() => window.location.href = '/api/classroom/oauth/start'}>
+      <Button size="sm" onClick={() => window.location.href = '/api/classroom/oauth/start'} aria-label="Connecter votre compte Google Classroom">
         Connecter Google Classroom
       </Button>
     </div>
