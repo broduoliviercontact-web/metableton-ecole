@@ -145,7 +145,7 @@ export default function CourseDetailPage() {
           <EmptyState
             icon="🔍"
             title="Cours introuvable"
-            description="Ce cours n'existe pas, a été retiré du catalogue ou n'a pas encore été publié. Parcourez les autres cours disponibles."
+            description="Ce cours n&apos;existe pas, a été retiré du catalogue ou n&apos;a pas encore été publié. Parcourez les autres cours disponibles."
             action={
               <Link to="/catalog">
                 <Button variant="secondary" size="sm">
@@ -199,7 +199,7 @@ export default function CourseDetailPage() {
             </p>
           ) : (
             <p className="text-sm italic text-gray-500">
-              Pas de description pour le moment.
+              La description du cours est en cours de finalisation.
             </p>
           )}
         </div>
@@ -325,9 +325,6 @@ function EnrollmentCTA({
           Vous êtes inscrit à ce cours. Le lien vers le Google Classroom sera
           disponible sur votre tableau de bord.
         </p>
-        <div className="mt-4 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-2 text-xs text-amber-200">
-          <span className="font-semibold">Accès Google Classroom :</span> Le professeur doit vous inviter. Google vous envoie un email d'invitation — acceptez-le avant d'ouvrir le cours. Si vous voyez "Cours introuvable", vérifiez que vous avez accepté l'invitation et que vous utilisez le bon compte Google.
-        </div>
         <div className="mt-4">
           <Link to="/dashboard">
             <Button size="sm">Mon tableau de bord</Button>
@@ -344,8 +341,7 @@ function EnrollmentCTA({
         <div className="mb-2 text-2xl">⏳</div>
         <h2 className="mb-2 font-semibold text-white">Demande en cours</h2>
         <p className="text-sm text-gray-300">
-          Votre demande d&apos;inscription est en attente de validation par
-          l&apos;enseignant. Vous serez notifié dès qu&apos;elle sera traitée.
+          Votre demande est en attente de validation. Vous serez informé(e) par email dès que l'enseignant aura traité votre dossier.
         </p>
       </div>
     );
@@ -358,8 +354,7 @@ function EnrollmentCTA({
         <div className="mb-2 text-2xl">⚠️</div>
         <h2 className="mb-2 font-semibold text-white">Demande refusée</h2>
         <p className="mb-4 text-sm text-gray-300">
-          Votre précédente demande a été refusée. Vous pouvez soumettre une
-          nouvelle demande.
+          La demande précédente a été refusée. Vous pouvez en soumettre une nouvelle.
         </p>
         {requestError && (
           <ErrorMessage
@@ -371,7 +366,7 @@ function EnrollmentCTA({
           <p className="mb-3 text-sm text-emerald-400">{retryMessage}</p>
         )}
         <Button onClick={onRequest} disabled={isRequesting}>
-          {isRequesting ? 'Envoi en cours…' : 'Redemander l’inscription'}
+          {isRequesting ? 'Envoi en cours…' : 'Nouvelle demande'}
         </Button>
       </div>
     );
@@ -380,10 +375,10 @@ function EnrollmentCTA({
   // 4d. No enrollment yet — show request button
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center">
-      <h2 className="mb-2 font-semibold text-white">Prêt à apprendre ?</h2>
+      <h2 className="mb-2 font-semibold text-white">Rejoignez ce cours</h2>
       <p className="mb-4 text-sm text-gray-400">
-        Demandez votre inscription à ce cours. L&apos;enseignant examinera votre
-        demande et vous donnera accès au Google Classroom.
+        Faites votre demande d&apos;inscription. L&apos;enseignant examinera votre
+        profil et vous communiquera les modalités d&apos;accès au Google Classroom.
       </p>
       {successMessage && (
         <div className="mb-4 rounded-lg bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
@@ -397,7 +392,7 @@ function EnrollmentCTA({
         />
       )}
       <Button onClick={onRequest} disabled={isRequesting}>
-        {isRequesting ? 'Envoi en cours…' : 'Demander l’inscription'}
+        {isRequesting ? 'Envoi en cours…' : 'Demander l\'inscription'}
       </Button>
     </div>
   );

@@ -82,9 +82,11 @@ export default function HomePage() {
                 Voir les cours
               </Button>
             </Link>
-            <Button variant="secondary" size="lg" disabled>
-              Se connecter avec Google &mdash; bientôt
-            </Button>
+            <a href="/api/auth/google">
+              <Button variant="secondary" size="lg">
+                Se connecter avec Google
+              </Button>
+            </a>
           </div>
         </div>
       </section>

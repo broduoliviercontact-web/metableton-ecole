@@ -65,9 +65,16 @@ export default function CatalogPage() {
           Catalogue des cours
         </h1>
         <EmptyState
-          icon="📚"
-          title="Aucun cours publié pour le moment"
-          description="Revenez bientôt : de nouveaux cours seront bientôt disponibles."
+          icon="🎵"
+          title="Le catalogue est en préparation"
+          description="Nos premiers parcours Metableton arrivent bientôt. Revenez prochainement ou connectez-vous pour préparer votre espace."
+          action={
+            <Link to="/" className="mt-4 inline-block">
+              <Button variant="outline" size="sm">
+                Retour à l&apos;accueil
+              </Button>
+            </Link>
+          }
         />
       </div>
     );
