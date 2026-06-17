@@ -75,7 +75,7 @@ export default function AdminCoursesPage() {
       <div>
         <PageHeader />
         <EmptyState
-          icon="🎓"
+          icon="🎵"
           title="Aucun cours pour le moment"
           description="Les cours créés par les enseignants apparaîtront ici."
           action={
@@ -116,7 +116,7 @@ function PageHeader() {
         to="/dashboard/admin"
         className="text-sm text-gray-400 transition-colors hover:text-white"
       >
-        &larr; Retour à l&apos;administration
+        &larr; Retour au pilotage
       </Link>
     </div>
   );

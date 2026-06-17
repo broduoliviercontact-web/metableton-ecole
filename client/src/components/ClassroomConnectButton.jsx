@@ -93,7 +93,7 @@ export default function ClassroomConnectButton() {
     return (
       <div className="flex items-center gap-2 rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-300">
         <Badge variant="pending">Google Classroom désactivé</Badge>
-        <span className="text-gray-400">La connexion est désactivée pour le moment.</span>
+        <span className="text-gray-400">La connexion Google Classroom est désactivée pour le moment.</span>
       </div>
     );
   }
@@ -118,7 +118,7 @@ export default function ClassroomConnectButton() {
         )}
         {!isCoursesLoading && courses && courses.length === 0 && (
           <EmptyState
-            icon="🎓"
+            icon="🎵"
             title="Aucun cours Google Classroom"
             description="Vous n'avez pas encore de cours dans Google Classroom."
           />
@@ -129,10 +129,10 @@ export default function ClassroomConnectButton() {
 
   // Not connected state (enabled but no token)
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-sm text-gray-400">
+    <div className="flex flex-col gap-2">
+      <div className="rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-300">
         Connectez votre compte Google Classroom pour synchroniser vos cours.
-      </span>
+      </div>
       <Button size="sm" onClick={() => window.location.href = '/api/classroom/oauth/start'}>
         Connecter Google Classroom
       </Button>

@@ -75,7 +75,7 @@ export default function StudentDashboardPage() {
   if (isLoading) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Mon tableau de bord</h1>
+        <h1 className="mb-6 text-2xl font-bold text-white">Mon espace étudiant</h1>
         <LoadingSpinner size="lg" className="py-12" />
       </div>
     );
@@ -85,7 +85,7 @@ export default function StudentDashboardPage() {
   if (error) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Mon tableau de bord</h1>
+        <h1 className="mb-6 text-2xl font-bold text-white">Mon espace étudiant</h1>
         <ErrorMessage
           title="Impossible de charger vos inscriptions"
           message={error.message || 'Une erreur est survenue lors du chargement.'}
@@ -99,11 +99,11 @@ export default function StudentDashboardPage() {
   if (!enrollments || enrollments.length === 0) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Mon tableau de bord</h1>
+        <h1 className="mb-6 text-2xl font-bold text-white">Mon espace étudiant</h1>
         <EmptyState
-          icon="📚"
-          title="Aucun cours pour le moment"
-          description="Parcourez le catalogue et demandez votre inscription à un cours."
+          icon="🎵"
+          title="Aucun cours validé pour le moment"
+          description="Parcourez le catalogue et demandez votre inscription à un cours. Vos cours approuvés apparaîtront ici."
           action={
             <Link to="/catalog">
               <Button>Voir le catalogue</Button>
@@ -117,7 +117,7 @@ export default function StudentDashboardPage() {
   // ── Populated state ─────────────────────────────────────────────
   return (
     <div>
-      <h1 className="mb-2 text-2xl font-bold text-white">Mon tableau de bord</h1>
+      <h1 className="mb-2 text-2xl font-bold text-white">Mon espace étudiant</h1>
       <p className="mb-6 text-sm text-gray-400">
         {enrollments.length} inscription{enrollments.length > 1 ? 's' : ''}
       </p>
@@ -211,9 +211,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
           Confirmer la désinscription
         </h3>
         <p className="mb-6 text-sm text-gray-300">
-          Voulez-vous vraiment quitter ce cours ? Vous perdrez l'accès depuis
-          votre dashboard et ne pourrez plus accéder au contenu ni au
-          Google Classroom.
+          Voulez-vous vraiment quitter ce cours ? Vous perdrez l'accès au contenu et au Google Classroom.
         </p>
         <div className="flex justify-end gap-3">
           <Button
@@ -283,7 +281,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
       {/* Google Classroom reminder for all approved enrollments */}
       {status === 'approved' && course.classroom_url && (
         <div className="mt-3 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-xs text-amber-200">
-          <span className="font-semibold">Accès Google Classroom :</span> Le professeur doit vous inviter. Google vous envoie un email d'invitation — acceptez-le avant d'ouvrir le cours. Si vous voyez "Cours introuvable", vérifiez que vous avez accepté l'invitation et que vous utilisez le bon compte Google.
+          <span className="font-semibold">Accès Google Classroom :</span> L'enseignant vous invitera après validation. Google vous envoie un email — acceptez-le pour accéder au cours. Vérifiez l'adresse email associée à votre compte.
         </div>
       )}
 
@@ -294,7 +292,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
             to={`/catalog/${course.id}`}
             className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
           >
-            Voir la page du cours →
+            Retour au catalogue
           </Link>
         </div>
       )}
@@ -328,7 +326,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
             onClick={handleCancel}
             disabled={isCanceling}
           >
-            {isCanceling ? 'Annulation en cours…' : 'Annuler la demande'}
+            {isCanceling ? 'Annulation en cours…' : 'Annuler'}
           </Button>
         </div>
       )}
@@ -361,7 +359,7 @@ function EnrollmentCard({ enrollment, onCancelEnrollment }) {
 // ── ClassroomLink ───────────────────────────────────────────────────
 // Renders the right control for an approved enrollment:
 //   - classroom_url present → external "Ouvrir Google Classroom" link
-//   - classroom_url missing → fallback "Classroom pas encore lié par le professeur"
+//   - classroom_url missing → fallback "Classroom pas encore lié"
 function ClassroomLink({ classroomUrl, courseId }) {
   if (classroomUrl) {
     return (
@@ -379,7 +377,7 @@ function ClassroomLink({ classroomUrl, courseId }) {
 
   return (
     <div className="rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-sm text-gray-400">
-      Classroom pas encore lié par le professeur.
+      Classroom pas encore lié.
       {courseId && (
         <>
           {' '}

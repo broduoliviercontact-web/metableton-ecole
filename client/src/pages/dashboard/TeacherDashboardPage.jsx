@@ -104,7 +104,7 @@ export default function TeacherDashboardPage() {
   // Header with create button (shared across all states)
   const HeaderActions = () => (
     <div className="mb-6 flex items-center justify-between">
-      <h1 className="text-2xl font-bold text-white">Mes cours</h1>
+      <h1 className="text-2xl font-bold text-white">Espace enseignant</h1>
       <div className="flex items-center gap-3">
         <ClassroomConnectButton />
         <Link to="/dashboard/teacher/courses/new">
@@ -144,7 +144,7 @@ export default function TeacherDashboardPage() {
       <div>
         <HeaderActions />
         <EmptyState
-          icon="🎓"
+          icon="🎵"
           title="Aucun cours pour le moment"
           description="Cliquez sur « Créer un cours » pour commencer. Vous pourrez le publier plus tard."
         />
@@ -152,7 +152,7 @@ export default function TeacherDashboardPage() {
         <PendingEnrollmentsSection
           isLoading={isPendingLoading}
           error={pendingError}
-          enrollments={pendingEnrollments}
+          pendingEnrollments={pendingEnrollments}
           onRetry={loadPending}
           onReview={handleReview}
           actionInFlight={actionInFlight}
@@ -171,7 +171,7 @@ export default function TeacherDashboardPage() {
       <PendingEnrollmentsSection
         isLoading={isPendingLoading}
         error={pendingError}
-        enrollments={pendingEnrollments}
+        pendingEnrollments={pendingEnrollments}
         onRetry={loadPending}
         onReview={handleReview}
         actionInFlight={actionInFlight}
@@ -241,14 +241,14 @@ export default function TeacherDashboardPage() {
 function PendingEnrollmentsSection({
   isLoading,
   error,
-  enrollments,
+  pendingEnrollments,
   onRetry,
   onReview,
   actionInFlight,
   rowErrors,
 }) {
   return (
-    <section className="mb-10">
+    <div className="mb-10">
       <h2 className="mb-4 text-lg font-semibold text-white">
         Demandes d&apos;inscription
       </h2>
@@ -267,17 +267,17 @@ function PendingEnrollmentsSection({
         />
       )}
 
-      {!isLoading && !error && enrollments && enrollments.length === 0 && (
+      {!isLoading && !error && pendingEnrollments && pendingEnrollments.length === 0 && (
         <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
           <p className="text-sm text-gray-400">
-            Aucune demande d&apos;inscription en attente.
+            Aucune demande d&apos;inscription en attente pour le moment.
           </p>
         </div>
       )}
 
-      {!isLoading && !error && enrollments && enrollments.length > 0 && (
+      {!isLoading && !error && pendingEnrollments && pendingEnrollments.length > 0 && (
         <ul className="space-y-3">
-          {enrollments.map((enrollment) => (
+          {pendingEnrollments.map((enrollment) => (
             <PendingEnrollmentRow
               key={enrollment.id}
               enrollment={enrollment}
@@ -289,7 +289,7 @@ function PendingEnrollmentsSection({
           ))}
         </ul>
       )}
-    </section>
+    </div>
   );
 }
 
@@ -324,7 +324,7 @@ function PendingEnrollmentRow({
           </div>
           {requestedAt && (
             <div className="mt-1 text-xs text-gray-500">
-              Reçue le {requestedAt}
+              Demande reçue le {requestedAt}
             </div>
           )}
         </div>

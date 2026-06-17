@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
   if (isLoading) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Administration</h1>
+        <h1 className="mb-6 text-2xl font-bold text-white">Pilotage Metableton</h1>
         <LoadingSpinner size="lg" className="py-12" />
       </div>
     );
@@ -100,7 +100,7 @@ export default function AdminDashboardPage() {
   if (error) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Administration</h1>
+        <h1 className="mb-6 text-2xl font-bold text-white">Pilotage Metableton</h1>
         <ErrorMessage
           title="Impossible de charger les utilisateurs"
           message={error.message || 'Une erreur est survenue lors du chargement.'}
@@ -114,7 +114,7 @@ export default function AdminDashboardPage() {
   if (!users || users.length === 0) {
     return (
       <div>
-        <h1 className="mb-6 text-2xl font-bold text-white">Administration</h1>
+        <h1 className="mb-6 text-2xl font-bold text-white">Pilotage Metableton</h1>
         <EmptyState
           icon="👥"
           title="Aucun utilisateur pour le moment"
@@ -128,7 +128,7 @@ export default function AdminDashboardPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Administration</h1>
+        <h1 className="text-2xl font-bold text-white">Pilotage Metableton</h1>
         <div className="flex items-center gap-3">
           <ClassroomConnectButton />
           <Link
