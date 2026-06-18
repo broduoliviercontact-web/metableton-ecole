@@ -14,9 +14,10 @@ const NAV_BY_ROLE = {
     { to: '/dashboard/profile', label: 'Mon profil', end: false },
   ],
   admin: [
-    { to: '/dashboard/admin', label: 'Vue d’ensemble', end: true },
+    { to: '/dashboard/admin', label: 'Vue d\'ensemble', end: true },
     { to: '/dashboard/admin', label: 'Utilisateurs', end: false },
     { to: '/dashboard/admin/courses', label: 'Tous les cours', end: false },
+    { to: '/dashboard/admin/beta-invitations', label: 'Invitations bêta', end: false },
     { to: '/dashboard/profile', label: 'Mon profil', end: false },
   ],
 };

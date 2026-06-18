@@ -8,6 +8,7 @@ import CourseDetailPage from './pages/CourseDetailPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import DesignPreviewPage from './components/metableton-ui/preview/DesignPreviewPage.jsx';
 import BetaInvitePage from './pages/BetaInvitePage.jsx';
+import AdminBetaInvitationsPage from './pages/dashboard/AdminBetaInvitationsPage.jsx';
 import StudentDashboardPage from './pages/dashboard/StudentDashboardPage.jsx';
 import TeacherDashboardPage from './pages/dashboard/TeacherDashboardPage.jsx';
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage.jsx';
@@ -89,6 +90,15 @@ export default function App() {
           element={
             <RequireAuth allow="admin">
               <AdminCoursesPage />
+            </RequireAuth>
+          }
+        />
+        {/* Admin: beta invitations */}
+        <Route
+          path="admin/beta-invitations"
+          element={
+            <RequireAuth allow="admin">
+              <AdminBetaInvitationsPage />
             </RequireAuth>
           }
         />

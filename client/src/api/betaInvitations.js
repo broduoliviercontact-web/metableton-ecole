@@ -23,3 +23,41 @@ export async function acceptBetaInvitation(token) {
   });
   return res.data;
 }
+
+/**
+ * Create a new beta invitation (admin only).
+ * @param {Object} options
+ * @param {string} options.email - Email of the invitee
+ * @param {'student'|'teacher'|'admin'} [options.role] - Role to grant
+ * @param {string} [options.expiresAt] - ISO date string for expiration
+ * @param {string} [options.notes] - Optional notes
+ * @returns {Promise<Object>} created invitation with raw token
+ */
+export async function createBetaInvitation({ email, role, expiresAt, notes }) {
+  const res = await apiClient('/admin/beta-invitations', {
+    method: 'POST',
+    body: JSON.stringify({ email, role, expiresAt, notes }),
+  });
+  return res.data;
+}
+
+/**
+ * Get all beta invitations (admin only).
+ * @returns {Promise<Array>} list of invitation rows
+ */
+export async function listBetaInvitations() {
+  const res = await apiClient('/admin/beta-invitations');
+  return res.data;
+}
+
+/**
+ * Revoke a pending beta invitation (admin only).
+ * @param {string} invitationId - The invitation ID
+ * @returns {Promise<Object>} updated invitation row
+ */
+export async function revokeBetaInvitation(invitationId) {
+  const res = await apiClient(`/admin/beta-invitations/${invitationId}/revoke`, {
+    method: 'POST',
+  });
+  return res.data;
+}
