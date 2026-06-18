@@ -35,8 +35,14 @@ export default function BetaInvitePage() {
       setInvitationError(null);
       try {
         const data = await getBetaInvitation(token);
-        setInvitation(data);
-        setInvitationError(null);
+        const inv = data?.invitation;
+        if (!inv || !inv.status) {
+          setInvitation(false);
+          setInvitationError(new Error('Invitation invalide ou inexistante'));
+        } else {
+          setInvitation(inv);
+          setInvitationError(null);
+        }
       } catch (err) {
         setInvitation(false);
         setInvitationError(err);
@@ -85,8 +91,9 @@ export default function BetaInvitePage() {
   };
 
   const handleLogin = () => {
-    // Login triggers a redirect, so we don't need to do anything else
-    // The useEffect will trigger again after auth restores
+    // Redirect to Google OAuth. After login the user lands on their
+    // dashboard; they can return to this page to auto-accept.
+    window.location.href = '/api/auth/google';
   };
 
   // ── Loading state ───────────────────────────────────────────────
