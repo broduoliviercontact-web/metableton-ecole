@@ -77,6 +77,39 @@ export default function AdminBetaInvitationsPage() {
     loadInvitations();
   }, [loadInvitations]);
 
+  const handleCreateInvitation = async (e) => {
+    e.preventDefault();
+    setCreateError(null);
+    setCreatedInvitation(null);
+
+    // Validate email
+    if (!formEmail || !formEmail.includes('@')) {
+      setCreateError('Veuillez entrer un email valide.');
+      return;
+    }
+
+    setIsCreating(true);
+    try {
+      const result = await createBetaInvitation({
+        email: formEmail,
+        role: formRole,
+        expiresAt: formExpiresAt || undefined,
+        notes: formNotes || undefined,
+      });
+
+      setCreatedInvitation(result);
+      setFormEmail('');
+      setFormRole('student');
+      setFormExpiresAt('');
+      setFormNotes('');
+      await loadInvitations();
+    } catch (err) {
+      setCreateError(err.message || 'Erreur lors de la création de l\'invitation.');
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
   // ── Loading state ───────────────────────────────────────────────
   if (isLoading) {
     return (
@@ -158,12 +191,12 @@ export default function AdminBetaInvitationsPage() {
                   <input
                     type="text"
                     readOnly
-                    value={getInvitationUrl(createdInvitation.token)}
+                    value={createdInvitation.inviteUrl || ''}
                     className="flex-1 rounded-lg border border-emerald-500/30 bg-black/30 px-3 py-2 text-sm text-emerald-100 focus:outline-none"
                     aria-label="Lien d'invitation généré"
                   />
                   <CopyButton
-                    text={getInvitationUrl(createdInvitation.token)}
+                    text={createdInvitation.inviteUrl || ''}
                     onSuccess={() => setCreatedInvitation(null)}
                   />
                 </div>
@@ -176,10 +209,7 @@ export default function AdminBetaInvitationsPage() {
         )}
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleCreateInvitation();
-          }}
+          onSubmit={handleCreateInvitation}
           className="space-y-4"
         >
           <div className="grid gap-4 sm:grid-cols-2">
