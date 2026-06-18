@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { requireRole } from '../middleware/role.js';
 import * as betaInvitationService from '../services/betaInvitationService.js';
+import { getSupabase } from '../config/supabase.js';
 import env from '../config/env.js';
 
 // ── Helper: Get client origin for invite URL ───────────────────────────
@@ -85,10 +86,33 @@ publicBetaInvitationsRouter.post('/:token/accept', requireAuth, async (req, res,
       });
     }
 
+    // Resolve the user's email: prefer session, fall back to profiles table.
+    let userEmail = req.session.googleProfile?.email || null;
+    if (!userEmail && req.user?.userId) {
+      const supabase = await getSupabase();
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('id', req.user.userId)
+        .maybeSingle();
+      if (profile?.email) {
+        userEmail = profile.email;
+      }
+    }
+
+    if (!userEmail) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Impossible de vérifier votre adresse email. Veuillez vous reconnecter.',
+        },
+      });
+    }
+
     const result = await betaInvitationService.acceptBetaInvitation({
       token,
       userId: req.user.userId,
-      userEmail: req.session.googleProfile?.email,
+      userEmail,
     });
 
     // Update session role if it changed
