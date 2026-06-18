@@ -9,7 +9,7 @@ import coursesRouter from './routes/courses.js';
 import enrollmentsRouter from './routes/enrollments.js';
 import adminRouter from './routes/admin.js';
 import classroomRouter from './routes/classroom.js';
-import betaInvitationsRouter from './routes/betaInvitations.js';
+import { publicBetaInvitationsRouter, adminBetaInvitationsRouter } from './routes/betaInvitations.js';
 
 const app = express();
 
@@ -55,8 +55,11 @@ app.use('/api/classroom', classroomRouter);
 // Admin routes — user management + courses overview
 app.use('/api/admin', adminRouter);
 
-// Beta invitations routes
-app.use('/api/beta-invitations', betaInvitationsRouter);
+// Beta invitations — public routes (token lookup, accept)
+app.use('/api/beta-invitations', publicBetaInvitationsRouter);
+
+// Beta invitations — admin routes (create, list, revoke)
+app.use('/api/admin/beta-invitations', adminBetaInvitationsRouter);
 
 // 404 — catch unknown routes
 app.use((_req, res) => {
