@@ -7,6 +7,7 @@ import CatalogPage from './pages/CatalogPage.jsx';
 import CourseDetailPage from './pages/CourseDetailPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import DesignPreviewPage from './components/metableton-ui/preview/DesignPreviewPage.jsx';
+import BetaInvitePage from './pages/BetaInvitePage.jsx';
 import StudentDashboardPage from './pages/dashboard/StudentDashboardPage.jsx';
 import TeacherDashboardPage from './pages/dashboard/TeacherDashboardPage.jsx';
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage.jsx';
@@ -31,6 +32,8 @@ export default function App() {
         )}
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="catalog/:courseId" element={<CourseDetailPage />} />
+        {/* Beta invitation acceptance page - public route */}
+        <Route path="beta/invite/:token" element={<BetaInvitePage />} />
       </Route>
 
       {/* Dashboard pages — Dashboard layout + role-gated routes */}
