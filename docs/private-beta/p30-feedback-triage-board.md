@@ -125,10 +125,35 @@ Satisfaction = ( ? / ? ) × 100 = ? %
 
 ---
 
+## P-38 — First Real Beta Feedback (2026-06-18)
+
+Retours collectés pendant la première vague de tests réels.
+
+| ID | Date | Testeur | Rôle | Type | Zone | Retour brut | Priorité | Décision |
+|---|---|---|---|---|---|---|---|---|
+| FB-007 | | | | | | | | |
+| FB-008 | | | | | | | | |
+| FB-009 | | | | | | | | |
+| FB-010 | | | | | | | | |
+| FB-011 | | | | | | | | |
+
+### Résumé P-38 (à remplir après la première vague)
+
+| Métrique | Valeur |
+|---|---|
+| Testeurs ayant complété le workflow | |
+| Retours totaux reçus | |
+| Bugs confirmés | |
+| UX incompréhensions | |
+| Features demandées | |
+| Satisfaction estimée | /10 |
+
+---
+
 **Fin du triage board.**
 
-*Document généré le 2026-06-17*  
-*Tag git: `mvp-demo-ready`*
+*Document généré le 2026-06-17, mis à jour le 2026-06-18 (section P-38)*  
+*Tag git: `p38-first-real-beta-launch`*
 
 ---
 
