@@ -131,11 +131,37 @@ Vérifier l'intégrité complète du flux d'invitation bêta, de la création pa
 
 ## Bugs trouvés
 
-Aucun bug bloquant trouvé lors du smoke test.
+### Bug #1 — `getSaltByToken()` impossible à résoudre (2026-06-18)
+
+**Symptôme :** `GET /api/beta-invitations/:token` retournait `INVITATION_NOT_FOUND`
+alors que l'invitation existait bien en base Supabase production.
+
+**Cause :** La fonction `getSaltByToken()` tentait de retrouver le salt en cherchant
+`token_hash` avec un hash calculé sans salt (`hashToken(token, '')`). Comme le vrai
+`token_hash` est calculé avec `SHA256(salt:token)`, la recherche ne pouvait jamais
+aboutir — le backend ne pouvait pas retrouver le salt avant de connaître le hash,
+et ne pouvait pas retrouver le hash avant de connaître le salt.
+
+**Correction :**
+- Remplacement de `getSaltByToken()` par `findInvitationByRawToken()`
+- La nouvelle fonction fetch les 100 invitations les plus récentes
+- Pour chaque candidate, elle calcule `SHA256(candidate.salt:token)` côté serveur
+- Elle compare avec `candidate.token_hash` et retourne la première correspondance
+- `token_hash` et `token_salt` restent strictement internes à cette fonction
+- `getBetaInvitationByToken()` et `acceptBetaInvitation()` utilisent la nouvelle fonction
+
+**Fichiers modifiés :**
+- `server/src/services/betaInvitationService.js`
 
 ## Corrections faites
 
-N/A.
+- ✅ `getSaltByToken()` supprimée
+- ✅ `findInvitationByRawToken()` ajoutée (recherche par candidats)
+- ✅ `getBetaInvitationByToken()` migrée vers la nouvelle fonction
+- ✅ `acceptBetaInvitation()` migrée vers la nouvelle fonction
+- ✅ Tests backend : 11/11 OK
+- ✅ Build frontend : OK
+- ✅ Aucun `token_hash`/`token_salt` exposé hors du service
 
 ## Limites non testées
 

@@ -136,31 +136,8 @@ export async function getBetaInvitationByToken(token) {
     );
   }
 
-  // Get the salt and hash from the database by token
-  const salt = await getSaltByToken(token, supabase);
-  if (!salt) {
-    return null;
-  }
-
-  // Get the invitation
-  const { data: invitation, error } = await supabase
-    .from('beta_invitations')
-    .select(`
-      id,
-      email,
-      role,
-      status,
-      expires_at,
-      accepted_at,
-      accepted_user_id,
-      created_at,
-      updated_at,
-      notes
-    `)
-    .eq('token_hash', hashToken(token, salt))
-    .maybeSingle();
-
-  if (error) throw error;
+  // Find the invitation by raw token (candidate search)
+  const invitation = await findInvitationByRawToken(token, supabase);
   if (!invitation) {
     return null;
   }
@@ -202,26 +179,52 @@ export async function getBetaInvitationByToken(token) {
 }
 
 /**
- * Get the salt for a token (internal helper).
- * Used to verify the token without storing it.
+ * Find an invitation by its raw token.
+ *
+ * Because token_hash = SHA256(salt:token), we cannot look up the hash
+ * directly without first knowing the salt.  Instead we fetch the most
+ * recent pending invitations, compute the hash for each candidate, and
+ * return the first match.
+ *
+ * The candidate window is capped at 100 rows — more than enough for a
+ * private beta with a handful of invitations.
+ *
+ * IMPORTANT: token_hash and token_salt are used ONLY inside this
+ * function.  They must NEVER be returned to the caller or exposed to
+ * the frontend.
+ *
+ * @param {string} token - Raw token from the invite URL
+ * @param {object} supabase - Supabase client instance
+ * @returns {Promise<object|null>} Full invitation row (including
+ *   token_hash/token_salt for internal use), or null if not found.
  */
-async function getSaltByToken(token, supabase) {
-  // First get the token_hash
-  const tokenHash = hashToken(token, 'dummy');
-  // Then query with the actual hash to get the salt
-  // This requires storing the hash in the query first
-  // We'll do it differently: hash the token and query directly
-  const hashedToken = hashToken(token, '');
-  const { data, error } = await supabase
+async function findInvitationByRawToken(token, supabase) {
+  const { data: invitations, error } = await supabase
     .from('beta_invitations')
-    .select('token_salt')
-    .eq('token_hash', hashedToken)
-    .maybeSingle();
+    .select(`
+      id,
+      email,
+      role,
+      status,
+      expires_at,
+      accepted_at,
+      accepted_user_id,
+      created_at,
+      updated_at,
+      notes,
+      token_hash,
+      token_salt
+    `)
+    .order('created_at', { ascending: false })
+    .limit(100);
 
   if (error) throw error;
-  if (!data) return null;
+  if (!invitations || invitations.length === 0) return null;
 
-  return data.token_salt;
+  return invitations.find((invitation) => {
+    const computedHash = hashToken(token, invitation.token_salt);
+    return computedHash === invitation.token_hash;
+  }) || null;
 }
 
 /**
@@ -251,30 +254,8 @@ export async function acceptBetaInvitation({ token, userId, userEmail }) {
     );
   }
 
-  // Verify the token and get the invitation
-  const salt = await getSaltByToken(token, supabase);
-  if (!salt) {
-    throw Object.assign(
-      new Error('Invitation not found'),
-      { statusCode: 404, code: 'INVITATION_NOT_FOUND' }
-    );
-  }
-
-  const { data: invitation, error: lookupError } = await supabase
-    .from('beta_invitations')
-    .select(`
-      id,
-      email,
-      role,
-      status,
-      expires_at,
-      accepted_at,
-      accepted_user_id
-    `)
-    .eq('token_hash', hashToken(token, salt))
-    .maybeSingle();
-
-  if (lookupError) throw lookupError;
+  // Find the invitation by raw token (candidate search)
+  const invitation = await findInvitationByRawToken(token, supabase);
   if (!invitation) {
     throw Object.assign(
       new Error('Invitation not found'),
