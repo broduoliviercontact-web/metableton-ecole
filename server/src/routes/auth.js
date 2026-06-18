@@ -62,29 +62,40 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
     const avatarUrl = payload.picture || null;
 
     // 3. Upsert profile via profileService (admin bootstrap, role preservation)
-    const { userId, role } = await findOrCreateGoogleProfile({
+    const { userId, role: initialRole } = await findOrCreateGoogleProfile({
       googleSub,
       email,
       displayName,
       avatarUrl,
     });
 
-    // 4. Check for beta invitation (before session creation)
-    try {
-      const invitationResult = await betaInvitationService.acceptBetaInvitation({
-        token: req.query.invitation || null,
-        userId,
-        userEmail: email,
-      });
+    let role = initialRole;
+    let invitationResult = null;
 
-      // If invitation was accepted and role changed, update the role
-      if (invitationResult?.status === 'accepted' && invitationResult.role !== role) {
-        role = invitationResult.role;
+    // 4. Check for beta invitation (before session creation)
+    // Only attempt if an invitation token is present in the query string.
+    const invitationToken =
+      typeof req.query.invitation === 'string' && req.query.invitation.length > 0
+        ? req.query.invitation
+        : null;
+
+    if (invitationToken) {
+      try {
+        invitationResult = await betaInvitationService.acceptBetaInvitation({
+          token: invitationToken,
+          userId,
+          userEmail: email,
+        });
+
+        // If invitation was accepted and role changed, update the role
+        if (invitationResult?.status === 'accepted' && invitationResult.role !== role) {
+          role = invitationResult.role;
+        }
+      } catch (invitationErr) {
+        // Ignore invitation errors (not an invitation user, or expired, etc.)
+        // This is not a blocking error for login
+        console.debug('Beta invitation check:', invitationErr.message);
       }
-    } catch (invitationErr) {
-      // Ignore invitation errors (not an invitation user, or expired, etc.)
-      // This is not a blocking error for login
-      console.debug('Beta invitation check:', invitationErr.message);
     }
 
     // 5. Create session
