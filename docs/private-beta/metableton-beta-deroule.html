@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Metableton Ecole - Deroule beta privee</title>
+  <style>
+    :root {
+      --bg: #05070d;
+      --bg-soft: #081018;
+      --panel: #0e141c;
+      --panel-2: #151d28;
+      --line: #263240;
+      --text: #f5f7f7;
+      --muted: #a8b2bd;
+      --cyan: #08d7d7;
+      --green: #26d07c;
+      --amber: #e7b547;
+      --red: #ef6b5c;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .45);
+      --radius: 14px;
+      font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(8, 215, 215, .12), transparent 28rem),
+        radial-gradient(circle at 14% 86%, rgba(38, 208, 124, .09), transparent 24rem),
+        var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .deck-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      place-items: center;
+      padding: 24px;
+      gap: 14px;
+    }
+
+    .stage {
+      position: relative;
+      width: min(1280px, calc(100vw - 48px));
+      aspect-ratio: 16 / 9;
+      background: var(--bg);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 54px 66px 44px 84px;
+      background:
+        linear-gradient(90deg, var(--cyan) 0 18px, transparent 18px),
+        linear-gradient(135deg, rgba(255,255,255,.025), transparent 35%),
+        var(--bg);
+    }
+
+    .slide.is-active {
+      display: grid;
+      animation: slideIn .24s ease-out both;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-kicker {
+      color: var(--cyan);
+      font-size: clamp(11px, 1vw, 14px);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    .number {
+      font-family: "Aptos Display", Aptos, "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 820px;
+      font-size: clamp(52px, 6vw, 82px);
+      line-height: .94;
+      font-weight: 800;
+    }
+
+    h2 {
+      max-width: 960px;
+      font-size: clamp(36px, 4vw, 54px);
+      line-height: 1.04;
+      font-weight: 800;
+    }
+
+    h3 {
+      font-size: clamp(22px, 2.2vw, 32px);
+      line-height: 1.08;
+      font-weight: 800;
+    }
+
+    .lead {
+      max-width: 820px;
+      color: var(--muted);
+      font-size: clamp(18px, 1.8vw, 24px);
+      line-height: 1.35;
+    }
+
+    .accent {
+      color: var(--cyan);
+    }
+
+    .green {
+      color: var(--green);
+    }
+
+    .amber {
+      color: var(--amber);
+    }
+
+    .red {
+      color: var(--red);
+    }
+
+    .meta {
+      color: #6f7c89;
+      font-size: 13px;
+    }
+
+    .footer {
+      position: absolute;
+      left: 84px;
+      right: 66px;
+      bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #66707a;
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .footer strong {
+      color: var(--cyan);
+      font-size: 15px;
+    }
+
+    .cover-grid {
+      grid-template-columns: minmax(0, .9fr) minmax(420px, 1fr);
+      align-items: center;
+      gap: 54px;
+    }
+
+    .cover-copy {
+      display: grid;
+      align-content: center;
+      gap: 26px;
+      min-width: 0;
+    }
+
+    .site-card {
+      display: grid;
+      gap: 22px;
+      min-width: 0;
+    }
+
+    .site-shot {
+      width: 100%;
+      aspect-ratio: 16 / 10.2;
+      object-fit: cover;
+      object-position: top left;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 18px 52px rgba(0, 0, 0, .28);
+    }
+
+    .url-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      max-width: 100%;
+      min-height: 46px;
+      padding: 0 22px;
+      border: 1px solid var(--cyan);
+      border-radius: 10px;
+      color: var(--cyan);
+      background: rgba(8, 215, 215, .08);
+      font-weight: 800;
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .hero-statement {
+      align-content: center;
+      gap: 52px;
+    }
+
+    .statement {
+      max-width: 940px;
+      color: var(--green);
+      font-size: clamp(28px, 3.1vw, 42px);
+      font-weight: 800;
+      line-height: 1.18;
+    }
+
+    .three-cols,
+    .two-cols,
+    .check-grid {
+      display: grid;
+      gap: 28px;
+    }
+
+    .three-cols {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .two-cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      min-height: 150px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(14, 20, 28, .9);
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .card.cyan {
+      border-color: var(--cyan);
+    }
+
+    .card.green {
+      border-color: var(--green);
+    }
+
+    .card.amber {
+      border-color: var(--amber);
+    }
+
+    .card.red {
+      border-color: var(--red);
+    }
+
+    .card p,
+    .step p,
+    .row p {
+      color: var(--muted);
+      font-size: clamp(15px, 1.5vw, 19px);
+      line-height: 1.35;
+    }
+
+    .content {
+      display: grid;
+      gap: 42px;
+      align-content: center;
+      width: 100%;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 34px;
+    }
+
+    .question-row {
+      display: grid;
+      grid-template-columns: 94px minmax(260px, .75fr) minmax(360px, 1fr);
+      align-items: center;
+      gap: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .question-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .number {
+      font-size: clamp(40px, 4vw, 56px);
+      font-weight: 900;
+      line-height: .9;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      align-items: start;
+      gap: 22px;
+      margin-top: 28px;
+    }
+
+    .step {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      justify-items: center;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .step::after {
+      content: "";
+      position: absolute;
+      top: 35px;
+      left: calc(50% + 42px);
+      width: calc(100% - 62px);
+      height: 2px;
+      background: var(--line);
+    }
+
+    .step:last-child::after {
+      display: none;
+    }
+
+    .bubble {
+      display: grid;
+      place-items: center;
+      width: 70px;
+      height: 70px;
+      border-radius: 999px;
+      background: var(--cyan);
+      color: var(--bg);
+      font-family: "Aptos Display", Aptos, sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .step:nth-child(even) .bubble {
+      background: var(--green);
+    }
+
+    .step h3 {
+      font-size: clamp(17px, 1.7vw, 24px);
+    }
+
+    .callout {
+      max-width: 880px;
+      margin-inline: auto;
+      padding: 20px 28px;
+      border: 1px solid var(--cyan);
+      border-radius: 10px;
+      background: rgba(8, 215, 215, .06);
+      color: var(--text);
+      font-size: clamp(18px, 1.8vw, 24px);
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.25;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      align-items: start;
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .day {
+      display: grid;
+      gap: 18px;
+      justify-items: center;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .day .bubble {
+      width: 74px;
+      height: 74px;
+      background: var(--cyan);
+      font-size: 20px;
+    }
+
+    .day.test .bubble {
+      width: 86px;
+      height: 86px;
+      background: var(--amber);
+    }
+
+    .day h3 {
+      min-height: 56px;
+      font-size: clamp(16px, 1.6vw, 22px);
+      line-height: 1.05;
+    }
+
+    .forms-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 68px;
+      align-items: stretch;
+    }
+
+    .bullets {
+      display: grid;
+      gap: 18px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .bullets li {
+      position: relative;
+      padding-left: 32px;
+      color: var(--text);
+      font-size: clamp(17px, 1.6vw, 20px);
+      line-height: 1.3;
+    }
+
+    .bullets li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .55em;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .priority-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 36px;
+      color: var(--muted);
+    }
+
+    .priority {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .priority strong {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .check-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .check-card {
+      min-height: 106px;
+      padding: 24px 28px;
+      border: 1px solid var(--cyan);
+      border-radius: 10px;
+      background: rgba(14, 20, 28, .88);
+    }
+
+    .check-card:nth-child(n + 4) {
+      border-color: var(--green);
+    }
+
+    .final-action {
+      justify-self: center;
+      width: min(920px, 100%);
+      padding: 20px 28px;
+      border-radius: 10px;
+      background: var(--green);
+      color: var(--bg);
+      font-size: clamp(18px, 1.8vw, 24px);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .toolbar button {
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .toolbar button:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    body.editing [data-editable] {
+      outline: 1px dashed rgba(8, 215, 215, .65);
+      outline-offset: 3px;
+      cursor: text;
+    }
+
+    body.editing .stage {
+      box-shadow: 0 0 0 2px rgba(8, 215, 215, .4), var(--shadow);
+    }
+
+    @media (max-width: 900px) {
+      body {
+        overflow: auto;
+      }
+
+      .deck-shell {
+        display: block;
+        padding: 0;
+      }
+
+      .stage {
+        width: 100vw;
+        min-height: 100vh;
+        aspect-ratio: auto;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .slide {
+        position: static;
+        min-height: 100vh;
+        padding: 44px 28px 70px 44px;
+      }
+
+      .slide.is-active {
+        display: grid;
+      }
+
+      .cover-grid,
+      .three-cols,
+      .two-cols,
+      .forms-grid,
+      .check-grid,
+      .process-grid,
+      .question-row {
+        grid-template-columns: 1fr;
+      }
+
+      .flow,
+      .timeline,
+      .priority-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .step::after {
+        display: none;
+      }
+
+      .footer {
+        left: 44px;
+        right: 28px;
+      }
+    }
+
+    @media print {
+      body {
+        overflow: visible;
+        background: var(--bg);
+      }
+
+      .deck-shell,
+      .stage {
+        display: block;
+        width: auto;
+        height: auto;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .toolbar {
+        display: none;
+      }
+
+      .slide,
+      .slide.is-active {
+        position: relative;
+        display: grid;
+        width: 100vw;
+        height: 56.25vw;
+        max-height: 100vh;
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck-shell">
+    <div class="stage" aria-live="polite">
+      <section class="slide cover-grid is-active" data-slide>
+        <div class="cover-copy">
+          <div class="slide-kicker" data-editable>Metableton Ecole</div>
+          <h1 data-editable>Beta privee</h1>
+          <p class="lead" data-editable>Deroule, roles, feedbacks et decisions produit.</p>
+          <a class="url-chip" href="https://metableton-ecole.vercel.app/" data-editable>https://metableton-ecole.vercel.app/</a>
+          <p class="meta" data-editable>Version de pilotage - 18 juin 2026</p>
+        </div>
+        <div class="site-card">
+          <img class="site-shot" src="assets/metableton-home.png" alt="Capture de la page d'accueil Metableton Ecole">
+          <h3 data-editable>La beta part du site live et se concentre sur le parcours reel des testeurs.</h3>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>01</strong></div>
+      </section>
+
+      <section class="slide hero-statement" data-slide>
+        <div>
+          <div class="slide-kicker" data-editable>Principe</div>
+          <h2 data-editable>La beta ne cherche pas a tout prouver.</h2>
+        </div>
+        <p class="statement" data-editable>Elle doit produire une decision claire : corriger, elargir, lancer ou repositionner.</p>
+        <div class="three-cols">
+          <article class="card">
+            <h3 data-editable>Observer</h3>
+            <p data-editable>Tester le produit sans trop guider.</p>
+          </article>
+          <article class="card cyan">
+            <h3 class="accent" data-editable>Mesurer</h3>
+            <p data-editable>Comprendre les blocages recurrents.</p>
+          </article>
+          <article class="card">
+            <h3 data-editable>Decider</h3>
+            <p data-editable>Transformer les retours en actions.</p>
+          </article>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>02</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Validation</div>
+            <h2 data-editable>Les 3 questions de la beta</h2>
+            <p class="lead" data-editable>Chaque retour doit aider a repondre a une de ces questions.</p>
+          </div>
+          <div class="question-list">
+            <div class="question-row">
+              <div class="number accent" data-editable>01</div>
+              <h3 data-editable>Est-ce compris ?</h3>
+              <p data-editable>Le concept est-il clair sans explication orale ?</p>
+            </div>
+            <div class="question-row">
+              <div class="number green" data-editable>02</div>
+              <h3 data-editable>Est-ce utile ?</h3>
+              <p data-editable>Les profils cibles voient-ils une valeur concrete ?</p>
+            </div>
+            <div class="question-row">
+              <div class="number amber" data-editable>03</div>
+              <h3 data-editable>Est-ce presentable ?</h3>
+              <p data-editable>Le MVP peut-il passer a une beta plus large ?</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>03</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Cohorte</div>
+            <h2 data-editable>3 a 5 testeurs, pas plus au debut</h2>
+            <p class="lead" data-editable>Petit groupe, feedbacks riches, gestion simple.</p>
+          </div>
+          <div class="three-cols">
+            <article class="card cyan">
+              <h3 data-editable>Eleve / musicien</h3>
+              <p data-editable>Comprendre l'offre et demander un acces.</p>
+            </article>
+            <article class="card green">
+              <h3 data-editable>Enseignant</h3>
+              <p data-editable>Valider les demandes et evaluer Classroom.</p>
+            </article>
+            <article class="card amber">
+              <h3 data-editable>Admin / responsable</h3>
+              <p data-editable>Evaluer pilotage, roles et credibilite.</p>
+            </article>
+          </div>
+          <p class="callout" data-editable>Optionnel ensuite : partenaire ecole ou profil non-technique.</p>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>04</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Parcours testeur</div>
+            <h2 data-editable>Le test doit rester court et observable</h2>
+            <p class="lead" data-editable>10 a 15 minutes pour identifier les vrais moments de friction.</p>
+          </div>
+          <div class="flow">
+            <div class="step"><div class="bubble">1</div><h3 data-editable>Home</h3><p data-editable>Comprendre</p></div>
+            <div class="step"><div class="bubble">2</div><h3 data-editable>Catalogue</h3><p data-editable>Explorer</p></div>
+            <div class="step"><div class="bubble">3</div><h3 data-editable>Login</h3><p data-editable>Google</p></div>
+            <div class="step"><div class="bubble">4</div><h3 data-editable>Dashboard</h3><p data-editable>Role</p></div>
+            <div class="step"><div class="bubble">5</div><h3 data-editable>Classroom</h3><p data-editable>Lien</p></div>
+            <div class="step"><div class="bubble">6</div><h3 data-editable>Formulaire</h3><p data-editable>Retour</p></div>
+          </div>
+          <p class="callout" data-editable>Regle : laisser avancer seul, puis noter le moment exact de confusion.</p>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>05</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Onboarding</div>
+            <h2 data-editable>Chaque testeur recoit seulement l'essentiel</h2>
+            <p class="lead" data-editable>Moins de documents, plus de chances d'avoir des retours exploitables.</p>
+          </div>
+          <div class="question-list">
+            <div class="question-row">
+              <div class="number accent" data-editable>01</div>
+              <h3 data-editable>Lien beta</h3>
+              <p data-editable>URL du site live a tester.</p>
+            </div>
+            <div class="question-row">
+              <div class="number green" data-editable>02</div>
+              <h3 data-editable>Role clair</h3>
+              <p data-editable>Eleve, enseignant ou admin.</p>
+            </div>
+            <div class="question-row">
+              <div class="number amber" data-editable>03</div>
+              <h3 data-editable>Checklist + formulaire</h3>
+              <p data-editable>Parcours adapte puis feedback principal.</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>06</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Google Forms</div>
+            <h2 data-editable>Deux formulaires suffisent</h2>
+            <p class="lead" data-editable>Un canal principal pour tous, un canal bug quand il faut reproduire.</p>
+          </div>
+          <div class="forms-grid">
+            <article class="card cyan">
+              <h3 class="accent" data-editable>Feedback principal</h3>
+              <ul class="bullets accent">
+                <li data-editable>Obligatoire pour tous</li>
+                <li data-editable>3 a 5 minutes</li>
+                <li data-editable>Comprehension, utilite, friction, priorite</li>
+              </ul>
+            </article>
+            <article class="card amber">
+              <h3 class="amber" data-editable>Signalement bug</h3>
+              <ul class="bullets amber">
+                <li data-editable>Seulement si probleme</li>
+                <li data-editable>2 a 4 minutes</li>
+                <li data-editable>Page, action, resultat observe, reproduction</li>
+              </ul>
+            </article>
+          </div>
+          <p class="callout green" data-editable>Le formulaire long est l'ennemi du feedback honnete.</p>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>07</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Cadence</div>
+            <h2 data-editable>Un cycle de beta en 7 jours</h2>
+            <p class="lead" data-editable>Le rythme doit etre assez court pour garder l'energie.</p>
+          </div>
+          <div class="timeline">
+            <div class="day"><div class="bubble">J0</div><h3 data-editable>Preparation</h3></div>
+            <div class="day"><div class="bubble">J1</div><h3 data-editable>Invitations</h3></div>
+            <div class="day test"><div class="bubble">J2-J4</div><h3 data-editable>Tests</h3></div>
+            <div class="day"><div class="bubble">J5</div><h3 data-editable>Triage</h3></div>
+            <div class="day"><div class="bubble">J6</div><h3 data-editable>Decision</h3></div>
+            <div class="day"><div class="bubble">J7</div><h3 data-editable>Retour testeurs</h3></div>
+          </div>
+          <p class="callout green" data-editable>Pendant les tests : observer d'abord, corriger seulement les bugs bloquants.</p>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>08</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Triage</div>
+            <h2 data-editable>Du feedback brut a l'action</h2>
+            <p class="lead" data-editable>Chaque retour sort avec un statut, une priorite et une prochaine action.</p>
+          </div>
+          <div class="process-grid">
+            <article class="card"><h3 data-editable>Feedback</h3><p data-editable>Google Form</p></article>
+            <article class="card"><h3 data-editable>Classement</h3><p data-editable>Bug / UX / feature</p></article>
+            <article class="card"><h3 data-editable>Priorite</h3><p data-editable>P0 a P3</p></article>
+            <article class="card green"><h3 class="green" data-editable>Action</h3><p data-editable>Ticket / backlog / decision</p></article>
+          </div>
+          <div class="priority-row">
+            <div class="priority"><strong class="red" data-editable>P0</strong><span data-editable>bloquant</span></div>
+            <div class="priority"><strong class="amber" data-editable>P1</strong><span data-editable>avant prochaine demo</span></div>
+            <div class="priority"><strong class="accent" data-editable>P2</strong><span data-editable>beta 2</span></div>
+            <div class="priority"><strong data-editable>P3</strong><span data-editable>plus tard</span></div>
+          </div>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>09</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Decision</div>
+            <h2 data-editable>Savoir quand continuer ou ralentir</h2>
+            <p class="lead" data-editable>Les criteres doivent etre visibles avant le debut de la beta.</p>
+          </div>
+          <div class="two-cols">
+            <article class="card green">
+              <h3 class="green" data-editable>Succes</h3>
+              <ul class="bullets green">
+                <li data-editable>4/5 comprennent le concept</li>
+                <li data-editable>3/5 voient une utilite claire</li>
+                <li data-editable>0 bug bloquant</li>
+                <li data-editable>Classroom percu comme avantage</li>
+              </ul>
+            </article>
+            <article class="card red">
+              <h3 class="red" data-editable>Alerte</h3>
+              <ul class="bullets red">
+                <li data-editable>Plus de 50% ne comprennent pas</li>
+                <li data-editable>Plus de 3 frictions majeures</li>
+                <li data-editable>Bug auth / Classroom bloquant</li>
+                <li data-editable>Feedbacks negatifs convergents</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>10</strong></div>
+      </section>
+
+      <section class="slide" data-slide>
+        <div class="content">
+          <div>
+            <div class="slide-kicker" data-editable>Lancement</div>
+            <h2 data-editable>Pret a lancer quand ces 6 points sont faits</h2>
+          </div>
+          <div class="check-grid">
+            <article class="check-card"><h3 data-editable>Cohorte</h3><p data-editable>3 noms confirmes</p></article>
+            <article class="check-card"><h3 data-editable>Plateforme</h3><p data-editable>site live verifie</p></article>
+            <article class="check-card"><h3 data-editable>Forms</h3><p data-editable>2 formulaires crees</p></article>
+            <article class="check-card"><h3 data-editable>Messages</h3><p data-editable>invitation + onboarding</p></article>
+            <article class="check-card"><h3 data-editable>Triage</h3><p data-editable>board pret</p></article>
+            <article class="check-card"><h3 data-editable>Decision</h3><p data-editable>date fixee</p></article>
+          </div>
+          <p class="final-action" data-editable>Lancer avec 3 testeurs, trier une seule fois, corriger P0/P1, puis elargir.</p>
+        </div>
+        <div class="footer"><span>Metableton Ecole - beta privee</span><strong>11</strong></div>
+      </section>
+    </div>
+
+    <nav class="toolbar" aria-label="Navigation de la presentation">
+      <button type="button" data-prev>Precedent</button>
+      <span><strong data-current>1</strong> / <span data-total>11</span></span>
+      <button type="button" data-next>Suivant</button>
+      <button type="button" data-edit>Modifier</button>
+      <button type="button" data-download>Telecharger HTML modifie</button>
+      <button type="button" onclick="window.print()">Exporter PDF</button>
+      <span>Fleches clavier : navigation</span>
+    </nav>
+  </main>
+
+  <script>
+    const slides = [...document.querySelectorAll("[data-slide]")];
+    const current = document.querySelector("[data-current]");
+    const total = document.querySelector("[data-total]");
+    const editButton = document.querySelector("[data-edit]");
+    const downloadButton = document.querySelector("[data-download]");
+    let index = 0;
+    let editing = false;
+
+    total.textContent = slides.length;
+
+    function showSlide(nextIndex) {
+      index = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("is-active", slideIndex === index);
+      });
+      current.textContent = index + 1;
+      window.location.hash = `slide-${index + 1}`;
+    }
+
+    function setEditing(nextEditing) {
+      editing = nextEditing;
+      document.body.classList.toggle("editing", editing);
+      document.querySelectorAll("[data-editable]").forEach((node) => {
+        node.contentEditable = editing ? "true" : "false";
+      });
+      editButton.textContent = editing ? "Terminer" : "Modifier";
+    }
+
+    document.querySelector("[data-prev]").addEventListener("click", () => showSlide(index - 1));
+    document.querySelector("[data-next]").addEventListener("click", () => showSlide(index + 1));
+    editButton.addEventListener("click", () => setEditing(!editing));
+    downloadButton.addEventListener("click", () => {
+      setEditing(false);
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll("[contenteditable]").forEach((node) => node.removeAttribute("contenteditable"));
+      clone.querySelector("body").classList.remove("editing");
+      const html = "<!doctype html>\n" + clone.outerHTML;
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "metableton-beta-deroule-modifie.html";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (editing) return;
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") showSlide(index + 1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") showSlide(index - 1);
+      if (event.key === "Home") showSlide(0);
+      if (event.key === "End") showSlide(slides.length - 1);
+    });
+
+    const hashMatch = window.location.hash.match(/slide-(\d+)/);
+    if (hashMatch) {
+      showSlide(Number(hashMatch[1]) - 1);
+    } else {
+      showSlide(0);
+    }
+  </script>
+</body>
+</html>

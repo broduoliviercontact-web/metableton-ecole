@@ -1,0 +1,285 @@
+{"kind":"deck","id":"pr/po6ot6","name":"Deck"}
+{"kind":"layout","layoutId":"1472ca79-e7ea-42f3-8a45-bb796abcb18e","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"b20f8bea-ad98-45f5-87ec-e0e7bc8520af","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/41d332","slide":1,"title":"METABLETON ECOLE","textShapes":14}
+{"kind":"shape","id":"sh/rmhk3q5o","slide":1,"bbox":[0,0,1280,720]}
+{"kind":"shape","id":"sh/g7adsji5","slide":1,"bbox":[0,0,430,720]}
+{"kind":"textbox","id":"sh/9s36hcrm","slide":1,"text":"METABLETON ECOLE","textPreview":"METABLETON ECOLE","textChars":16,"textLines":1,"bbox":[64,58,300,24]}
+{"kind":"textbox","id":"sh/yd0z6103","slide":1,"text":"Beta privee","textPreview":"Beta privee","textChars":11,"textLines":1,"bbox":[64,178,640,74]}
+{"kind":"textbox","id":"sh/rytsvu9k","slide":1,"text":"Comment elle va se derouler, ce qu'elle doit valider, et comment les retours deviennent des decisions produit.","textPreview":"Comment elle va se derouler, ce qu'elle doit valider, et comment les retours deviennent des decisions produit.","textChars":110,"textLines":1,"bbox":[64,274,318,142]}
+{"kind":"textbox","id":"sh/gfmlkjm1","slide":1,"text":"Version de pilotage - 18 juin 2026","textPreview":"Version de pilotage - 18 juin 2026","textChars":34,"textLines":1,"bbox":[64,594,420,24]}
+{"kind":"shape","id":"sh/90je9cvi","slide":1,"bbox":[548,78,586,332]}
+{"kind":"textbox","id":"sh/r65wjudg","slide":1,"text":"https://metableton-ecole.vercel.app/","textPreview":"https://metableton-ecole.vercel.app/","textChars":36,"textLines":1,"bbox":[584,428,520,24]}
+{"kind":"textbox","id":"sh/vahoza1g","slide":1,"text":"Repo projet: /Users/zub/metableton-school","textPreview":"Repo projet: /Users/zub/metableton-school","textChars":41,"textLines":1,"bbox":[584,456,520,22]}
+{"kind":"shape","id":"sh/6tovahoz","slide":1,"bbox":[548,526,172,74]}
+{"kind":"textbox","id":"sh/dg7adsji","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[566,540,44,24]}
+{"kind":"textbox","id":"sh/ovahoza1","slide":1,"text":"Tester avec 3 a 5 personnes","textPreview":"Tester avec 3 a 5 personnes","textChars":27,"textLines":1,"bbox":[566,566,132,24]}
+{"kind":"shape","id":"sh/z25kb6xk","slide":1,"bbox":[744,526,172,74]}
+{"kind":"textbox","id":"sh/6hcrmhk3","slide":1,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[762,540,44,24]}
+{"kind":"textbox","id":"sh/d8v6psfi","slide":1,"text":"Observer le parcours reel","textPreview":"Observer le parcours reel","textChars":25,"textLines":1,"bbox":[762,566,132,24]}
+{"kind":"shape","id":"sh/onyd0z61","slide":1,"bbox":[940,526,172,74]}
+{"kind":"textbox","id":"sh/vy90je9c","slide":1,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[958,540,44,24]}
+{"kind":"textbox","id":"sh/6dcbulwv","slide":1,"text":"Transformer les retours en actions","textPreview":"Transformer les retours en actions","textChars":34,"textLines":1,"bbox":[958,566,132,24]}
+{"kind":"textbox","id":"sh/ahoza1gv","slide":1,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/32lszqtc","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"image","id":"im/z25kb6xk","slide":1,"name":"","geometry":"roundRect","alt":"Capture de la page d'accueil Metableton Ecole","bbox":[572,102,538,284]}
+{"kind":"notes","id":"nt/41d332","slide":1,"text":""}
+{"kind":"slide","id":"sl/yv5sag","slide":2,"title":"OBJECTIF","textShapes":12}
+{"kind":"textbox","id":"sh/nuxc3ylc","slide":2,"text":"OBJECTIF","textPreview":"OBJECTIF","textChars":8,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/gbq1oryt","slide":2,"text":"Ce que la beta doit valider","textPreview":"Ce que la beta doit valider","textChars":27,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/5wjudg7a","slide":2,"text":"La beta ne sert pas a tout tester. Elle sert a repondre a trois questions simples.","textPreview":"La beta ne sert pas a tout tester. Elle sert a repondre a trois questions simples.","textChars":82,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/yhgn29gr","slide":2,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/n29gr2p8","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/gn29gr2p","slide":2,"bbox":[64,238,344,250]}
+{"kind":"shape","id":"sh/58z25kb6","slide":2,"bbox":[96,268,48,48]}
+{"kind":"textbox","id":"sh/ytsvu9kn","slide":2,"text":"Compris ?","textPreview":"Compris ?","textChars":9,"textLines":1,"bbox":[102,342,270,38]}
+{"kind":"textbox","id":"sh/neloj2t8","slide":2,"text":"Les visiteurs comprennent-ils le concept en moins d'une minute ?","textPreview":"Les visiteurs comprennent-ils le concept en moins d'une minute ?","textChars":64,"textLines":1,"bbox":[102,392,268,78]}
+{"kind":"shape","id":"sh/nap4r65w","slide":2,"bbox":[456,238,344,250]}
+{"kind":"shape","id":"sh/upwb2hwf","slide":2,"bbox":[488,268,48,48]}
+{"kind":"textbox","id":"sh/5gbq1ory","slide":2,"text":"Utile ?","textPreview":"Utile ?","textChars":7,"textLines":1,"bbox":[494,342,270,38]}
+{"kind":"textbox","id":"sh/cvixczed","slide":2,"text":"Les eleves, professeurs et responsables voient-ils une vraie valeur ?","textPreview":"Les eleves, professeurs et responsables voient-ils une vraie valeur ?","textChars":69,"textLines":1,"bbox":[494,392,268,78]}
+{"kind":"shape","id":"sh/nyd0z610","slide":2,"bbox":[848,238,344,250]}
+{"kind":"shape","id":"sh/udg7adsj","slide":2,"bbox":[880,268,48,48]}
+{"kind":"textbox","id":"sh/54zidony","slide":2,"text":"Pret ?","textPreview":"Pret ?","textChars":6,"textLines":1,"bbox":[886,342,270,38]}
+{"kind":"textbox","id":"sh/cj6tovah","slide":2,"text":"Le MVP est-il presentable pour une beta plus large ou une V1 limitee ?","textPreview":"Le MVP est-il presentable pour une beta plus large ou une V1 limitee ?","textChars":70,"textLines":1,"bbox":[886,392,268,78]}
+{"kind":"textbox","id":"sh/judg7ads","slide":2,"text":"Le bon resultat n'est pas une liste infinie d'idees. C'est une decision claire: corriger, elargir, lancer ou repositionner.","textPreview":"Le bon resultat n'est pas une liste infinie d'idees. C'est une decision claire: corriger, elargir, lancer ou repositionner.","textChars":123,"textLines":1,"bbox":[132,560,1016,46]}
+{"kind":"notes","id":"nt/yv5sag","slide":2,"text":""}
+{"kind":"slide","id":"sl/5jgozn","slide":3,"title":"COHORTE","textShapes":18}
+{"kind":"textbox","id":"sh/5o7qpg3e","slide":3,"text":"COHORTE","textPreview":"COHORTE","textChars":7,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/yxobm58z","slide":3,"text":"Commencer petit, mais bien cible","textPreview":"Commencer petit, mais bien cible","textChars":32,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/nih4byhg","slide":3,"text":"Le premier batch doit etre facile a gerer et riche en retours qualitatifs.","textPreview":"Le premier batch doit etre facile a gerer et riche en retours qualitatifs.","textChars":74,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/gr2p8nqx","slide":3,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/9cvixcze","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"textbox","id":"sh/ylc7u54z","slide":3,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[76,218,150,78]}
+{"kind":"textbox","id":"sh/r65wjudg","slide":3,"text":"testeurs minimum","textPreview":"testeurs minimum","textChars":16,"textLines":1,"bbox":[76,300,150,30]}
+{"kind":"textbox","id":"sh/gfmlkjm1","slide":3,"text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[302,218,150,78]}
+{"kind":"textbox","id":"sh/90je9cvi","slide":3,"text":"testeurs maximum","textPreview":"testeurs maximum","textChars":16,"textLines":1,"bbox":[302,300,150,30]}
+{"kind":"textbox","id":"sh/lc7u54zi","slide":3,"text":"7","textPreview":"7","textChars":1,"textLines":1,"bbox":[528,218,150,78]}
+{"kind":"textbox","id":"sh/wra5gbq1","slide":3,"text":"jours de cycle","textPreview":"jours de cycle","textChars":14,"textLines":1,"bbox":[528,300,150,30]}
+{"kind":"shape","id":"sh/36hcrmhk","slide":3,"bbox":[748,198,410,354]}
+{"kind":"textbox","id":"sh/eloj2t83","slide":3,"text":"Profils a couvrir","textPreview":"Profils a couvrir","textChars":17,"textLines":1,"bbox":[788,236,300,32]}
+{"kind":"shape","id":"sh/l0rqd4vm","slide":3,"bbox":[794,303,12,12]}
+{"kind":"textbox","id":"sh/wfyxobm5","slide":3,"text":"1 eleve / musicien","textPreview":"1 eleve / musicien","textChars":18,"textLines":1,"bbox":[822,296,288,42]}
+{"kind":"shape","id":"sh/7u54zido","slide":3,"bbox":[794,345,12,12]}
+{"kind":"textbox","id":"sh/ed8bat47","slide":3,"text":"1 enseignant","textPreview":"1 enseignant","textChars":12,"textLines":1,"bbox":[822,338,288,42]}
+{"kind":"shape","id":"sh/psfil0rq","slide":3,"bbox":[794,387,12,12]}
+{"kind":"textbox","id":"sh/w7mp0bi9","slide":3,"text":"1 admin / responsable pedagogique","textPreview":"1 admin / responsable pedagogique","textChars":33,"textLines":1,"bbox":[822,380,288,42]}
+{"kind":"shape","id":"sh/wb2hwfyx","slide":3,"bbox":[794,429,12,12]}
+{"kind":"textbox","id":"sh/lwval87e","slide":3,"text":"Option: partenaire ecole","textPreview":"Option: partenaire ecole","textChars":24,"textLines":1,"bbox":[822,422,288,42]}
+{"kind":"shape","id":"sh/e9cvixcz","slide":3,"bbox":[794,471,12,12]}
+{"kind":"textbox","id":"sh/3q5o7qpg","slide":3,"text":"Option: utilisateur non technique","textPreview":"Option: utilisateur non technique","textChars":33,"textLines":1,"bbox":[822,464,288,42]}
+{"kind":"textbox","id":"sh/w3m94fu1","slide":3,"text":"La beta 1 cherche des signaux forts, pas une statistique parfaite.","textPreview":"La beta 1 cherche des signaux forts, pas une statistique parfaite.","textChars":66,"textLines":1,"bbox":[98,440,560,62]}
+{"kind":"notes","id":"nt/5jgozn","slide":3,"text":""}
+{"kind":"slide","id":"sl/745its","slide":4,"title":"PARCOURS TESTEUR","textShapes":24}
+{"kind":"textbox","id":"sh/yhgn29gr","slide":4,"text":"PARCOURS TESTEUR","textPreview":"PARCOURS TESTEUR","textChars":16,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/58z25kb6","slide":4,"text":"Un test court, observe du debut a la fin","textPreview":"Un test court, observe du debut a la fin","textChars":40,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/gn29gr2p","slide":4,"text":"Objectif: voir ou le parcours devient clair, lent ou confus.","textPreview":"Objectif: voir ou le parcours devient clair, lent ou confus.","textChars":60,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/nuxc3ylc","slide":4,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/y90je9cv","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/5wjudg7a","slide":4,"bbox":[80,286,72,72]}
+{"kind":"textbox","id":"sh/gbq1oryt","slide":4,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[90,307,52,30]}
+{"kind":"textbox","id":"sh/nqxs72x4","slide":4,"text":"Home","textPreview":"Home","textChars":4,"textLines":1,"bbox":[30,384,172,28]}
+{"kind":"textbox","id":"sh/u54zidon","slide":4,"text":"Comprendre l'offre","textPreview":"Comprendre l'offre","textChars":18,"textLines":1,"bbox":[30,416,172,44]}
+{"kind":"shape","id":"sh/cbulwval","slide":4,"bbox":[156,322,110,0]}
+{"kind":"shape","id":"sh/5sneloj2","slide":4,"bbox":[274,286,72,72]}
+{"kind":"textbox","id":"sh/u54zidon","slide":4,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[284,307,52,30]}
+{"kind":"textbox","id":"sh/nqxs72x4","slide":4,"text":"Catalogue","textPreview":"Catalogue","textChars":9,"textLines":1,"bbox":[224,384,172,28]}
+{"kind":"textbox","id":"sh/czed8v6p","slide":4,"text":"Voir les cours","textPreview":"Voir les cours","textChars":14,"textLines":1,"bbox":[224,416,172,44]}
+{"kind":"shape","id":"sh/5kb6xkf6","slide":4,"bbox":[350,322,110,0]}
+{"kind":"shape","id":"sh/ytsvu9kn","slide":4,"bbox":[468,286,72,72]}
+{"kind":"textbox","id":"sh/neloj2t8","slide":4,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[478,307,52,30]}
+{"kind":"textbox","id":"sh/gn29gr2p","slide":4,"text":"Login","textPreview":"Login","textChars":5,"textLines":1,"bbox":[418,384,172,28]}
+{"kind":"textbox","id":"sh/58z25kb6","slide":4,"text":"Connexion Google","textPreview":"Connexion Google","textChars":16,"textLines":1,"bbox":[418,416,172,44]}
+{"kind":"shape","id":"sh/tcj6tova","slide":4,"bbox":[544,322,110,0]}
+{"kind":"shape","id":"sh/0rqd4vmt","slide":4,"bbox":[662,286,72,72]}
+{"kind":"textbox","id":"sh/b6xkf6dc","slide":4,"text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[672,307,52,30]}
+{"kind":"textbox","id":"sh/il0rqd4v","slide":4,"text":"Dashboard","textPreview":"Dashboard","textChars":9,"textLines":1,"bbox":[612,384,172,28]}
+{"kind":"textbox","id":"sh/t47y1kre","slide":4,"text":"Tester le role","textPreview":"Tester le role","textChars":14,"textLines":1,"bbox":[612,416,172,44]}
+{"kind":"shape","id":"sh/0je9cvix","slide":4,"bbox":[738,322,110,0]}
+{"kind":"shape","id":"sh/byhgn29g","slide":4,"bbox":[856,286,72,72]}
+{"kind":"textbox","id":"sh/idonyd0z","slide":4,"text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[866,307,52,30]}
+{"kind":"textbox","id":"sh/p0bi9s36","slide":4,"text":"Classroom","textPreview":"Classroom","textChars":9,"textLines":1,"bbox":[806,384,172,28]}
+{"kind":"textbox","id":"sh/0fepkzup","slide":4,"text":"Comprendre le lien","textPreview":"Comprendre le lien","textChars":18,"textLines":1,"bbox":[806,416,172,44]}
+{"kind":"shape","id":"sh/e9cvixcz","slide":4,"bbox":[932,322,110,0]}
+{"kind":"shape","id":"sh/3q5o7qpg","slide":4,"bbox":[1050,286,72,72]}
+{"kind":"textbox","id":"sh/wb2hwfyx","slide":4,"text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[1060,307,52,30]}
+{"kind":"textbox","id":"sh/lwval87e","slide":4,"text":"Feedback","textPreview":"Feedback","textChars":8,"textLines":1,"bbox":[1000,384,172,28]}
+{"kind":"textbox","id":"sh/ex0nuxc3","slide":4,"text":"Remplir le form","textPreview":"Remplir le form","textChars":15,"textLines":1,"bbox":[1000,416,172,44]}
+{"kind":"shape","id":"sh/3itgfmlk","slide":4,"bbox":[192,520,896,86]}
+{"kind":"textbox","id":"sh/w3m94fu1","slide":4,"text":"Regle de test: laisser la personne avancer seule autant que possible, puis noter le moment exact de confusion.","textPreview":"Regle de test: laisser la personne avancer seule autant que possible, puis noter le moment exact de confusion.","textChars":110,"textLines":1,"bbox":[226,544,828,42]}
+{"kind":"notes","id":"nt/745its","slide":4,"text":""}
+{"kind":"slide","id":"sl/mr08e1","slide":5,"title":"ONBOARDING","textShapes":18}
+{"kind":"textbox","id":"sh/pwb2hwfy","slide":5,"text":"ONBOARDING","textPreview":"ONBOARDING","textChars":10,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/i5sneloj","slide":5,"text":"Ce que chaque testeur recoit","textPreview":"Ce que chaque testeur recoit","textChars":28,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/7qpg3ex0","slide":5,"text":"On reduit la charge cognitive: peu de documents, des consignes nettes.","textPreview":"On reduit la charge cognitive: peu de documents, des consignes nettes.","textChars":70,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/wjudg7ad","slide":5,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/p4r65wju","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/ed8v6psf","slide":5,"bbox":[116,212,468,124]}
+{"kind":"textbox","id":"sh/7y1kre1w","slide":5,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[146,242,58,38]}
+{"kind":"textbox","id":"sh/0nuxc3yl","slide":5,"text":"Lien beta","textPreview":"Lien beta","textChars":9,"textLines":1,"bbox":[226,237,250,32]}
+{"kind":"textbox","id":"sh/p8nqxs72","slide":5,"text":"URL de la plateforme a tester","textPreview":"URL de la plateforme a tester","textChars":29,"textLines":1,"bbox":[226,274,310,38]}
+{"kind":"shape","id":"sh/xobm58z2","slide":5,"bbox":[646,212,468,124]}
+{"kind":"textbox","id":"sh/83itgfml","slide":5,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[676,242,58,38]}
+{"kind":"textbox","id":"sh/fil0rqd4","slide":5,"text":"Role clair","textPreview":"Role clair","textChars":10,"textLines":1,"bbox":[756,237,250,32]}
+{"kind":"textbox","id":"sh/qxs72x4n","slide":5,"text":"Eleve, enseignant ou admin","textPreview":"Eleve, enseignant ou admin","textChars":26,"textLines":1,"bbox":[756,274,310,38]}
+{"kind":"shape","id":"sh/x0nuxc3y","slide":5,"bbox":[116,390,468,124]}
+{"kind":"textbox","id":"sh/4fu18jqh","slide":5,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[146,420,58,38]}
+{"kind":"textbox","id":"sh/fu18jqh0","slide":5,"text":"Checklist courte","textPreview":"Checklist courte","textChars":16,"textLines":1,"bbox":[226,415,250,32]}
+{"kind":"textbox","id":"sh/m94fu18j","slide":5,"text":"Parcours adapte au role","textPreview":"Parcours adapte au role","textChars":23,"textLines":1,"bbox":[226,452,310,38]}
+{"kind":"shape","id":"sh/xc3ylc7u","slide":5,"bbox":[646,390,468,124]}
+{"kind":"textbox","id":"sh/4r65wjud","slide":5,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[676,420,58,38]}
+{"kind":"textbox","id":"sh/032lszqt","slide":5,"text":"Formulaire","textPreview":"Formulaire","textChars":10,"textLines":1,"bbox":[756,415,250,32]}
+{"kind":"textbox","id":"sh/tovahoza","slide":5,"text":"Feedback principal apres le test","textPreview":"Feedback principal apres le test","textChars":32,"textLines":1,"bbox":[756,452,310,38]}
+{"kind":"textbox","id":"sh/ixczed8v","slide":5,"text":"Les limitations connues restent disponibles, mais ne doivent pas devenir un obstacle avant le test.","textPreview":"Les limitations connues restent disponibles, mais ne doivent pas devenir un obstacle avant le test.","textChars":99,"textLines":1,"bbox":[174,578,932,30]}
+{"kind":"notes","id":"nt/mr08e1","slide":5,"text":""}
+{"kind":"slide","id":"sl/0vq4mw","slide":6,"title":"FEEDBACK","textShapes":16}
+{"kind":"textbox","id":"sh/ji5snelo","slide":6,"text":"FEEDBACK","textPreview":"FEEDBACK","textChars":8,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/c3ylc7u5","slide":6,"text":"Deux formulaires, pas un questionnaire geant","textPreview":"Deux formulaires, pas un questionnaire geant","textChars":44,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/1kre1w7m","slide":6,"text":"Le testeur repond vite; l'equipe garde des donnees exploitables.","textPreview":"Le testeur repond vite; l'equipe garde des donnees exploitables.","textChars":64,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/ulwval87","slide":6,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/j6tovaho","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/crmhk3q5","slide":6,"bbox":[106,214,476,292]}
+{"kind":"textbox","id":"sh/1cfa9w3m","slide":6,"text":"Formulaire principal","textPreview":"Formulaire principal","textChars":20,"textLines":1,"bbox":[150,254,360,38]}
+{"kind":"shape","id":"sh/qh0fepkz","slide":6,"bbox":[158,331,12,12]}
+{"kind":"textbox","id":"sh/j2t83itg","slide":6,"text":"Obligatoire pour tous","textPreview":"Obligatoire pour tous","textChars":21,"textLines":1,"bbox":[186,324,318,42]}
+{"kind":"shape","id":"sh/byhgn29g","slide":6,"bbox":[158,369,12,12]}
+{"kind":"textbox","id":"sh/idonyd0z","slide":6,"text":"3 a 5 minutes","textPreview":"3 a 5 minutes","textChars":13,"textLines":1,"bbox":[186,362,318,42]}
+{"kind":"shape","id":"sh/t47y1kre","slide":6,"bbox":[158,407,12,12]}
+{"kind":"textbox","id":"sh/0je9cvix","slide":6,"text":"Compréhension, utilite, friction","textPreview":"Compréhension, utilite, friction","textChars":32,"textLines":1,"bbox":[186,400,318,42]}
+{"kind":"shape","id":"sh/b6xkf6dc","slide":6,"bbox":[158,445,12,12]}
+{"kind":"textbox","id":"sh/il0rqd4v","slide":6,"text":"Priorite d'amelioration","textPreview":"Priorite d'amelioration","textChars":23,"textLines":1,"bbox":[186,438,318,42]}
+{"kind":"shape","id":"sh/tcj6tova","slide":6,"bbox":[698,214,476,292]}
+{"kind":"textbox","id":"sh/0rqd4vmt","slide":6,"text":"Formulaire bug","textPreview":"Formulaire bug","textChars":14,"textLines":1,"bbox":[742,254,360,38]}
+{"kind":"shape","id":"sh/bi9s36hc","slide":6,"bbox":[750,331,12,12]}
+{"kind":"textbox","id":"sh/ixczed8v","slide":6,"text":"Seulement si bug","textPreview":"Seulement si bug","textChars":16,"textLines":1,"bbox":[778,324,318,42]}
+{"kind":"shape","id":"sh/al87ed8b","slide":6,"bbox":[750,369,12,12]}
+{"kind":"textbox","id":"sh/z61032ls","slide":6,"text":"2 a 4 minutes","textPreview":"2 a 4 minutes","textChars":13,"textLines":1,"bbox":[778,362,318,42]}
+{"kind":"shape","id":"sh/orytsvu9","slide":6,"bbox":[750,407,12,12]}
+{"kind":"textbox","id":"sh/hcrmhk3q","slide":6,"text":"Page, action, resultat observe","textPreview":"Page, action, resultat observe","textChars":30,"textLines":1,"bbox":[778,400,318,42]}
+{"kind":"shape","id":"sh/a9w3m94f","slide":6,"bbox":[750,445,12,12]}
+{"kind":"textbox","id":"sh/zupwb2hw","slide":6,"text":"Etapes de reproduction","textPreview":"Etapes de reproduction","textChars":22,"textLines":1,"bbox":[778,438,318,42]}
+{"kind":"textbox","id":"sh/sfil0rqd","slide":6,"text":"La question cle: chaque reponse doit aider a prendre une decision.","textPreview":"La question cle: chaque reponse doit aider a prendre une decision.","textChars":66,"textLines":1,"bbox":[194,568,890,36]}
+{"kind":"notes","id":"nt/0vq4mw","slide":6,"text":""}
+{"kind":"slide","id":"sl/38bgpz","slide":7,"title":"PLANNING","textShapes":18}
+{"kind":"textbox","id":"sh/47y1kre1","slide":7,"text":"PLANNING","textPreview":"PLANNING","textChars":8,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/bm58z25k","slide":7,"text":"Cadence simple sur 7 jours","textPreview":"Cadence simple sur 7 jours","textChars":26,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/m1cfa9w3","slide":7,"text":"Un cycle court suffit pour apprendre, corriger et decider.","textPreview":"Un cycle court suffit pour apprendre, corriger et decider.","textChars":58,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/tgfmlkjm","slide":7,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/4vmtwra5","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/bat47y1k","slide":7,"bbox":[78,260,154,168]}
+{"kind":"textbox","id":"sh/mp0bi9s3","slide":7,"text":"J0","textPreview":"J0","textChars":2,"textLines":1,"bbox":[96,292,118,46]}
+{"kind":"textbox","id":"sh/t83itgfm","slide":7,"text":"Preparation","textPreview":"Preparation","textChars":11,"textLines":1,"bbox":[92,356,126,42]}
+{"kind":"shape","id":"sh/4nap4r65","slide":7,"bbox":[268,260,154,168]}
+{"kind":"textbox","id":"sh/u9knih4b","slide":7,"text":"J1","textPreview":"J1","textChars":2,"textLines":1,"bbox":[286,292,118,46]}
+{"kind":"textbox","id":"sh/judg7ads","slide":7,"text":"Invitations","textPreview":"Invitations","textChars":11,"textLines":1,"bbox":[282,356,126,42]}
+{"kind":"shape","id":"sh/cfa9w3m9","slide":7,"bbox":[458,260,154,168]}
+{"kind":"textbox","id":"sh/1032lszq","slide":7,"text":"J2-J4","textPreview":"J2-J4","textChars":5,"textLines":1,"bbox":[476,292,118,46]}
+{"kind":"textbox","id":"sh/u18jqh0f","slide":7,"text":"Tests","textPreview":"Tests","textChars":5,"textLines":1,"bbox":[472,356,126,42]}
+{"kind":"shape","id":"sh/jm1cfa9w","slide":7,"bbox":[648,260,154,168]}
+{"kind":"textbox","id":"sh/c7u54zid","slide":7,"text":"J5","textPreview":"J5","textChars":2,"textLines":1,"bbox":[666,292,118,46]}
+{"kind":"textbox","id":"sh/1orytsvu","slide":7,"text":"Triage","textPreview":"Triage","textChars":6,"textLines":1,"bbox":[662,356,126,42]}
+{"kind":"shape","id":"sh/upwb2hwf","slide":7,"bbox":[838,260,154,168]}
+{"kind":"textbox","id":"sh/nap4r65w","slide":7,"text":"J6","textPreview":"J6","textChars":2,"textLines":1,"bbox":[856,292,118,46]}
+{"kind":"textbox","id":"sh/f6dcbulw","slide":7,"text":"Decision","textPreview":"Decision","textChars":8,"textLines":1,"bbox":[852,356,126,42]}
+{"kind":"shape","id":"sh/mlkjm1cf","slide":7,"bbox":[1028,260,154,168]}
+{"kind":"textbox","id":"sh/xc3ylc7u","slide":7,"text":"J7","textPreview":"J7","textChars":2,"textLines":1,"bbox":[1046,292,118,46]}
+{"kind":"textbox","id":"sh/4r65wjud","slide":7,"text":"Retour testeurs","textPreview":"Retour testeurs","textChars":15,"textLines":1,"bbox":[1042,356,126,42]}
+{"kind":"textbox","id":"sh/fepkzupw","slide":7,"text":"Pendant J2-J4, on evite de corriger tout de suite sauf bug bloquant. On observe d'abord.","textPreview":"Pendant J2-J4, on evite de corriger tout de suite sauf bug bloquant. On observe d'abord.","textChars":88,"textLines":1,"bbox":[182,528,916,34]}
+{"kind":"notes","id":"nt/38bgpz","slide":7,"text":""}
+{"kind":"slide","id":"sl/jygk4l","slide":8,"title":"TRIAGE","textShapes":26}
+{"kind":"textbox","id":"sh/r65wjudg","slide":8,"text":"TRIAGE","textPreview":"TRIAGE","textChars":6,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/gr2p8nqx","slide":8,"text":"Transformer les retours en decisions","textPreview":"Transformer les retours en decisions","textChars":36,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/9cvixcze","slide":8,"text":"Chaque retour doit sortir avec un statut: corriger, reporter, ignorer ou approfondir.","textPreview":"Chaque retour doit sortir avec un statut: corriger, reporter, ignorer ou approfondir.","textChars":85,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/yxobm58z","slide":8,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/nih4byhg","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/g3ex0nux","slide":8,"bbox":[141,205,46,46]}
+{"kind":"textbox","id":"sh/5o7qpg3e","slide":8,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[142,214,44,28]}
+{"kind":"textbox","id":"sh/y1kre1w7","slide":8,"text":"Recevoir","textPreview":"Recevoir","textChars":8,"textLines":1,"bbox":[220,204,230,30]}
+{"kind":"textbox","id":"sh/rmhk3q5o","slide":8,"text":"Google Form, message, email","textPreview":"Google Form, message, email","textChars":27,"textLines":1,"bbox":[220,240,360,28]}
+{"kind":"shape","id":"sh/fa9w3m94","slide":8,"bbox":[141,293,46,46]}
+{"kind":"textbox","id":"sh/qpg3ex0n","slide":8,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[142,302,44,28]}
+{"kind":"textbox","id":"sh/xczed8v6","slide":8,"text":"Classer","textPreview":"Classer","textChars":7,"textLines":1,"bbox":[220,292,230,30]}
+{"kind":"textbox","id":"sh/8v6psfil","slide":8,"text":"Bug, UX, contenu, feature","textPreview":"Bug, UX, contenu, feature","textChars":25,"textLines":1,"bbox":[220,328,360,28]}
+{"kind":"shape","id":"sh/fyxobm58","slide":8,"bbox":[141,381,46,46]}
+{"kind":"textbox","id":"sh/qd4vmtwr","slide":8,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[142,390,44,28]}
+{"kind":"textbox","id":"sh/x4nap4r6","slide":8,"text":"Prioriser","textPreview":"Prioriser","textChars":9,"textLines":1,"bbox":[220,380,230,30]}
+{"kind":"textbox","id":"sh/8jqh0fep","slide":8,"text":"P0, P1, P2 ou P3","textPreview":"P0, P1, P2 ou P3","textChars":16,"textLines":1,"bbox":[220,416,360,28]}
+{"kind":"shape","id":"sh/fmlkjm1c","slide":8,"bbox":[141,469,46,46]}
+{"kind":"textbox","id":"sh/q1orytsv","slide":8,"text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[142,478,44,28]}
+{"kind":"textbox","id":"sh/y1kre1w7","slide":8,"text":"Actionner","textPreview":"Actionner","textChars":9,"textLines":1,"bbox":[220,468,230,30]}
+{"kind":"textbox","id":"sh/rmhk3q5o","slide":8,"text":"Ticket, backlog ou decision","textPreview":"Ticket, backlog ou decision","textChars":27,"textLines":1,"bbox":[220,504,360,28]}
+{"kind":"shape","id":"sh/g7adsji5","slide":8,"bbox":[730,214,366,256]}
+{"kind":"textbox","id":"sh/9s36hcrm","slide":8,"text":"Priorites","textPreview":"Priorites","textChars":9,"textLines":1,"bbox":[770,250,230,32]}
+{"kind":"textbox","id":"sh/yd0z6103","slide":8,"text":"P0","textPreview":"P0","textChars":2,"textLines":1,"bbox":[772,306,48,24]}
+{"kind":"textbox","id":"sh/rytsvu9k","slide":8,"text":"bloquant","textPreview":"bloquant","textChars":8,"textLines":1,"bbox":[832,306,180,24]}
+{"kind":"textbox","id":"sh/gfmlkjm1","slide":8,"text":"P1","textPreview":"P1","textChars":2,"textLines":1,"bbox":[772,342,48,24]}
+{"kind":"textbox","id":"sh/90je9cvi","slide":8,"text":"important","textPreview":"important","textChars":9,"textLines":1,"bbox":[832,342,180,24]}
+{"kind":"textbox","id":"sh/ylc7u54z","slide":8,"text":"P2","textPreview":"P2","textChars":2,"textLines":1,"bbox":[772,378,48,24]}
+{"kind":"textbox","id":"sh/r65wjudg","slide":8,"text":"utile","textPreview":"utile","textChars":5,"textLines":1,"bbox":[832,378,180,24]}
+{"kind":"textbox","id":"sh/d8v6psfi","slide":8,"text":"P3","textPreview":"P3","textChars":2,"textLines":1,"bbox":[772,414,48,24]}
+{"kind":"textbox","id":"sh/onyd0z61","slide":8,"text":"plus tard","textPreview":"plus tard","textChars":9,"textLines":1,"bbox":[832,414,180,24]}
+{"kind":"notes","id":"nt/jygk4l","slide":8,"text":""}
+{"kind":"slide","id":"sl/caav71","slide":9,"title":"DECISION","textShapes":17}
+{"kind":"textbox","id":"sh/ra5gbq1o","slide":9,"text":"DECISION","textPreview":"DECISION","textChars":8,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/gvy90je9","slide":9,"text":"Criteres de succes et d'arret","textPreview":"Criteres de succes et d'arret","textChars":29,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/9gr2p8nq","slide":9,"text":"La beta doit aboutir a un choix, pas seulement a des commentaires.","textPreview":"La beta doit aboutir a un choix, pas seulement a des commentaires.","textChars":66,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/2hwfyxob","slide":9,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/r2p8nqxs","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/kjm1cfa9","slide":9,"bbox":[92,210,504,326]}
+{"kind":"textbox","id":"sh/94fu18jq","slide":9,"text":"Succes","textPreview":"Succes","textChars":6,"textLines":1,"bbox":[134,246,320,36]}
+{"kind":"shape","id":"sh/25kb6xkf","slide":9,"bbox":[142,323,12,12]}
+{"kind":"textbox","id":"sh/rqd4vmtw","slide":9,"text":"4/5 comprennent le concept","textPreview":"4/5 comprennent le concept","textChars":26,"textLines":1,"bbox":[170,316,358,42]}
+{"kind":"shape","id":"sh/jm1cfa9w","slide":9,"bbox":[142,361,12,12]}
+{"kind":"textbox","id":"sh/u18jqh0f","slide":9,"text":"3/5 voient une utilite claire","textPreview":"3/5 voient une utilite claire","textChars":29,"textLines":1,"bbox":[170,354,358,42]}
+{"kind":"shape","id":"sh/1orytsvu","slide":9,"bbox":[142,399,12,12]}
+{"kind":"textbox","id":"sh/c7u54zid","slide":9,"text":"3/5 seraient prets a reutiliser","textPreview":"3/5 seraient prets a reutiliser","textChars":31,"textLines":1,"bbox":[170,392,358,42]}
+{"kind":"shape","id":"sh/judg7ads","slide":9,"bbox":[142,437,12,12]}
+{"kind":"textbox","id":"sh/u9knih4b","slide":9,"text":"Aucun bug bloquant","textPreview":"Aucun bug bloquant","textChars":18,"textLines":1,"bbox":[170,430,358,42]}
+{"kind":"shape","id":"sh/1032lszq","slide":9,"bbox":[142,475,12,12]}
+{"kind":"textbox","id":"sh/cfa9w3m9","slide":9,"text":"Classroom percu comme avantage","textPreview":"Classroom percu comme avantage","textChars":30,"textLines":1,"bbox":[170,468,358,42]}
+{"kind":"shape","id":"sh/nyd0z610","slide":9,"bbox":[684,210,504,326]}
+{"kind":"textbox","id":"sh/udg7adsj","slide":9,"text":"Alerte","textPreview":"Alerte","textChars":6,"textLines":1,"bbox":[726,246,320,36]}
+{"kind":"shape","id":"sh/2p8nqxs7","slide":9,"bbox":[734,323,12,12]}
+{"kind":"textbox","id":"sh/ra5gbq1o","slide":9,"text":"Plus de 50% ne comprennent pas","textPreview":"Plus de 50% ne comprennent pas","textChars":30,"textLines":1,"bbox":[762,316,358,42]}
+{"kind":"shape","id":"sh/gvy90je9","slide":9,"bbox":[734,361,12,12]}
+{"kind":"textbox","id":"sh/9gr2p8nq","slide":9,"text":"Plus de 3 frictions majeures","textPreview":"Plus de 3 frictions majeures","textChars":28,"textLines":1,"bbox":[762,354,358,42]}
+{"kind":"shape","id":"sh/2hwfyxob","slide":9,"bbox":[734,399,12,12]}
+{"kind":"textbox","id":"sh/r2p8nqxs","slide":9,"text":"Bug auth ou Classroom bloquant","textPreview":"Bug auth ou Classroom bloquant","textChars":30,"textLines":1,"bbox":[762,392,358,42]}
+{"kind":"shape","id":"sh/kjm1cfa9","slide":9,"bbox":[734,437,12,12]}
+{"kind":"textbox","id":"sh/94fu18jq","slide":9,"text":"Feedbacks negatifs convergents","textPreview":"Feedbacks negatifs convergents","textChars":30,"textLines":1,"bbox":[762,430,358,42]}
+{"kind":"shape","id":"sh/25kb6xkf","slide":9,"bbox":[734,475,12,12]}
+{"kind":"textbox","id":"sh/rqd4vmtw","slide":9,"text":"Positionnement mal compris","textPreview":"Positionnement mal compris","textChars":26,"textLines":1,"bbox":[762,468,358,42]}
+{"kind":"notes","id":"nt/caav71","slide":9,"text":""}
+{"kind":"slide","id":"sl/s3h8d3","slide":10,"title":"LANCEMENT","textShapes":24}
+{"kind":"textbox","id":"sh/3itgfmlk","slide":10,"text":"LANCEMENT","textPreview":"LANCEMENT","textChars":9,"textLines":1,"bbox":[64,42,440,22]}
+{"kind":"textbox","id":"sh/w3m94fu1","slide":10,"text":"Prochaines actions pour demarrer","textPreview":"Prochaines actions pour demarrer","textChars":32,"textLines":1,"bbox":[64,76,880,52]}
+{"kind":"textbox","id":"sh/loj2t83i","slide":10,"text":"La beta peut commencer quand ces points sont prets.","textPreview":"La beta peut commencer quand ces points sont prets.","textChars":51,"textLines":1,"bbox":[64,130,900,34]}
+{"kind":"textbox","id":"sh/e9cvixcz","slide":10,"text":"Metableton Ecole - Beta privee - 2026","textPreview":"Metableton Ecole - Beta privee - 2026","textChars":37,"textLines":1,"bbox":[64,684,420,18]}
+{"kind":"textbox","id":"sh/3q5o7qpg","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1160,678,56,24]}
+{"kind":"shape","id":"sh/wb2hwfyx","slide":10,"bbox":[97,200,34,34]}
+{"kind":"textbox","id":"sh/lwval87e","slide":10,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[100,200,28,28]}
+{"kind":"textbox","id":"sh/ahoza1gv","slide":10,"text":"Cohorte","textPreview":"Cohorte","textChars":7,"textLines":1,"bbox":[152,192,320,28]}
+{"kind":"textbox","id":"sh/32lszqtc","slide":10,"text":"3 noms confirmes et role assigne","textPreview":"3 noms confirmes et role assigne","textChars":32,"textLines":1,"bbox":[152,226,390,28]}
+{"kind":"shape","id":"sh/rqd4vmtw","slide":10,"bbox":[657,200,34,34]}
+{"kind":"textbox","id":"sh/25kb6xkf","slide":10,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[660,200,28,28]}
+{"kind":"textbox","id":"sh/9w3m94fu","slide":10,"text":"Plateforme","textPreview":"Plateforme","textChars":10,"textLines":1,"bbox":[712,192,320,28]}
+{"kind":"textbox","id":"sh/kb6xkf6d","slide":10,"text":"Home, catalogue, login et dashboards verifies","textPreview":"Home, catalogue, login et dashboards verifies","textChars":45,"textLines":1,"bbox":[712,226,390,28]}
+{"kind":"shape","id":"sh/re1w7mp0","slide":10,"bbox":[97,312,34,34]}
+{"kind":"textbox","id":"sh/2t83itgf","slide":10,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[100,312,28,28]}
+{"kind":"textbox","id":"sh/9knih4by","slide":10,"text":"Forms","textPreview":"Forms","textChars":5,"textLines":1,"bbox":[152,304,320,28]}
+{"kind":"textbox","id":"sh/kzupwb2h","slide":10,"text":"Feedback principal + bug form crees","textPreview":"Feedback principal + bug form crees","textChars":35,"textLines":1,"bbox":[152,338,390,28]}
+{"kind":"shape","id":"sh/ra5gbq1o","slide":10,"bbox":[657,312,34,34]}
+{"kind":"textbox","id":"sh/2p8nqxs7","slide":10,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[660,312,28,28]}
+{"kind":"textbox","id":"sh/qd4vmtwr","slide":10,"text":"Messages","textPreview":"Messages","textChars":8,"textLines":1,"bbox":[712,304,320,28]}
+{"kind":"textbox","id":"sh/fyxobm58","slide":10,"text":"Invitation et onboarding prets","textPreview":"Invitation et onboarding prets","textChars":30,"textLines":1,"bbox":[712,338,390,28]}
+{"kind":"shape","id":"sh/8jqh0fep","slide":10,"bbox":[97,424,34,34]}
+{"kind":"textbox","id":"sh/x4nap4r6","slide":10,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[100,424,28,28]}
+{"kind":"textbox","id":"sh/qpg3ex0n","slide":10,"text":"Triage","textPreview":"Triage","textChars":6,"textLines":1,"bbox":[152,416,320,28]}
+{"kind":"textbox","id":"sh/fa9w3m94","slide":10,"text":"Board pret avec IDs FB-001, FB-002...","textPreview":"Board pret avec IDs FB-001, FB-002...","textChars":37,"textLines":1,"bbox":[152,450,390,28]}
+{"kind":"shape","id":"sh/8v6psfil","slide":10,"bbox":[657,424,34,34]}
+{"kind":"textbox","id":"sh/xczed8v6","slide":10,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[660,424,28,28]}
+{"kind":"textbox","id":"sh/qtcj6tov","slide":10,"text":"Decision","textPreview":"Decision","textChars":8,"textLines":1,"bbox":[712,416,320,28]}
+{"kind":"textbox","id":"sh/je9cvixc","slide":10,"text":"Date de triage et criteres valides","textPreview":"Date de triage et criteres valides","textChars":34,"textLines":1,"bbox":[712,450,390,28]}
+{"kind":"shape","id":"sh/5kb6xkf6","slide":10,"bbox":[194,574,892,54]}
+{"kind":"textbox","id":"sh/czed8v6p","slide":10,"text":"Recommandation: lancer avec 3 testeurs, trier une seule fois, corriger P0/P1, puis elargir.","textPreview":"Recommandation: lancer avec 3 testeurs, trier une seule fois, corriger P0/P1, puis elargir.","textChars":91,"textLines":1,"bbox":[226,590,828,24]}
+{"kind":"notes","id":"nt/s3h8d3","slide":10,"text":""}
