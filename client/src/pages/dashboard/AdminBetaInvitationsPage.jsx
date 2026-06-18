@@ -136,31 +136,12 @@ export default function AdminBetaInvitationsPage() {
     );
   }
 
-  // ── Empty state ─────────────────────────────────────────────────
-  if (!invitations || invitations.length === 0) {
-    return (
-      <div>
-        <PageHeader />
-        <EmptyState
-          icon="✉️"
-          title="Aucune invitation bêta pour le moment"
-          description="Créez une première invitation pour tester le parcours privé."
-          action={
-            <Button size="sm" onClick={() => document.getElementById('email-input')?.focus()}>
-              Créer une invitation
-            </Button>
-          }
-        />
-      </div>
-    );
-  }
-
-  // ── Populated state ─────────────────────────────────────────────
+  // ── Main content (form always visible) ──────────────────────────
   return (
     <div>
       <PageHeader />
 
-      {/* Creation Form */}
+      {/* Creation Form — always visible */}
       <section className="mb-10 rounded-xl border border-white/10 bg-white/[0.03] p-6">
         <h2 className="mb-4 text-lg font-semibold text-white">
           Nouvelle invitation
@@ -328,17 +309,25 @@ export default function AdminBetaInvitationsPage() {
       <h2 className="mb-4 text-lg font-semibold text-white">
         Invitations existantes
       </h2>
-      <div className="space-y-3">
-        {invitations.map((inv) => (
-          <InvitationRow
-            key={inv.id}
-            invitation={inv}
-            onRefresh={() => {
-              loadInvitations();
-            }}
-          />
-        ))}
-      </div>
+      {(!invitations || invitations.length === 0) ? (
+        <EmptyState
+          icon="✉️"
+          title="Aucune invitation bêta pour le moment"
+          description="Utilisez le formulaire ci-dessus pour créer une première invitation."
+        />
+      ) : (
+        <div className="space-y-3">
+          {invitations.map((inv) => (
+            <InvitationRow
+              key={inv.id}
+              invitation={inv}
+              onRefresh={() => {
+                loadInvitations();
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
