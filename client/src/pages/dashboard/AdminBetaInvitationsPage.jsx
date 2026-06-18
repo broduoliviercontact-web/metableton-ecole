@@ -10,6 +10,8 @@ import {
   createBetaInvitation,
   listBetaInvitations,
   revokeBetaInvitation,
+  regenerateBetaInvitationLink,
+  deleteBetaInvitation,
 } from '../../api/betaInvitations.js';
 
 const STATUS_LABELS = {
@@ -331,7 +333,7 @@ export default function AdminBetaInvitationsPage() {
           <InvitationRow
             key={inv.id}
             invitation={inv}
-            onRevoke={() => {
+            onRefresh={() => {
               loadInvitations();
             }}
           />
@@ -354,7 +356,7 @@ function PageHeader() {
 }
 
 // ── InvitationRow ────────────────────────────────────────────────────
-function InvitationRow({ invitation, onRevoke }) {
+function InvitationRow({ invitation, onRefresh }) {
   const { id, email, role, status, created_at, accepted_at, expires_at, notes } =
     invitation;
 
@@ -362,15 +364,21 @@ function InvitationRow({ invitation, onRevoke }) {
   const isRevoked = status === 'revoked';
   const isExpired = status === 'expired';
   const isAccepted = status === 'accepted';
+  const canRegenerate = isPending || isRevoked;
 
   const formattedCreated = formatDate(created_at);
   const formattedAccepted = formatDate(accepted_at);
   const formattedExpires = formatDate(expires_at);
 
+  // Regenerated link state (per-row)
+  const [regeneratedUrl, setRegeneratedUrl] = useState(null);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [regenerateError, setRegenerateError] = useState(null);
+
   const handleRevoke = () => {
     if (window.confirm(`Révoquer l'invitation pour ${email} ?`)) {
       revokeBetaInvitation(id)
-        .then(() => onRevoke())
+        .then(() => onRefresh())
         .catch((err) => {
           alert(
             `Impossible de révoquer : ${err.message || 'Erreur inconnue'}`
@@ -379,8 +387,80 @@ function InvitationRow({ invitation, onRevoke }) {
     }
   };
 
+  const handleRegenerate = async () => {
+    if (!window.confirm(`Régénérer un nouveau lien pour ${email} ? L'ancien lien ne fonctionnera plus.`)) {
+      return;
+    }
+    setIsRegenerating(true);
+    setRegenerateError(null);
+    setRegeneratedUrl(null);
+    try {
+      const result = await regenerateBetaInvitationLink(id);
+      setRegeneratedUrl(result.inviteUrl);
+      onRefresh();
+    } catch (err) {
+      setRegenerateError(err.message || 'Erreur lors de la régénération.');
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Supprimer définitivement l'invitation pour ${email} ? Cette action est irréversible.`)) {
+      deleteBetaInvitation(id)
+        .then(() => onRefresh())
+        .catch((err) => {
+          alert(
+            `Impossible de supprimer : ${err.message || 'Erreur inconnue'}`
+          );
+        });
+    }
+  };
+
   return (
     <article className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      {/* Regenerated link banner */}
+      {regeneratedUrl && (
+        <div
+          className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3"
+          role="alert"
+          aria-live="polite"
+        >
+          <div className="flex items-start gap-3">
+            <div className="text-xl">🔗</div>
+            <div className="flex-1">
+              <p className="mb-1 text-sm font-medium text-emerald-200">
+                Nouveau lien généré
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={regeneratedUrl}
+                  className="flex-1 rounded-lg border border-emerald-500/30 bg-black/30 px-3 py-2 text-sm text-emerald-100 focus:outline-none"
+                  aria-label="Nouveau lien d'invitation"
+                />
+                <CopyButton
+                  text={regeneratedUrl}
+                  onSuccess={() => setRegeneratedUrl(null)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Regenerate error */}
+      {regenerateError && (
+        <div
+          className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300"
+          role="alert"
+          aria-live="assertive"
+        >
+          {regenerateError}
+        </div>
+      )}
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Left side: info */}
         <div className="flex min-w-0 gap-3">
@@ -428,14 +508,25 @@ function InvitationRow({ invitation, onRevoke }) {
           </div>
         </div>
 
-        {/* Right side: status + action */}
-        <div className="flex shrink-0 items-center gap-2">
+        {/* Right side: status + actions */}
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           <Badge
             variant={STATUS_VARIANTS[status] || 'pending'}
             className="min-w-[80px]"
           >
             {STATUS_LABELS[status] || status}
           </Badge>
+          {canRegenerate && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleRegenerate}
+              disabled={isRegenerating}
+              aria-label={`Régénérer le lien pour ${email}`}
+            >
+              {isRegenerating ? '...' : '🔗 Régénérer'}
+            </Button>
+          )}
           {isPending && (
             <Button
               variant="danger"
@@ -446,6 +537,14 @@ function InvitationRow({ invitation, onRevoke }) {
               Révoquer
             </Button>
           )}
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={handleDelete}
+            aria-label={`Supprimer l'invitation pour ${email}`}
+          >
+            🗑 Supprimer
+          </Button>
           {formattedAccepted && (
             <span className="text-xs text-emerald-400">
               Accepté: {formattedAccepted}

@@ -191,3 +191,47 @@ adminBetaInvitationsRouter.post('/:invitationId/revoke', async (req, res, next) 
     next(err);
   }
 });
+
+// ── POST /api/admin/beta-invitations/:invitationId/regenerate-link ─
+// Admin only: Regenerate the invitation link with a new token.
+// Works for pending and revoked invitations. Blocked for accepted.
+adminBetaInvitationsRouter.post('/:invitationId/regenerate-link', async (req, res, next) => {
+  try {
+    const { invitationId } = req.params;
+
+    const { invitation, rawToken } =
+      await betaInvitationService.regenerateBetaInvitationLink(
+        invitationId,
+        req.user.userId
+      );
+
+    const clientOrigin = getClientOrigin();
+    const inviteUrl = `${clientOrigin}/beta/invite/${rawToken}`;
+
+    res.json({
+      data: {
+        invitation,
+        inviteUrl,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ── DELETE /api/admin/beta-invitations/:invitationId ───────────────
+// Admin only: Permanently delete an invitation.
+adminBetaInvitationsRouter.delete('/:invitationId', async (req, res, next) => {
+  try {
+    const { invitationId } = req.params;
+
+    const result = await betaInvitationService.deleteBetaInvitation(
+      invitationId,
+      req.user.userId
+    );
+
+    res.json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+});

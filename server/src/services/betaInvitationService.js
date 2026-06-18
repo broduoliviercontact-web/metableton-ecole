@@ -447,6 +447,112 @@ export async function revokeBetaInvitation(invitationId, adminUserId) {
 }
 
 /**
+ * Regenerate the invitation link for a pending or revoked invitation.
+ * Generates a new token (hash + salt), updates the row, and returns the
+ * updated invitation with the new raw token.
+ *
+ * Accepted invitations cannot be regenerated — the invitee has already
+ * consumed the invitation.
+ *
+ * @param {string} invitationId - ID of the invitation
+ * @param {string} adminUserId - ID of the admin performing the action
+ * @returns {Promise<{ invitation: Object, rawToken: string }>}
+ */
+export async function regenerateBetaInvitationLink(invitationId, adminUserId) {
+  const supabase = await getSupabase();
+
+  // Look up the invitation
+  const { data: invitation, error: lookupError } = await supabase
+    .from('beta_invitations')
+    .select('id, email, role, status, expires_at, notes, created_by')
+    .eq('id', invitationId)
+    .maybeSingle();
+
+  if (lookupError) throw lookupError;
+  if (!invitation) {
+    throw Object.assign(
+      new Error('Invitation not found'),
+      { statusCode: 404, code: 'INVITATION_NOT_FOUND' }
+    );
+  }
+
+  // Block regeneration for accepted invitations
+  if (invitation.status === 'accepted') {
+    throw Object.assign(
+      new Error('Cannot regenerate link for an accepted invitation'),
+      { statusCode: 400, code: 'INVITATION_ALREADY_ACCEPTED' }
+    );
+  }
+
+  // Generate new token and salt
+  const rawToken = generateRawToken();
+  const salt = generateTokenSalt();
+  const tokenHash = hashToken(rawToken, salt);
+
+  // Update the row: new hash, new salt, status back to pending
+  const { error: updateError } = await supabase
+    .from('beta_invitations')
+    .update({
+      token_hash: tokenHash,
+      token_salt: salt,
+      status: 'pending',
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', invitationId);
+
+  if (updateError) throw updateError;
+
+  return {
+    invitation: {
+      ...invitation,
+      status: 'pending',
+      updated_at: new Date().toISOString(),
+    },
+    rawToken,
+  };
+}
+
+/**
+ * Permanently delete a beta invitation.
+ * Any status is allowed — pending, revoked, expired, or accepted.
+ *
+ * @param {string} invitationId - ID of the invitation to delete
+ * @param {string} adminUserId - ID of the admin performing the action
+ * @returns {Promise<{ deleted: boolean, id: string }>}
+ */
+export async function deleteBetaInvitation(invitationId, adminUserId) {
+  const supabase = await getSupabase();
+
+  // Verify the invitation exists
+  const { data: invitation, error: lookupError } = await supabase
+    .from('beta_invitations')
+    .select('id')
+    .eq('id', invitationId)
+    .maybeSingle();
+
+  if (lookupError) throw lookupError;
+  if (!invitation) {
+    throw Object.assign(
+      new Error('Invitation not found'),
+      { statusCode: 404, code: 'INVITATION_NOT_FOUND' }
+    );
+  }
+
+  // Delete the row
+  const { error: deleteError } = await supabase
+    .from('beta_invitations')
+    .delete()
+    .eq('id', invitationId);
+
+  if (deleteError) throw deleteError;
+
+  return {
+    deleted: true,
+    id: invitationId,
+  };
+}
+
+/**
  * Mask an email for display (show first 2 chars + ***).
  * Example: "test@example.com" -> "te***@example.com"
  */

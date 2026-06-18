@@ -61,3 +61,28 @@ export async function revokeBetaInvitation(invitationId) {
   });
   return res.data;
 }
+
+/**
+ * Regenerate the invitation link with a new token (admin only).
+ * Works for pending and revoked invitations. Blocked for accepted.
+ * @param {string} invitationId - The invitation ID
+ * @returns {Promise<Object>} { invitation, inviteUrl }
+ */
+export async function regenerateBetaInvitationLink(invitationId) {
+  const res = await apiClient(`/admin/beta-invitations/${invitationId}/regenerate-link`, {
+    method: 'POST',
+  });
+  return res.data;
+}
+
+/**
+ * Permanently delete a beta invitation (admin only).
+ * @param {string} invitationId - The invitation ID
+ * @returns {Promise<Object>} { deleted: true, id }
+ */
+export async function deleteBetaInvitation(invitationId) {
+  const res = await apiClient(`/admin/beta-invitations/${invitationId}`, {
+    method: 'DELETE',
+  });
+  return res.data;
+}
