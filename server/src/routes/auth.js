@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getOauth2Client } from '../config/google.js';
 import env from '../config/env.js';
 import { findOrCreateGoogleProfile, getCurrentUserProfile } from '../services/profileService.js';
+import * as betaInvitationService from '../services/betaInvitationService.js';
 
 const router = Router();
 
@@ -68,7 +69,25 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
       avatarUrl,
     });
 
-    // 4. Create session
+    // 4. Check for beta invitation (before session creation)
+    try {
+      const invitationResult = await betaInvitationService.acceptBetaInvitation({
+        token: req.query.invitation || null,
+        userId,
+        userEmail: email,
+      });
+
+      // If invitation was accepted and role changed, update the role
+      if (invitationResult?.status === 'accepted' && invitationResult.role !== role) {
+        role = invitationResult.role;
+      }
+    } catch (invitationErr) {
+      // Ignore invitation errors (not an invitation user, or expired, etc.)
+      // This is not a blocking error for login
+      console.debug('Beta invitation check:', invitationErr.message);
+    }
+
+    // 5. Create session
     req.session.userId = userId;
     req.session.role = role;
     req.session.googleTokens = {
@@ -82,8 +101,12 @@ router.get('/api/auth/google/callback', async (req, res, next) => {
       displayName,
       avatarUrl,
     };
+    // Store invitation role if accepted
+    if (invitationResult?.status === 'accepted') {
+      req.session.invitationRole = invitationResult.role;
+    }
 
-    // 5. Save session explicitly, then redirect
+    // 6. Save session explicitly, then redirect
     req.session.save((err) => {
       if (err) return next(err);
 
