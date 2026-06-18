@@ -83,14 +83,25 @@ d'inviter les suivants. Ne pas créer 5 invitations d'un coup.
 
 | ID | Nom | Email | Rôle bêta | Profil | Invitation créée | Lien envoyé | A testé | Feedback reçu | Notes |
 |---|---|---|---|---|---|---|---|---|---|
-| BETA-01 | [placeholder] | [placeholder] | `student` | Étudiant / musicien | ⬜ | ⬜ | ⬜ | ⬜ | P-38 première invitation |
+| BETA-01 | Olivier | `brodu.olivier.contact@gmail.com` | `student` | Admin / auto-test | ✅ `afba7e83` | ⬜ | ⬜ | ⬜ | P-38 première invitation réelle — auto-test admin |
 | BETA-02 | [placeholder] | [placeholder] | `teacher` | Enseignant / formateur | ⬜ | ⬜ | ⬜ | ⬜ | |
 | BETA-03 | [placeholder] | [placeholder] | `student` | Musicien / producteur | ⬜ | ⬜ | ⬜ | ⬜ | |
 | BETA-04 | [placeholder] | [placeholder] | `admin` | Partenaire école | ⬜ | ⬜ | ⬜ | ⬜ | Optionnel |
 | BETA-05 | [placeholder] | [placeholder] | `student` | Profil non technique | ⬜ | ⬜ | ⬜ | ⬜ | Optionnel |
 
-> **Sécurité :** Les emails réels ne sont pas stockés dans ce document public.
-> Utiliser des placeholders. Les vrais emails sont dans l'UI admin Supabase.
+### Détails BETA-01
+
+| Champ | Valeur |
+|---|---|
+| **ID invitation** | `afba7e83-aa1d-47b0-aed5-107fc4748d6a` |
+| **Token** | `71de932ad…` (64 chars, stocké uniquement en hash dans Supabase) |
+| **Lien d'invitation** | `https://metableton-ecole.vercel.app/beta/invite/71de932ad2732816044af371e194da9084097ffb506a3275c74f86d8137f701d` |
+| **Statut** | `pending` |
+| **Expiration** | 2026-07-02 (14 jours) |
+| **Créée le** | 2026-06-18 12:10 CEST |
+| **Note admin** | « P-38 première invitation réelle » |
+
+> **Sécurité :** Le token brut est affiché ici pour référence mais n'est jamais stocké dans Supabase (hash + salt uniquement).
 
 ---
 
