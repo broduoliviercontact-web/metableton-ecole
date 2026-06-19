@@ -5,7 +5,7 @@ import { apiClient } from './client.js';
  * @returns {Promise<Array<{ id, pseudo, score, createdAt }>>}
  */
 export async function fetchOscillatorMemoryScores() {
-  const res = await apiClient('/oscillator-memory/scores');
+  const res = await apiClient('/api/oscillator-memory/scores');
   return res.data;
 }
 
@@ -15,7 +15,7 @@ export async function fetchOscillatorMemoryScores() {
  * @returns {Promise<{ id, pseudo, score, createdAt }>}
  */
 export async function submitOscillatorMemoryScore({ pseudo, score }) {
-  const res = await apiClient('/oscillator-memory/scores', {
+  const res = await apiClient('/api/oscillator-memory/scores', {
     method: 'POST',
     body: JSON.stringify({ pseudo, score }),
   });
