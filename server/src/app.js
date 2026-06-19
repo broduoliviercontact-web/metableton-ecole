@@ -40,28 +40,6 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Diagnostic: dump the Express router stack so we can verify which routes
-// are actually registered on a running Render instance. This helps catch
-// stale containers that have not picked up the latest deploy.
-// Safe: exposes only HTTP methods and path RegExp strings, no data.
-app.get('/api/health/routes', (_req, res) => {
-  const stack = (app._router?.stack || []).map((layer) => ({
-    name: layer.name,
-    regexp: layer.regexp?.toString(),
-    routePath: layer.route?.path || null,
-    routeMethods: layer.route ? Object.keys(layer.route.methods).filter((m) => layer.route.methods[m]) : null,
-    subStack: layer.handle?.stack
-      ? layer.handle.stack.map((sub) => ({
-          name: sub.name,
-          regexp: sub.regexp?.toString(),
-          routePath: sub.route?.path || null,
-          routeMethods: sub.route ? Object.keys(sub.route.methods).filter((m) => sub.route.methods[m]) : null,
-        }))
-      : null,
-  }));
-  res.json({ data: stack });
-});
-
 // Auth routes — Google OAuth, session, logout
 app.use(authRouter);
 

@@ -14,7 +14,7 @@ vi.mock('../services/adminService.js', () => ({
   default: {},
 }));
 
-import { deleteUserHandler } from './admin.js';
+import { deleteUserHandler, default as adminRouter } from './admin.js';
 
 function createMockRes() {
   const res = {};
@@ -38,6 +38,16 @@ function createMockNext() {
 describe('DELETE /api/admin/users/:userId handler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it('is registered as DELETE /users/:userId on the exported router', () => {
+    const registeredRoute = adminRouter.stack.find(
+      (layer) =>
+        layer.route?.path === '/users/:userId' &&
+        layer.route.methods?.delete
+    );
+
+    expect(registeredRoute).toBeTruthy();
   });
 
   it('deletes the user and returns the service result', async () => {
