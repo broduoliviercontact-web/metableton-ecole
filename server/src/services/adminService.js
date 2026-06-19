@@ -87,3 +87,51 @@ export async function listAllCoursesForAdmin() {
 }
 
 export { VALID_ROLES };
+
+/**
+ * Permanently delete a user profile.
+ *
+ * Guardrails (enforced by the caller):
+ *   - Admin only
+ *   - Cannot delete yourself
+ *   - Cannot delete the last remaining admin
+ *
+ * This also cascades to:
+ *   - beta_invitations (accepted_user_id SET NULL, created_by CASCADE)
+ *   - enrollments (user_id CASCADE)
+ *   - courses (teacher_id SET NULL)
+ *
+ * @param {string} userId - The profile id to delete
+ * @returns {Promise<{ deleted: boolean, id: string }>}
+ */
+export async function deleteUser(userId) {
+  const supabase = await getSupabase();
+
+  // Verify the user exists
+  const { data: profile, error: lookupError } = await supabase
+    .from('profiles')
+    .select('id, email, role')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (lookupError) throw lookupError;
+  if (!profile) {
+    throw Object.assign(
+      new Error('User not found'),
+      { statusCode: 404, code: 'NOT_FOUND' }
+    );
+  }
+
+  // Delete the profile (cascades handled by FK constraints)
+  const { error: deleteError } = await supabase
+    .from('profiles')
+    .delete()
+    .eq('id', userId);
+
+  if (deleteError) throw deleteError;
+
+  return {
+    deleted: true,
+    id: userId,
+  };
+}

@@ -6,7 +6,7 @@ import EmptyState from '../../components/ui/EmptyState.jsx';
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx';
 import ErrorMessage from '../../components/ui/ErrorMessage.jsx';
 import ClassroomConnectButton from '../../components/ClassroomConnectButton.jsx';
-import { getUsers, updateUserRole } from '../../api/admin.js';
+import { getUsers, updateUserRole, deleteUser } from '../../api/admin.js';
 import { useAuth } from '../../hooks/useAuth.js';
 
 const ROLE_OPTIONS = [
@@ -54,6 +54,27 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
+
+  // Delete a user with confirmation.
+  async function handleDeleteUser(userId, userEmail) {
+    if (!window.confirm(
+      `Supprimer définitivement ${userEmail || 'cet utilisateur'} ?\n\nCette action est irréversible : toutes les données associées (inscriptions, invitations) seront supprimées.`
+    )) {
+      return;
+    }
+
+    // Optimistic: remove from list
+    setUsers((prev) => prev ? prev.filter((u) => u.id !== userId) : prev);
+
+    try {
+      await deleteUser(userId);
+      await loadUsers(); // refresh from server
+    } catch (err) {
+      // Rollback: reload the full list
+      await loadUsers();
+      alert(err.message || 'Impossible de supprimer cet utilisateur.');
+    }
+  }
 
   // Apply a role change: optimistic + server refresh on success, rollback on error.
   async function handleRoleChange(userId, newRole, previousRole) {
@@ -155,6 +176,7 @@ export default function AdminDashboardPage() {
               isSaving={savingId === u.id}
               rowError={rowErrors[u.id]}
               onChangeRole={(newRole) => handleRoleChange(u.id, newRole, u.role)}
+              onDelete={() => handleDeleteUser(u.id, u.email)}
             />
           ))}
         </div>
@@ -165,7 +187,7 @@ export default function AdminDashboardPage() {
 
 // ── UserRow ──────────────────────────────────────────────────────────
 // One user with avatar, identity, role select + save, and per-row errors.
-function UserRow({ user, isCurrentUser, isSaving, rowError, onChangeRole }) {
+function UserRow({ user, isCurrentUser, isSaving, rowError, onChangeRole, onDelete }) {
   const [pendingRole, setPendingRole] = useState(user.role);
   const isDirty = pendingRole !== user.role;
 
@@ -193,8 +215,8 @@ function UserRow({ user, isCurrentUser, isSaving, rowError, onChangeRole }) {
           </div>
         </div>
 
-        {/* Role + save */}
-        <div className="flex shrink-0 items-center gap-2">
+        {/* Role + save + delete */}
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           <Badge variant={user.role}>{ROLE_LABEL[user.role] || user.role}</Badge>
           <select
             value={pendingRole}
@@ -217,6 +239,16 @@ function UserRow({ user, isCurrentUser, isSaving, rowError, onChangeRole }) {
           >
             {isSaving ? '…' : 'Enregistrer'}
           </Button>
+          {!isCurrentUser && (
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={onDelete}
+              aria-label={`Supprimer ${user.email}`}
+            >
+              🗑
+            </Button>
+          )}
         </div>
       </div>
 

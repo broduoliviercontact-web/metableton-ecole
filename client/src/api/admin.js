@@ -27,6 +27,19 @@ export async function updateUserRole(userId, role) {
 }
 
 /**
+ * Permanently delete a user (admin only).
+ * Guardrails: cannot delete yourself, cannot delete the last admin.
+ * @param {string} userId
+ * @returns {Promise<Object>} { deleted: true, id }
+ */
+export async function deleteUser(userId) {
+  const res = await apiClient(`/admin/users/${userId}`, {
+    method: 'DELETE',
+  });
+  return res.data;
+}
+
+/**
  * Get all courses for the admin overview (admin only).
  * Each course has teacher info joined in via `profiles`:
  *   { display_name, email }

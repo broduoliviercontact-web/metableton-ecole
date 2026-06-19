@@ -70,6 +70,57 @@ router.put('/users/:id/role', async (req, res, next) => {
   }
 });
 
+// ── DELETE /api/admin/users/:id ─────────────────────────────────────
+// Admin only: Permanently delete a user profile.
+//
+// Guardrails:
+//   - Cannot delete yourself
+//   - Cannot delete the last remaining admin
+router.delete('/users/:id', async (req, res, next) => {
+  try {
+    const targetId = req.params.id;
+    const currentUserId = req.user.userId;
+
+    // 1. Cannot delete yourself
+    if (targetId === currentUserId) {
+      return res.status(403).json({
+        error: {
+          code: 'CANNOT_DELETE_SELF',
+          message: 'Vous ne pouvez pas supprimer votre propre compte.',
+        },
+      });
+    }
+
+    // 2. Look up the target user
+    const target = await adminService.getUserById(targetId);
+    if (!target) {
+      return res.status(404).json({
+        error: { code: 'NOT_FOUND', message: 'Utilisateur introuvable.' },
+      });
+    }
+
+    // 3. Last-admin guard
+    if (target.role === 'admin') {
+      const adminCount = await adminService.countAdmins();
+      if (adminCount <= 1) {
+        return res.status(409).json({
+          error: {
+            code: 'LAST_ADMIN',
+            message:
+              'Impossible de supprimer le dernier administrateur. Promouvez d\'abord un autre utilisateur.',
+          },
+        });
+      }
+    }
+
+    // 4. Delete
+    const result = await adminService.deleteUser(targetId);
+    res.json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ── GET /api/admin/courses ─────────────────────────────────────────
 // Returns every course in the system, with teacher display name and
 // email joined in.
