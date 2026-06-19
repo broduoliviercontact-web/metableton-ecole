@@ -178,18 +178,27 @@ export default function AdminDashboardPage() {
       <section className="mb-10">
         <h2 className="mb-4 text-lg font-semibold text-white">Utilisateurs</h2>
         <div className="space-y-3">
-          {users.map((u) => (
-            <UserRow
-              key={u.id}
-              user={u}
-              isCurrentUser={u.id === currentUser?.userId}
-              isSaving={savingId === u.id}
-              isDeleting={deletingId === u.id}
-              rowError={rowErrors[u.id]}
-              onChangeRole={(newRole) => handleRoleChange(u.id, newRole, u.role)}
-              onDelete={() => handleDeleteUser(u.id, u.email)}
-            />
-          ))}
+          {users.map((u) => {
+            const currentUserId =
+              currentUser?.id ||
+              currentUser?.userId ||
+              currentUser?.profileId ||
+              currentUser?.profile?.id;
+            const isCurrentUser = u.id === currentUserId;
+
+            return (
+              <UserRow
+                key={u.id}
+                user={u}
+                isCurrentUser={isCurrentUser}
+                isSaving={savingId === u.id}
+                isDeleting={deletingId === u.id}
+                rowError={rowErrors[u.id]}
+                onChangeRole={(newRole) => handleRoleChange(u.id, newRole, u.role)}
+                onDelete={() => handleDeleteUser(u.id, u.email)}
+              />
+            );
+          })}
         </div>
       </section>
     </div>
@@ -259,7 +268,7 @@ function UserRow({ user, isCurrentUser, isSaving, isDeleting, rowError, onChange
               aria-label={`Supprimer ${user.email}`}
               aria-busy={isDeleting}
             >
-              {isDeleting ? '…' : '🗑'}
+              {isDeleting ? '…' : '🗑 Supprimer'}
             </Button>
           )}
         </div>
