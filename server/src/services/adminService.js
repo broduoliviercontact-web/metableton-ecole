@@ -101,6 +101,10 @@ export { VALID_ROLES };
  *   - enrollments (user_id CASCADE)
  *   - courses (teacher_id SET NULL)
  *
+ * We chain `.select('id')` after the delete so PostgREST returns the rows that
+ * were actually removed. Without it, a silent failure (e.g. RLS filtering out
+ * the row) returns `error: null` while leaving the row in place.
+ *
  * @param {string} userId - The profile id to delete
  * @returns {Promise<{ deleted: boolean, id: string }>}
  */
@@ -122,13 +126,40 @@ export async function deleteUser(userId) {
     );
   }
 
-  // Delete the profile (cascades handled by FK constraints)
-  const { error: deleteError } = await supabase
+  console.log(
+    `[adminService.deleteUser] Attempting deletion of profile ${userId} (role=${profile.role})`
+  );
+
+  // Delete the profile and ask PostgREST to return the removed row ids.
+  const { data: deletedRows, error: deleteError } = await supabase
     .from('profiles')
     .delete()
-    .eq('id', userId);
+    .eq('id', userId)
+    .select('id');
 
-  if (deleteError) throw deleteError;
+  if (deleteError) {
+    console.error(
+      `[adminService.deleteUser] Supabase error deleting profile ${userId}:`,
+      deleteError.message || deleteError
+    );
+    throw deleteError;
+  }
+
+  if (!deletedRows || deletedRows.length === 0) {
+    console.error(
+      `[adminService.deleteUser] Profile ${userId} was not removed — database returned zero deleted rows`
+    );
+    throw Object.assign(
+      new Error(
+        'La suppression a été refusée par la base de données. Vérifiez les droits ou les dépendances.'
+      ),
+      { statusCode: 409, code: 'DELETE_FAILED' }
+    );
+  }
+
+  console.log(
+    `[adminService.deleteUser] Deleted profile ${userId} (${deletedRows.length} row${deletedRows.length > 1 ? 's' : ''})`
+  );
 
   return {
     deleted: true,

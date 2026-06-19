@@ -35,7 +35,9 @@ export default function AdminDashboardPage() {
   // Track which user id currently has an update in flight so we can
   // disable only that row's controls.
   const [savingId, setSavingId] = useState(null);
-  // Per-row transient error message (e.g. LAST_ADMIN) shown under the row.
+  // Track which user id is currently being deleted.
+  const [deletingId, setDeletingId] = useState(null);
+  // Per-row transient error message (e.g. LAST_ADMIN, DELETE_FAILED) shown under the row.
   const [rowErrors, setRowErrors] = useState({});
 
   const loadUsers = useCallback(async () => {
@@ -63,6 +65,9 @@ export default function AdminDashboardPage() {
       return;
     }
 
+    setDeletingId(userId);
+    setRowErrors((prev) => ({ ...prev, [userId]: null }));
+
     // Optimistic: remove from list
     setUsers((prev) => prev ? prev.filter((u) => u.id !== userId) : prev);
 
@@ -70,9 +75,14 @@ export default function AdminDashboardPage() {
       await deleteUser(userId);
       await loadUsers(); // refresh from server
     } catch (err) {
-      // Rollback: reload the full list
+      // Rollback: reload the full list and show the error inline.
       await loadUsers();
-      alert(err.message || 'Impossible de supprimer cet utilisateur.');
+      setRowErrors((prev) => ({
+        ...prev,
+        [userId]: err.message || 'Impossible de supprimer cet utilisateur.',
+      }));
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -174,6 +184,7 @@ export default function AdminDashboardPage() {
               user={u}
               isCurrentUser={u.id === currentUser?.userId}
               isSaving={savingId === u.id}
+              isDeleting={deletingId === u.id}
               rowError={rowErrors[u.id]}
               onChangeRole={(newRole) => handleRoleChange(u.id, newRole, u.role)}
               onDelete={() => handleDeleteUser(u.id, u.email)}
@@ -187,7 +198,7 @@ export default function AdminDashboardPage() {
 
 // ── UserRow ──────────────────────────────────────────────────────────
 // One user with avatar, identity, role select + save, and per-row errors.
-function UserRow({ user, isCurrentUser, isSaving, rowError, onChangeRole, onDelete }) {
+function UserRow({ user, isCurrentUser, isSaving, isDeleting, rowError, onChangeRole, onDelete }) {
   const [pendingRole, setPendingRole] = useState(user.role);
   const isDirty = pendingRole !== user.role;
 
@@ -244,9 +255,11 @@ function UserRow({ user, isCurrentUser, isSaving, rowError, onChangeRole, onDele
               variant="danger"
               size="sm"
               onClick={onDelete}
+              disabled={isDeleting}
               aria-label={`Supprimer ${user.email}`}
+              aria-busy={isDeleting}
             >
-              🗑
+              {isDeleting ? '…' : '🗑'}
             </Button>
           )}
         </div>
