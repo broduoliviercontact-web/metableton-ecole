@@ -4,6 +4,7 @@ import { useAudioContext } from './useAudioContext.js';
 import { playSound, NOTE_DURATION } from './playSound.js';
 import OscillatorPad, { OSCILLATOR_TYPES } from './OscillatorPad.jsx';
 import GameStatus from './GameStatus.jsx';
+import { getHighScore, saveHighScore, resetHighScore } from './highScoreStorage.js';
 
 const GAP_BETWEEN_NOTES = 0.25;
 const ROUND_DELAY_MS = 800;
@@ -22,6 +23,8 @@ export default function OscillatorMemoryGame() {
   const [sequence, setSequence] = useState([]);
   const [userStep, setUserStep] = useState(0);
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [isNewRecord, setIsNewRecord] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [audioError, setAudioError] = useState(false);
 
@@ -44,6 +47,7 @@ export default function OscillatorMemoryGame() {
     setSequence([]);
     setUserStep(0);
     setScore(0);
+    setIsNewRecord(false);
     setIsInitializing(false);
   }, [clearRoundTimeout]);
 
@@ -112,6 +116,7 @@ export default function OscillatorMemoryGame() {
     const firstSequence = [firstType];
     setSequence(firstSequence);
     setScore(0);
+    setIsNewRecord(false);
     setAudioError(false);
     setIsInitializing(false);
     await playSequence(firstSequence);
@@ -137,7 +142,16 @@ export default function OscillatorMemoryGame() {
       playSound(type, ctx);
 
       if (type !== sequence[userStep]) {
-        safeSetStatus('failed');
+        const finalScore = sequence.length - 1;
+        const previousHigh = getHighScore();
+        const nextHigh = saveHighScore(finalScore);
+
+        if (isMountedRef.current) {
+          setScore(finalScore);
+          setHighScore(nextHigh);
+          setIsNewRecord(nextHigh > previousHigh && nextHigh > 0);
+          safeSetStatus('failed');
+        }
         return;
       }
 
@@ -189,11 +203,18 @@ export default function OscillatorMemoryGame() {
 
   useEffect(() => {
     isMountedRef.current = true;
+    setHighScore(getHighScore());
     return () => {
       isMountedRef.current = false;
       clearRoundTimeout();
     };
   }, [clearRoundTimeout]);
+
+  const handleResetHighScore = useCallback(() => {
+    resetHighScore();
+    setHighScore(0);
+    setIsNewRecord(false);
+  }, []);
 
   const sequenceLength = sequence.length || 1;
   const isIdle = status === 'idle';
@@ -240,6 +261,8 @@ export default function OscillatorMemoryGame() {
           status={status}
           score={score}
           sequenceLength={sequenceLength}
+          highScore={highScore}
+          isNewRecord={isNewRecord}
         />
       </div>
 
@@ -283,6 +306,19 @@ export default function OscillatorMemoryGame() {
         <p className="mt-4 text-center text-sm text-gray-400">
           Pas de souci — réécoute attentivement et réessaie.
         </p>
+      )}
+
+      {isIdle && highScore > 0 && (
+        <div className="mt-6 flex justify-center">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleResetHighScore}
+            aria-label="Réinitialiser le record local du mini-jeu"
+          >
+            Réinitialiser le record
+          </Button>
+        </div>
       )}
     </div>
   );

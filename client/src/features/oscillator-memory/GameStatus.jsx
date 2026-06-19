@@ -17,7 +17,13 @@ const STATUS_COLORS = {
   failed: 'text-red-400',
 };
 
-export default function GameStatus({ status, score, sequenceLength }) {
+export default function GameStatus({
+  status,
+  score,
+  sequenceLength,
+  highScore,
+  isNewRecord,
+}) {
   const isFailed = status === 'failed';
 
   return (
@@ -33,14 +39,23 @@ export default function GameStatus({ status, score, sequenceLength }) {
         </p>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         <Badge variant={isFailed ? 'rejected' : 'approved'}>
           Score : {score}
         </Badge>
         <Badge variant={isFailed ? 'rejected' : 'pending'}>
           Tour {sequenceLength}
         </Badge>
+        <Badge variant="all_levels">
+          Record : {highScore}
+        </Badge>
       </div>
+
+      {isNewRecord && isFailed && (
+        <p className="text-sm font-semibold text-emerald-400">
+          Nouveau record !
+        </p>
+      )}
     </div>
   );
 }
