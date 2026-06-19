@@ -5,6 +5,8 @@ import { playSound, NOTE_DURATION } from './playSound.js';
 import OscillatorPad, { OSCILLATOR_TYPES } from './OscillatorPad.jsx';
 import GameStatus from './GameStatus.jsx';
 import { getHighScore, saveHighScore, resetHighScore } from './highScoreStorage.js';
+import LeaderboardPanel from './LeaderboardPanel.jsx';
+import SubmitScoreForm from './SubmitScoreForm.jsx';
 
 const GAP_BETWEEN_NOTES = 0.25;
 const ROUND_DELAY_MS = 800;
@@ -27,6 +29,7 @@ export default function OscillatorMemoryGame() {
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [audioError, setAudioError] = useState(false);
+  const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
 
   const isMountedRef = useRef(true);
   const isPlayingRef = useRef(false);
@@ -216,6 +219,10 @@ export default function OscillatorMemoryGame() {
     setIsNewRecord(false);
   }, []);
 
+  const handleScoreSubmitted = useCallback(() => {
+    setLeaderboardRefresh((n) => n + 1);
+  }, []);
+
   const sequenceLength = sequence.length || 1;
   const isIdle = status === 'idle';
   const isFailed = status === 'failed';
@@ -302,14 +309,20 @@ export default function OscillatorMemoryGame() {
         </div>
       )}
 
+      {isFailed && score > 0 && (
+        <SubmitScoreForm score={score} onSubmitted={handleScoreSubmitted} />
+      )}
+
       {isFailed && (
         <p className="mt-4 text-center text-sm text-gray-400">
           Pas de souci — réécoute attentivement et réessaie.
         </p>
       )}
 
+      <LeaderboardPanel refreshToken={leaderboardRefresh} />
+
       {isIdle && highScore > 0 && (
-        <div className="mt-6 flex justify-center">
+        <div className="mt-2 flex justify-center">
           <Button
             variant="ghost"
             size="sm"

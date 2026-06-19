@@ -9,6 +9,7 @@ import coursesRouter from './routes/courses.js';
 import enrollmentsRouter from './routes/enrollments.js';
 import adminRouter from './routes/admin.js';
 import classroomRouter from './routes/classroom.js';
+import oscillatorMemoryScoresRouter from './routes/oscillatorMemoryScores.js';
 import { publicBetaInvitationsRouter, adminBetaInvitationsRouter } from './routes/betaInvitations.js';
 
 const app = express();
@@ -60,6 +61,9 @@ app.use('/api/beta-invitations', publicBetaInvitationsRouter);
 
 // Beta invitations — admin routes (create, list, revoke)
 app.use('/api/admin/beta-invitations', adminBetaInvitationsRouter);
+
+// Oscillator Memory leaderboard — public anonymous scores (P-37E)
+app.use('/api/oscillator-memory/scores', oscillatorMemoryScoresRouter);
 
 // 404 — catch unknown routes
 app.use((req, res) => {
