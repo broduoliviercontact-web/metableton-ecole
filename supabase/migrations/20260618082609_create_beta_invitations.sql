@@ -4,8 +4,16 @@
 -- Enable pgcrypto for gen_random_uuid()
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- Create the status enum type for beta invitations
-CREATE TYPE beta_invitation_status AS ENUM ('pending', 'accepted', 'expired', 'revoked');
+-- Create the status enum type for beta invitations (idempotent)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_type WHERE typname = 'beta_invitation_status'
+  ) THEN
+    CREATE TYPE beta_invitation_status AS ENUM ('pending', 'accepted', 'expired', 'revoked');
+  END IF;
+END
+$$;
 
 -- Create the beta_invitations table
 CREATE TABLE beta_invitations (
@@ -25,11 +33,11 @@ CREATE TABLE beta_invitations (
 );
 
 -- Indexes for common queries
-CREATE INDEX idx_beta_invitations_email ON beta_invitations(email);
-CREATE INDEX idx_beta_invitations_status ON beta_invitations(status);
-CREATE INDEX idx_beta_invitations_token_hash ON beta_invitations(token_hash);
-CREATE INDEX idx_beta_invitations_created_by ON beta_invitations(created_by);
-CREATE INDEX idx_beta_invitations_accepted_user_id ON beta_invitations(accepted_user_id);
+CREATE INDEX IF NOT EXISTS idx_beta_invitations_email ON beta_invitations(email);
+CREATE INDEX IF NOT EXISTS idx_beta_invitations_status ON beta_invitations(status);
+CREATE INDEX IF NOT EXISTS idx_beta_invitations_token_hash ON beta_invitations(token_hash);
+CREATE INDEX IF NOT EXISTS idx_beta_invitations_created_by ON beta_invitations(created_by);
+CREATE INDEX IF NOT EXISTS idx_beta_invitations_accepted_user_id ON beta_invitations(accepted_user_id);
 
 -- Enable RLS on the beta_invitations table
 ALTER TABLE beta_invitations ENABLE ROW LEVEL SECURITY;
