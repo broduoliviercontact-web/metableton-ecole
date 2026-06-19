@@ -70,19 +70,33 @@ router.put('/users/:id/role', async (req, res, next) => {
   }
 });
 
-// ── DELETE /api/admin/users/:id ─────────────────────────────────────
+// ── DELETE /api/admin/users/:userId ──────────────────────────────────
 // Admin only: Permanently delete a user profile.
 //
 // Guardrails:
 //   - Cannot delete yourself
 //   - Cannot delete the last remaining admin
-router.delete('/users/:id', async (req, res, next) => {
+router.delete('/users/:userId', deleteUserHandler);
+
+export async function deleteUserHandler(req, res, next) {
   try {
-    const targetId = req.params.id;
+    const { userId } = req.params;
     const currentUserId = req.user.userId;
 
+    console.log(`[admin] DELETE /users/${userId} requested by ${currentUserId}`);
+
+    // 0. Validate URL parameter
+    if (!userId) {
+      return res.status(400).json({
+        error: {
+          code: 'USER_ID_REQUIRED',
+          message: 'L\'identifiant utilisateur est requis dans l\'URL.',
+        },
+      });
+    }
+
     // 1. Cannot delete yourself
-    if (targetId === currentUserId) {
+    if (userId === currentUserId) {
       return res.status(403).json({
         error: {
           code: 'CANNOT_DELETE_SELF',
@@ -92,7 +106,7 @@ router.delete('/users/:id', async (req, res, next) => {
     }
 
     // 2. Look up the target user
-    const target = await adminService.getUserById(targetId);
+    const target = await adminService.getUserById(userId);
     if (!target) {
       return res.status(404).json({
         error: { code: 'NOT_FOUND', message: 'Utilisateur introuvable.' },
@@ -114,12 +128,12 @@ router.delete('/users/:id', async (req, res, next) => {
     }
 
     // 4. Delete
-    const result = await adminService.deleteUser(targetId);
+    const result = await adminService.deleteUser(userId);
     res.json({ data: result });
   } catch (err) {
     next(err);
   }
-});
+}
 
 // ── GET /api/admin/courses ─────────────────────────────────────────
 // Returns every course in the system, with teacher display name and
