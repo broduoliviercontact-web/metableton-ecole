@@ -1,7 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import Button from '../../components/ui/Button.jsx';
 import { useAudioContext } from './useAudioContext.js';
-import { playSound, NOTE_DURATION } from './playSound.js';
+import { playSample, getSampleDuration } from './playSample.js';
+import { loadSamples } from './loadSamples.js';
 import OscillatorPad, { OSCILLATOR_TYPES } from './OscillatorPad.jsx';
 import GameStatus from './GameStatus.jsx';
 import { getHighScore, saveHighScore, resetHighScore } from './highScoreStorage.js';
@@ -10,6 +11,7 @@ import SubmitScoreForm from './SubmitScoreForm.jsx';
 
 const GAP_BETWEEN_NOTES = 0.25;
 const ROUND_DELAY_MS = 800;
+const DEFAULT_SAMPLE_DURATION = 1.5;
 
 function getRandomType() {
   const index = Math.floor(Math.random() * OSCILLATOR_TYPES.length);
@@ -29,11 +31,14 @@ export default function OscillatorMemoryGame() {
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [audioError, setAudioError] = useState(false);
+  const [samplesLoading, setSamplesLoading] = useState(false);
+  const [samplesError, setSamplesError] = useState(null);
   const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
 
   const isMountedRef = useRef(true);
   const isPlayingRef = useRef(false);
   const messageTimeoutRef = useRef(null);
+  const sampleBuffersRef = useRef({});
   const { ensureReady } = useAudioContext();
 
   const clearRoundTimeout = useCallback(() => {
@@ -52,6 +57,7 @@ export default function OscillatorMemoryGame() {
     setScore(0);
     setIsNewRecord(false);
     setIsInitializing(false);
+    setSamplesError(null);
   }, [clearRoundTimeout]);
 
   const safeSetStatus = useCallback((nextStatus) => {
@@ -82,9 +88,11 @@ export default function OscillatorMemoryGame() {
 
       for (let i = 0; i < seqToPlay.length; i++) {
         if (!isMountedRef.current) return;
-        playSound(seqToPlay[i], ctx);
+        const soundId = seqToPlay[i];
+        playSample(soundId, ctx, sampleBuffersRef.current);
+        const sampleDuration = getSampleDuration(soundId, sampleBuffersRef.current);
         // eslint-disable-next-line no-await-in-loop
-        await sleep((NOTE_DURATION + GAP_BETWEEN_NOTES) * 1000);
+        await sleep((sampleDuration + GAP_BETWEEN_NOTES) * 1000);
       }
 
       if (isMountedRef.current) {
@@ -115,6 +123,25 @@ export default function OscillatorMemoryGame() {
 
     if (!isMountedRef.current) return;
 
+    if (Object.keys(sampleBuffersRef.current).length === 0) {
+      setSamplesLoading(true);
+      const { buffers, errors } = await loadSamples(ctx);
+      if (!isMountedRef.current) return;
+
+      const failedSamples = Object.keys(errors);
+      if (failedSamples.length > 0) {
+        setSamplesError(
+          `Échantillons audio manquants : ${failedSamples.join(', ')}. Vérifie le dossier /public/audio/oscillator-memory/.`
+        );
+        setSamplesLoading(false);
+        setIsInitializing(false);
+        return;
+      }
+
+      sampleBuffersRef.current = buffers;
+      setSamplesLoading(false);
+    }
+
     const firstType = getRandomType();
     const firstSequence = [firstType];
     setSequence(firstSequence);
@@ -142,7 +169,7 @@ export default function OscillatorMemoryGame() {
       }
 
       if (!isMountedRef.current) return;
-      playSound(type, ctx);
+      playSample(type, ctx, sampleBuffersRef.current);
 
       if (type !== sequence[userStep]) {
         const finalScore = sequence.length - 1;
@@ -227,9 +254,9 @@ export default function OscillatorMemoryGame() {
   const isIdle = status === 'idle';
   const isFailed = status === 'failed';
   const isWaiting = status === 'waitingInput';
-  const padsDisabled = status === 'playingSequence' || isIdle || isFailed || audioError;
+  const padsDisabled = status === 'playingSequence' || isIdle || isFailed || audioError || samplesLoading;
 
-  if (audioError) {
+  if (audioError || samplesError) {
     return (
       <div className="w-full max-w-lg rounded-xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-sm">
         <div className="mb-6">
@@ -242,7 +269,9 @@ export default function OscillatorMemoryGame() {
         </div>
         <div className="text-center" role="alert">
           <p className="mb-4 text-sm text-red-300">
-            L’audio n’est pas disponible sur ce navigateur. La page 404 reste accessible.
+            {audioError
+              ? "L’audio n’est pas disponible sur ce navigateur. La page 404 reste accessible."
+              : samplesError}
           </p>
           <Button variant="outline" onClick={resetGame}>
             Réessayer
