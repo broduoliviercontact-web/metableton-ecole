@@ -29,7 +29,7 @@ export default function OscillatorMemoryFrame({ children }) {
           </h2>
         </div>
         <span className="font-mono text-[10px] uppercase tracking-wider text-[#86948a]">
-          SEQ-404-BLIND
+          METABLETON
         </span>
       </div>
 
