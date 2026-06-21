@@ -25,7 +25,7 @@ export default function OscillatorMemoryFrame({ children }) {
             ⊘
           </span>
           <h2 className="font-mono text-xs font-medium uppercase tracking-[0.15em] text-[#e5e2e1]">
-            Auditory Recall Protocol
+            OSC MEMORY
           </h2>
         </div>
         <span className="font-mono text-[10px] uppercase tracking-wider text-[#86948a]">
