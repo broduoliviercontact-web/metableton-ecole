@@ -8,10 +8,10 @@ import GameStatus from './GameStatus.jsx';
 import { getHighScore, saveHighScore, resetHighScore } from './highScoreStorage.js';
 import LeaderboardPanel from './LeaderboardPanel.jsx';
 import SubmitScoreForm from './SubmitScoreForm.jsx';
+import OscillatorMemoryFrame from './OscillatorMemoryFrame.jsx';
 
 const GAP_BETWEEN_NOTES = 0.25;
 const ROUND_DELAY_MS = 800;
-const DEFAULT_SAMPLE_DURATION = 1.5;
 
 function getRandomType() {
   const index = Math.floor(Math.random() * OSCILLATOR_TYPES.length);
@@ -172,6 +172,7 @@ export default function OscillatorMemoryGame() {
       playSample(type, ctx, sampleBuffersRef.current);
 
       if (type !== sequence[userStep]) {
+        playSample('wrong', ctx, sampleBuffersRef.current);
         const finalScore = sequence.length - 1;
         const previousHigh = getHighScore();
         const nextHigh = saveHighScore(finalScore);
@@ -189,6 +190,7 @@ export default function OscillatorMemoryGame() {
       setUserStep(nextStep);
 
       if (nextStep >= sequence.length) {
+        playSample('correct', ctx, sampleBuffersRef.current);
         safeSetStatus('success');
         const newScore = sequence.length;
         const nextSequence = [...sequence, getRandomType()];
@@ -258,17 +260,9 @@ export default function OscillatorMemoryGame() {
 
   if (audioError || samplesError) {
     return (
-      <div className="w-full max-w-lg rounded-xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-sm">
-        <div className="mb-6">
-          <h2 className="mb-1 text-center text-lg font-semibold tracking-wide text-white">
-            Oscillator Memory
-          </h2>
-          <p className="text-center text-xs text-gray-500">
-            Ear training synth — écoute et reproduis la séquence
-          </p>
-        </div>
-        <div className="text-center" role="alert">
-          <p className="mb-4 text-sm text-red-300">
+      <OscillatorMemoryFrame>
+        <div className="py-6 text-center" role="alert">
+          <p className="mb-5 font-mono text-sm text-red-300">
             {audioError
               ? "L’audio n’est pas disponible sur ce navigateur. La page 404 reste accessible."
               : samplesError}
@@ -277,22 +271,13 @@ export default function OscillatorMemoryGame() {
             Réessayer
           </Button>
         </div>
-      </div>
+      </OscillatorMemoryFrame>
     );
   }
 
   return (
-    <div className="w-full max-w-lg rounded-xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-sm">
-      <div className="mb-6">
-        <h2 className="mb-1 text-center text-lg font-semibold tracking-wide text-white">
-          Oscillator Memory
-        </h2>
-        <p className="text-center text-xs text-gray-500">
-          Ear training synth — écoute et reproduis la séquence
-        </p>
-      </div>
-
-      <div className="mb-6">
+    <OscillatorMemoryFrame>
+      <div className="mb-5">
         <GameStatus
           status={status}
           score={score}
@@ -303,7 +288,7 @@ export default function OscillatorMemoryGame() {
       </div>
 
       {isIdle && (
-        <div className="flex justify-center">
+        <div className="mb-5 flex justify-center">
           <Button onClick={startGame} size="lg" disabled={isInitializing}>
             {isInitializing ? 'Initialisation…' : 'Écouter & jouer'}
           </Button>
@@ -311,7 +296,7 @@ export default function OscillatorMemoryGame() {
       )}
 
       {!isIdle && (
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+        <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
           {OSCILLATOR_TYPES.map((osc) => (
             <OscillatorPad
               key={osc.id}
@@ -326,15 +311,13 @@ export default function OscillatorMemoryGame() {
       )}
 
       {(isWaiting || isFailed) && (
-        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <div className="mb-5 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           {isWaiting && (
             <Button variant="outline" onClick={handleReplaySequence}>
               Réécouter la séquence
             </Button>
           )}
-          {isFailed && (
-            <Button onClick={handleRestart}>Recommencer</Button>
-          )}
+          {isFailed && <Button onClick={handleRestart}>Recommencer</Button>}
         </div>
       )}
 
@@ -343,7 +326,7 @@ export default function OscillatorMemoryGame() {
       )}
 
       {isFailed && (
-        <p className="mt-4 text-center text-sm text-gray-400">
+        <p className="mb-4 text-center text-sm text-[#86948a]">
           Pas de souci — réécoute attentivement et réessaie.
         </p>
       )}
@@ -351,7 +334,7 @@ export default function OscillatorMemoryGame() {
       <LeaderboardPanel refreshToken={leaderboardRefresh} />
 
       {isIdle && highScore > 0 && (
-        <div className="mt-2 flex justify-center">
+        <div className="mt-4 flex justify-center">
           <Button
             variant="ghost"
             size="sm"
@@ -362,6 +345,6 @@ export default function OscillatorMemoryGame() {
           </Button>
         </div>
       )}
-    </div>
+    </OscillatorMemoryFrame>
   );
 }

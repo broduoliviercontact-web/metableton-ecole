@@ -33,10 +33,10 @@ export default function SubmitScoreForm({ score, onSubmitted }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-4 rounded-lg border border-white/10 bg-black/20 p-4"
+      className="mt-5 rounded border border-[#3c4a42] bg-[#0e0e0e] p-3 sm:p-4"
       aria-label="Publier mon score"
     >
-      <p className="mb-3 text-sm text-gray-300">
+      <p className="mb-3 font-mono text-sm text-[#bbcabf]">
         Ajouter mon score au tableau
       </p>
 
@@ -52,7 +52,7 @@ export default function SubmitScoreForm({ score, onSubmitted }) {
           maxLength={MAX_PSEUDO_LENGTH}
           placeholder="Pseudo"
           disabled={isSubmitting}
-          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-emerald-400 focus:outline-none"
+          className="w-full rounded border border-[#3c4a42] bg-[#131313] px-3 py-2 font-mono text-sm text-[#e5e2e1] placeholder-[#86948a] focus:border-emerald-400 focus:outline-none"
           autoComplete="off"
         />
       </div>
@@ -65,19 +65,19 @@ export default function SubmitScoreForm({ score, onSubmitted }) {
         >
           {isSubmitting ? 'Publication…' : 'Publier le score'}
         </Button>
-        <span className="text-xs text-gray-500">
+        <span className="font-mono text-xs text-[#86948a]">
           Sans compte, sans donnée personnelle.
         </span>
       </div>
 
       {result && (
-        <p className="mt-3 text-sm text-emerald-400" aria-live="polite">
+        <p className="mt-3 font-mono text-sm text-emerald-400" aria-live="polite">
           {result}
         </p>
       )}
 
       {error && (
-        <p className="mt-3 text-sm text-red-400" role="alert">
+        <p className="mt-3 font-mono text-sm text-red-400" role="alert">
           {error}
         </p>
       )}

@@ -1,27 +1,32 @@
-import { Link } from 'react-router-dom';
-import Button from '../components/ui/Button.jsx';
 import OscillatorMemoryGame from '../features/oscillator-memory/OscillatorMemoryGame.jsx';
+import SignalLostHeader from '../features/oscillator-memory/SignalLostHeader.jsx';
+import StarfieldBackground from '../features/oscillator-memory/StarfieldBackground.jsx';
 
 export default function NotFoundPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12 text-center">
-      <div className="mb-4 text-6xl">🎛️</div>
-      <h1 className="mb-2 text-4xl font-bold text-white">404</h1>
-      <p className="mb-2 max-w-md text-gray-300 font-medium">
-        Signal perdu / page introuvable
-      </p>
-      <p className="mb-8 max-w-md text-sm text-gray-500">
-        Cette page n&apos;existe pas. Peut-être un preset égaré dans la session ?
-      </p>
-      <div className="mb-12 flex flex-col items-center gap-3 sm:flex-row">
-        <Link to="/">
-          <Button variant="secondary">Retour à l&apos;accueil</Button>
-        </Link>
-        <Link to="/catalog">
-          <Button variant="outline">Voir les cours</Button>
-        </Link>
-      </div>
-      <OscillatorMemoryGame />
+    <div
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-12 text-center"
+      style={{ backgroundColor: '#131313' }}
+    >
+      <StarfieldBackground />
+
+      {/* Subtle radial grid texture */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage: 'radial-gradient(#86948a 1px, transparent 1px)',
+          backgroundSize: '16px 16px',
+        }}
+        aria-hidden="true"
+      />
+
+      <main className="relative z-10 w-full max-w-3xl">
+        <SignalLostHeader />
+
+        <div className="mt-10 sm:mt-12">
+          <OscillatorMemoryGame />
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,16 +1,16 @@
-# Graph Report - metableton-ecole  (2026-06-19)
+# Graph Report - metableton-ecole  (2026-06-20)
 
 ## Corpus Check
-- 161 files · ~77,548 words
+- 174 files · ~81,119 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 811 nodes · 1107 edges · 87 communities (46 shown, 41 thin omitted)
+- 849 nodes · 1173 edges · 90 communities (47 shown, 43 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eb27db88`
+- Built from commit: `0175c667`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -94,15 +94,18 @@
 - [[_COMMUNITY_Community 77|Community 77]]
 - [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
+- [[_COMMUNITY_Community 82|Community 82]]
 - [[_COMMUNITY_Community 83|Community 83]]
 - [[_COMMUNITY_Community 84|Community 84]]
 - [[_COMMUNITY_Community 85|Community 85]]
+- [[_COMMUNITY_Community 86|Community 86]]
+- [[_COMMUNITY_Community 87|Community 87]]
 - [[_COMMUNITY_Community 89|Community 89]]
-- [[_COMMUNITY_Community 91|Community 91]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `getSupabase()` - 38 edges
-2. `apiClient()` - 37 edges
+1. `apiClient()` - 41 edges
+2. `getSupabase()` - 41 edges
 3. `useAuth()` - 17 edges
 4. `Session Handoff — Metableton Ecole` - 16 edges
 5. `4. Nice-to-have improvements` - 11 edges
@@ -113,8 +116,6 @@
 10. `Section Definitions` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `listManageableCourses()` --calls--> `apiClient()`  [EXTRACTED]
-  client/src/api/courses.js → client/src/api/client.js
 - `AdminDashboardPage()` --calls--> `useAuth()`  [EXTRACTED]
   client/src/pages/dashboard/AdminDashboardPage.jsx → client/src/hooks/useAuth.js
 - `getUsers()` --calls--> `apiClient()`  [EXTRACTED]
@@ -123,31 +124,33 @@
   client/src/api/admin.js → client/src/api/client.js
 - `deleteUser()` --calls--> `apiClient()`  [EXTRACTED]
   client/src/api/admin.js → client/src/api/client.js
+- `getAdminCourses()` --calls--> `apiClient()`  [EXTRACTED]
+  client/src/api/admin.js → client/src/api/client.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (87 total, 41 thin omitted)
+## Communities (90 total, 43 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.10
-Nodes (14): DEFAULT_DASHBOARDS, RequireAuth(), formatDate(), UserProfilePage(), useAuth(), DashboardLayout(), NAV_BY_ROLE, Header() (+6 more)
+Cohesion: 0.09
+Nodes (15): getBetaInvitation(), DEFAULT_DASHBOARDS, RequireAuth(), formatDate(), UserProfilePage(), useAuth(), DashboardLayout(), NAV_BY_ROLE (+7 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.07
-Nodes (27): env, getOauth2Client(), requireAuth(), errorHandler(), mapStatusCodeToErrorCode(), requireRole(), pgPool, PgSessionStore (+19 more)
+Nodes (28): env, getOauth2Client(), requireAuth(), errorHandler(), mapStatusCodeToErrorCode(), requireRole(), pgPool, PgSessionStore (+20 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
 Nodes (38): Additional Requirements (from Architecture), Epic 1: School Foundation & Public Presence, Epic 1: School Foundation & Public Presence, Epic 2: Authentication & Role-Based Access, Epic 2: Authentication & Role-Based Access, Epic 3: Courses, Enrollment & Google Classroom, Epic 3: Courses, Enrollment & Google Classroom, Epic 4: Admin Operations (+30 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.14
-Nodes (12): connectGoogleClassroom(), getClassroomOAuthStatus(), getGoogleClassroomCourses(), createCourse(), getManageableCourseById(), getPublishedCourses(), linkClassroom(), listManageableCourses() (+4 more)
+Cohesion: 0.24
+Nodes (7): connectGoogleClassroom(), getClassroomOAuthStatus(), getGoogleClassroomCourses(), linkClassroom(), ClassroomSection(), SKILL_OPTIONS, STATUS_OPTIONS
 
 ### Community 4 - "Community 4"
 Cohesion: 0.07
-Nodes (44): getSupabase(), countAdmins(), deleteUser(), getUserById(), listAllCoursesForAdmin(), listAllUsers(), mockData, updateUserRole() (+36 more)
+Nodes (46): getSupabase(), router, countAdmins(), deleteUser(), getUserById(), listAllCoursesForAdmin(), listAllUsers(), mockData (+38 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.07
@@ -258,68 +261,72 @@ Cohesion: 0.50
 Nodes (3): Fix suggestion, Source, What happened
 
 ### Community 69 - "Community 69"
-Cohesion: 0.14
-Nodes (6): BAR_TIMING, DIMMED, PEAKS, WIDTHS, BASE, VARIANTS
+Cohesion: 0.09
+Nodes (10): ICON_COLORS, ICONS, STRIP_COLORS, MODULES, BAR_TIMING, DIMMED, PEAKS, WIDTHS (+2 more)
 
 ### Community 70 - "Community 70"
-Cohesion: 0.43
+Cohesion: 0.39
 Nodes (4): getMe(), logout(), AuthContext, AuthProvider()
 
 ### Community 71 - "Community 71"
-Cohesion: 0.24
-Nodes (5): AdminCoursesPage(), computeStats(), CourseRow(), formatDate(), STATUS_LABELS
+Cohesion: 0.14
+Nodes (9): getPublishedCourses(), AdminCoursesPage(), computeStats(), CourseRow(), formatDate(), STATUS_LABELS, CourseDetailPage(), useEnrollmentForCourse() (+1 more)
 
 ### Community 72 - "Community 72"
-Cohesion: 0.15
-Nodes (5): studentDashboardConfig, studentDashboardMinimalConfig, studentDashboardNoProfileConfig, teacherDashboardMinimalConfig, teacherDashboardNoStatsConfig
+Cohesion: 0.16
+Nodes (4): studentDashboardMinimalConfig, studentDashboardNoProfileConfig, teacherDashboardMinimalConfig, teacherDashboardNoStatsConfig
 
 ### Community 73 - "Community 73"
 Cohesion: 0.23
 Nodes (9): deleteUser(), getAdminCourses(), getUsers(), updateUserRole(), AdminDashboardPage(), formatDate(), ROLE_LABEL, ROLE_OPTIONS (+1 more)
 
 ### Community 74 - "Community 74"
-Cohesion: 0.12
-Nodes (18): getPublishedCourseById(), approveEnrollment(), cancelApprovedEnrollment(), cancelEnrollment(), getMyEnrollments(), getPendingEnrollments(), rejectEnrollment(), requestEnrollment() (+10 more)
+Cohesion: 0.20
+Nodes (14): apiClient(), buildApiUrl(), createCourse(), getManageableCourseById(), getPublishedCourseById(), listManageableCourses(), updateCourse(), approveEnrollment() (+6 more)
 
 ### Community 75 - "Community 75"
 Cohesion: 0.19
-Nodes (15): acceptBetaInvitation(), createBetaInvitation(), deleteBetaInvitation(), getBetaInvitation(), listBetaInvitations(), regenerateBetaInvitationLink(), revokeBetaInvitation(), apiClient() (+7 more)
+Nodes (13): acceptBetaInvitation(), createBetaInvitation(), deleteBetaInvitation(), listBetaInvitations(), regenerateBetaInvitationLink(), revokeBetaInvitation(), AdminBetaInvitationsPage(), formatDate() (+5 more)
 
 ### Community 78 - "Community 78"
 Cohesion: 0.25
 Nodes (4): DashboardHeader(), renderRightSlot(), BASE, VARIANTS
 
 ### Community 79 - "Community 79"
-Cohesion: 0.14
-Nodes (14): MESSAGES, STATUS_COLORS, OscillatorMemoryGame(), COLORS, OSCILLATOR_TYPES, PRESSED_COLORS, makeMasterGain(), OSCILLATOR_FREQUENCIES (+6 more)
+Cohesion: 0.07
+Nodes (27): fetchOscillatorMemoryScores(), submitOscillatorMemoryScore(), formatScore(), GameStatus(), LED_COLORS, MESSAGES, TEXT_COLORS, getHighScore() (+19 more)
+
+### Community 80 - "Community 80"
+Cohesion: 0.27
+Nodes (7): cancelApprovedEnrollment(), cancelEnrollment(), EnrollmentCard(), formatDate(), STATUS_LABELS, STATUS_MESSAGES, STATUS_PANEL_CLASS
+
+### Community 82 - "Community 82"
+Cohesion: 0.50
+Nodes (3): createMockClient(), mockClients, resetMockData()
 
 ### Community 83 - "Community 83"
 Cohesion: 0.40
 Nodes (4): Metableton UI — preview isolée, Pour itérer plus tard, Pourquoi ce dossier existe, Routes preview
 
-### Community 91 - "Community 91"
-Cohesion: 0.25
-Nodes (4): ICON_COLORS, ICONS, STRIP_COLORS, MODULES
-
 ## Knowledge Gaps
-- **357 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+352 more)
+- **360 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+355 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **41 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `getSupabase()` connect `Community 4` to `Community 1`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `apiClient()` connect `Community 75` to `Community 73`, `Community 74`, `Community 3`, `Community 70`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `apiClient()` connect `Community 74` to `Community 0`, `Community 3`, `Community 70`, `Community 71`, `Community 73`, `Community 75`, `Community 79`, `Community 80`?**
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Why does `MVP Stabilization Audit — Metableton Ecole` connect `Community 26` to `Community 17`, `Community 21`, `Community 22`, `Community 27`, `Community 29`, `Community 30`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `Return 'code' or 'id' if every table item carries that *same* field.      All it`, `Shape-aware array merge. Base + override combined tables may opt into     keyed`, `Recursively merge override into base using structural rules.     - Table + table` to the rest of the system?**
-  _361 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _364 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.10160427807486631 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0873015873015873 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.07111756168359942 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06711915535444947 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._

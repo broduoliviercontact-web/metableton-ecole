@@ -32,26 +32,28 @@ export default function LeaderboardPanel({ refreshToken }) {
   }, [refreshToken]);
 
   return (
-    <div className="mt-6 rounded-lg border border-white/10 bg-black/20 p-4">
+    <div className="mt-5 rounded border border-[#3c4a42] bg-[#0e0e0e] p-3 sm:p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold tracking-wide text-white">
+        <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#e5e2e1]">
           Top écoutes
         </h3>
         <Badge variant="all_levels">Classement expérimental</Badge>
       </div>
 
       {loading && (
-        <p className="text-sm text-gray-500">Chargement…</p>
+        <p className="font-mono text-sm text-[#86948a]">Chargement…</p>
       )}
 
       {error && (
-        <p className="text-sm text-red-400" role="alert">
+        <p className="font-mono text-sm text-red-400" role="alert">
           {error}
         </p>
       )}
 
       {!loading && !error && scores.length === 0 && (
-        <p className="text-sm text-gray-500">Aucun score publié pour l’instant.</p>
+        <p className="font-mono text-sm text-[#86948a]">
+          Aucun score publié pour l’instant.
+        </p>
       )}
 
       {!loading && !error && scores.length > 0 && (
@@ -59,15 +61,17 @@ export default function LeaderboardPanel({ refreshToken }) {
           {scores.map((entry, index) => (
             <li
               key={entry.id}
-              className="flex items-center justify-between rounded-md border border-white/5 bg-white/[0.02] px-3 py-2"
+              className="flex items-center justify-between rounded border border-white/5 bg-white/[0.02] px-3 py-2"
             >
               <div className="flex items-center gap-3">
-                <span className="w-6 text-center text-xs font-mono text-gray-500">
+                <span className="w-6 text-center font-mono text-xs text-[#86948a]">
                   {index + 1}
                 </span>
-                <span className="text-sm text-white">{entry.pseudo}</span>
+                <span className="text-sm text-[#e5e2e1]">{entry.pseudo}</span>
               </div>
-              <span className="text-sm font-mono text-emerald-400">{entry.score}</span>
+              <span className="font-mono text-sm text-emerald-400">
+                {entry.score}
+              </span>
             </li>
           ))}
         </ul>

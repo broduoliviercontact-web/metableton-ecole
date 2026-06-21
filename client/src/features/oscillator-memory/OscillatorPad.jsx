@@ -1,32 +1,62 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
 const OSCILLATOR_TYPES = [
-  { id: 'sine', label: 'Sine', shortcut: '1' },
-  { id: 'triangle', label: 'Triangle', shortcut: '2' },
-  { id: 'square', label: 'Square', shortcut: '3' },
-  { id: 'sawtooth', label: 'Saw', shortcut: '4' },
-  { id: 'fm', label: 'FM', shortcut: '5' },
-  { id: 'noise', label: 'Noise', shortcut: '6' },
+  { id: 'sine', label: 'SINE', shortcut: '1', icon: '∿' },
+  { id: 'triangle', label: 'TRI', shortcut: '2', icon: '△' },
+  { id: 'square', label: 'SQR', shortcut: '3', icon: '□' },
+  { id: 'sawtooth', label: 'SAW', shortcut: '4', icon: '⩘' },
+  { id: 'fm', label: 'FM', shortcut: '5', icon: '∞' },
+  { id: 'noise', label: 'NOISE', shortcut: '6', icon: '✻' },
 ];
 
 export { OSCILLATOR_TYPES };
 
-const COLORS = {
-  sine: 'focus-visible:ring-emerald-400 hover:border-emerald-500/40 hover:bg-emerald-500/10 active:bg-emerald-500/20',
-  triangle: 'focus-visible:ring-amber-400 hover:border-amber-500/40 hover:bg-amber-500/10 active:bg-amber-500/20',
-  square: 'focus-visible:ring-blue-400 hover:border-blue-500/40 hover:bg-blue-500/10 active:bg-blue-500/20',
-  sawtooth: 'focus-visible:ring-purple-400 hover:border-purple-500/40 hover:bg-purple-500/10 active:bg-purple-500/20',
-  fm: 'focus-visible:ring-pink-400 hover:border-pink-500/40 hover:bg-pink-500/10 active:bg-pink-500/20',
-  noise: 'focus-visible:ring-gray-400 hover:border-gray-500/40 hover:bg-gray-500/10 active:bg-gray-500/20',
+const COLOR = {
+  sine: 'emerald',
+  triangle: 'amber',
+  square: 'blue',
+  sawtooth: 'purple',
+  fm: 'pink',
+  noise: 'gray',
 };
 
-const PRESSED_COLORS = {
-  sine: 'border-emerald-500/60 bg-emerald-500/20 shadow-[0_0_16px_rgba(16,185,129,0.25)]',
-  triangle: 'border-amber-500/60 bg-amber-500/20 shadow-[0_0_16px_rgba(245,158,11,0.25)]',
-  square: 'border-blue-500/60 bg-blue-500/20 shadow-[0_0_16px_rgba(59,130,246,0.25)]',
-  sawtooth: 'border-purple-500/60 bg-purple-500/20 shadow-[0_0_16px_rgba(168,85,247,0.25)]',
-  fm: 'border-pink-500/60 bg-pink-500/20 shadow-[0_0_16px_rgba(236,72,153,0.25)]',
-  noise: 'border-gray-500/60 bg-gray-500/20 shadow-[0_0_16px_rgba(156,163,175,0.25)]',
+const COLOR_MAP = {
+  emerald: {
+    glow: 'shadow-[0_0_20px_4px_rgba(52,211,153,0.5)]',
+    border: 'border-emerald-500/80',
+    bg: 'bg-emerald-500/15',
+    text: 'text-emerald-400',
+  },
+  amber: {
+    glow: 'shadow-[0_0_20px_4px_rgba(251,191,36,0.5)]',
+    border: 'border-amber-500/80',
+    bg: 'bg-amber-500/15',
+    text: 'text-amber-400',
+  },
+  blue: {
+    glow: 'shadow-[0_0_20px_4px_rgba(96,165,250,0.5)]',
+    border: 'border-blue-500/80',
+    bg: 'bg-blue-500/15',
+    text: 'text-blue-400',
+  },
+  purple: {
+    glow: 'shadow-[0_0_20px_4px_rgba(192,132,252,0.5)]',
+    border: 'border-purple-500/80',
+    bg: 'bg-purple-500/15',
+    text: 'text-purple-400',
+  },
+  pink: {
+    glow: 'shadow-[0_0_20px_4px_rgba(244,114,182,0.5)]',
+    border: 'border-pink-500/80',
+    bg: 'bg-pink-500/15',
+    text: 'text-pink-400',
+  },
+  gray: {
+    glow: 'shadow-[0_0_20px_4px_rgba(156,163,175,0.5)]',
+    border: 'border-gray-500/80',
+    bg: 'bg-gray-500/15',
+    text: 'text-gray-400',
+  },
 };
 
 export default function OscillatorPad({
@@ -54,7 +84,7 @@ export default function OscillatorPad({
     onClick(type);
     timeoutRef.current = window.setTimeout(() => {
       setPressed(false);
-    }, 120);
+    }, 150);
   }, [disabled, clearPressTimeout, onClick, type]);
 
   useEffect(() => {
@@ -62,6 +92,10 @@ export default function OscillatorPad({
       clearPressTimeout();
     };
   }, [clearPressTimeout]);
+
+  const osc = OSCILLATOR_TYPES.find((o) => o.id === type) || OSCILLATOR_TYPES[0];
+  const colorKey = COLOR[type] || 'emerald';
+  const palette = COLOR_MAP[colorKey];
 
   return (
     <button
@@ -71,20 +105,33 @@ export default function OscillatorPad({
       disabled={disabled}
       onClick={activate}
       className={`
-        relative flex flex-col items-center justify-center gap-1
-        rounded-lg border bg-black/20
-        px-4 py-5
-        font-mono text-sm font-medium tracking-wide text-white
+        relative flex aspect-square flex-col items-center justify-center gap-1
+        rounded-sm border bg-[#201f1f] p-2
+        font-mono text-xs font-medium uppercase tracking-wider text-[#bbcabf]
         transition-all duration-75
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-        disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:bg-black/20
-        ${COLORS[type]}
-        ${pressed ? PRESSED_COLORS[type] : 'border-white/10'}
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#131313]
+        disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#3c4a42] disabled:hover:bg-[#201f1f]
+        ${pressed ? `scale-[0.96] ${palette.border} ${palette.bg} ${palette.glow}` : 'border-[#3c4a42] hover:border-[#86948a]/50 hover:bg-[#2a2a2a]'}
         ${className}
       `}
+      style={{
+        boxShadow: pressed
+          ? undefined
+          : 'inset 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.04)',
+      }}
     >
-      <span className="text-xs uppercase tracking-wider text-gray-400">{label}</span>
-      <span className="text-xs text-white/50">{shortcut}</span>
+      <span className="absolute left-2 top-2 font-mono text-[10px] text-[#86948a]">
+        {shortcut}
+      </span>
+
+      <span
+        className={`text-2xl transition-colors duration-75 ${pressed ? palette.text : 'text-[#86948a]'}`}
+        aria-hidden="true"
+      >
+        {osc.icon}
+      </span>
+
+      <span className="text-[10px] tracking-wider">{osc.label}</span>
     </button>
   );
 }

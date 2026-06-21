@@ -14,6 +14,8 @@ export const SAMPLE_MAP = {
   sawtooth: `${SAMPLE_BASE_URL}/saw.wav`,
   fm: `${SAMPLE_BASE_URL}/fm.wav`,
   noise: `${SAMPLE_BASE_URL}/noise.wav`,
+  correct: `${SAMPLE_BASE_URL}/correct.wav`,
+  wrong: `${SAMPLE_BASE_URL}/wrong.wav`,
 };
 
 export const SAMPLE_IDS = Object.keys(SAMPLE_MAP);

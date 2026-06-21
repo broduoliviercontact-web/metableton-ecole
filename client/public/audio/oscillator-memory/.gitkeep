@@ -1,0 +1,15 @@
+# Oscillator Memory sample directory
+
+This directory must contain the following sample files:
+
+- sine.wav
+- triangle.wav
+- square.wav
+- saw.wav
+- fm.wav
+- noise.wav
+- correct.wav  (played on every correct pad press)
+- wrong.wav    (played when the sequence is failed)
+
+These samples are played by the Oscillator Memory mini-game on the 404 page.
+The game will display a clear error message in the UI if any sample is missing.
